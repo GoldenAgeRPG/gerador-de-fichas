@@ -19,6 +19,7 @@
       --mono: 'Roboto Mono', monospace;
       --failure: #c53030;
       --glass: rgba(255, 255, 255, 0.03);
+      --glass-2: rgba(255, 255, 255, 0.02);
       --success: #00e091;
     }
     body {
@@ -29,7 +30,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 900px; /* Largura de documento padrão */
+      max-width: 900px;
       margin: 0 auto;
     }
     #form-container {
@@ -70,10 +71,25 @@
     input[type="number"] { font-family: var(--mono); }
     textarea { min-height: 80px; resize: vertical; }
     .note { font-size: 12px; color: var(--muted); opacity: 0.8; margin-top: -5px; margin-bottom: 10px; }
-    
+    h4 {
+      font-family: var(--title);
+      color: var(--highlight);
+      border-bottom: 1px solid var(--glass-2);
+      padding-bottom: 5px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    .dynamic-item-set {
+      border: 1px solid var(--glass-2);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: var(--bg);
+    }
     #output-code {
       width: 100%;
-      height: 150px; /* Altura da caixa de código */
+      height: 150px;
       background: var(--bg);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
@@ -138,37 +154,16 @@
       <fieldset>
         <legend>Atributos (1-20)</legend>
         <div class="grid-2">
-          <div class="input-group">
-            <label for="f-forca">Força (FOR)</label>
-            <input type="number" id="f-forca" value="1" min="1" max="20">
-          </div>
-          <div class="input-group">
-            <label for="f-destreza">Destreza (DES)</label>
-            <input type="number" id="f-destreza" value="1" min="1" max="20">
-          </div>
-          <div class="input-group">
-            <label for="f-inteligencia">Inteligência (INT)</label>
-            <input type="number" id="f-inteligencia" value="1" min="1" max="20">
-          </div>
-          <div class="input-group">
-            <label for="f-sorte">Sorte (SOR)</label>
-            <input type="number" id="f-sorte" value="1" min="1" max="20">
-          </div>
+          <div class="input-group"><label for="f-forca">Força (FOR)</label><input type="number" id="f-forca" value="1" min="1" max="20"></div>
+          <div class="input-group"><label for="f-destreza">Destreza (DES)</label><input type="number" id="f-destreza" value="1" min="1" max="20"></div>
+          <div class="input-group"><label for="f-inteligencia">Inteligência (INT)</label><input type="number" id="f-inteligencia" value="1" min="1" max="20"></div>
+          <div class="input-group"><label for="f-sorte">Sorte (SOR)</label><input type="number" id="f-sorte" value="1" min="1" max="20"></div>
         </div>
         <hr style="border-color: var(--glass); margin: 15px 0;">
         <div class="grid-3">
-          <div class="input-group">
-            <label for="f-vigor">Vigor (VIG)</label>
-            <input type="number" id="f-vigor" value="1" min="1" max="20">
-          </div>
-          <div class="input-group">
-            <label for="f-energia">Energia (ENE)</label>
-            <input type="number" id="f-energia" value="1" min="1" max="20">
-          </div>
-          <div class="input-group">
-            <label for="f-fonte">Fonte (FON)</label>
-            <input type="number" id="f-fonte" value="1" min="1" max="20">
-          </div>
+          <div class="input-group"><label for="f-vigor">Vigor (VIG)</label><input type="number" id="f-vigor" value="1" min="1" max="20"></div>
+          <div class="input-group"><label for="f-energia">Energia (ENE)</label><input type="number" id="f-energia" value="1" min="1" max="20"></div>
+          <div class="input-group"><label for="f-fonte">Fonte (FON)</label><input type="number" id="f-fonte" value="1" min="1" max="20"></div>
         </div>
       </fieldset>
 
@@ -219,34 +214,62 @@
           <div class="input-group"><label>Sobrevivência</label><input type="number" id="f-skill-sobrevivencia" value="0" min="0" max="50"></div>
         </div>
       </fieldset>
+      
+      <fieldset>
+        <legend>Combate</legend>
+        <h4>Técnicas</h4>
+        <p class="note">Preencha quantos slots precisar. Os vazios serão ignorados.</p>
+        <div class="dynamic-item-set">
+          <div class="grid-2">
+            <div class="input-group"><label>Técnica 1: Nome</label><input type="text" id="f-tecnica-nome-1" placeholder="Ex: Punho Divergente"></div>
+            <div class="input-group"><label>Técnica 1: URL</label><input type="url" id="f-tecnica-url-1" placeholder="https://... (opcional)"></div>
+          </div>
+        </div>
+        <div class="dynamic-item-set">
+          <div class="grid-2">
+            <div class="input-group"><label>Técnica 2: Nome</label><input type="text" id="f-tecnica-nome-2" placeholder="Ex: Clarão Negro"></div>
+            <div class="input-group"><label>Técnica 2: URL</label><input type="url" id="f-tecnica-url-2" placeholder="https://... (opcional)"></div>
+          </div>
+        </div>
+        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 3: Nome</label><input type="text" id="f-tecnica-nome-3"></div><div class="input-group"><label>Técnica 3: URL</label><input type="url" id="f-tecnica-url-3"></div></div></div>
+        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 4: Nome</label><input type="text" id="f-tecnica-nome-4"></div><div class="input-group"><label>Técnica 4: URL</label><input type="url" id="f-tecnica-url-4"></div></div></div>
+        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 5: Nome</label><input type="text" id="f-tecnica-nome-5"></div><div class="input-group"><label>Técnica 5: URL</label><input type="url" id="f-tecnica-url-5"></div></div></div>
+        
+        <h4 style="margin-top: 20px;">Equipamentos</h4>
+        <p class="note">Um por linha.</p>
+        <textarea id="f-equipamentos" placeholder="Ex: Uniforme da Escola Jujutsu"></textarea>
+      </fieldset>
+      
+      <fieldset>
+        <legend>Características</legend>
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="f-carac-p">Positivas (Uma por linha)</label>
+            <textarea id="f-carac-p" placeholder="Ex: Força Elevada (2 pts)"></textarea>
+          </div>
+          <div class="input-group">
+            <label for="f-carac-n">Negativas (Uma por linha)</label>
+            <textarea id="f-carac-n" placeholder="Ex: Impulsividade (5 pts)"></textarea>
+          </div>
+        </div>
+      </fieldset>
 
       <fieldset>
-        <legend>Combate, Carac. e Perfil</legend>
+        <legend>Perfil</legend>
         <div class="input-group">
-          <label for="f-tecnicas">Técnicas</label>
-          <p class="note">Uma por linha. Formato: [Nome] | [URL] (Opcional)</p>
-          <textarea id="f-tecnicas" placeholder="Ex: Punho Divergente | https://..."></textarea>
+          <label for="f-particularidade-nome">Particularidade (Apenas UMA)</label>
+          <input type="text" id="f-particularidade-nome" placeholder="Ex: Receptáculo Amaldiçoado">
         </div>
         <div class="input-group">
-          <label for="f-equipamentos">Equipamentos</label>
-          <p class="note">Um por linha.</p>
-          <textarea id="f-equipamentos" placeholder="Ex: Uniforme da Escola Jujutsu"></textarea>
+          <label for="f-particularidade-url">URL da Particularidade</label>
+          <input type="url" id="f-particularidade-url" placeholder="https://... (opcional)">
         </div>
         <div class="input-group">
-          <label for="f-carac-p">Características Positivas</label>
-          <p class="note">Um por linha. (Ex: Força Elevada (2 pts))</p>
-          <textarea id="f-carac-p"></textarea>
+          <label for="f-particularidade-desc">Descrição IC da Particularidade</label>
+          <input type="text" id="f-particularidade-desc" placeholder="Ex: Hospedeiro de Ryomen Sukuna">
         </div>
-        <div class="input-group">
-          <label for="f-carac-n">Características Negativas</label>
-          <p class="note">Um por linha. (Ex: Impulsividade (5 pts))</p>
-          <textarea id="f-carac-n"></textarea>
-        </div>
-        <div class="input-group">
-          <label for="f-particularidade">Particularidade (Apenas UMA)</label>
-          <p class="note">Formato: [Nome] | [URL] | [Descrição IC]</p>
-          <textarea id="f-particularidade" rows="2" placeholder="Ex: Receptáculo Amaldiçoado | https://... | Hospedeiro de..."></textarea>
-        </div>
+        
+        <hr style="border-color: var(--glass); margin: 15px 0;">
         <div class="input-group">
           <label for="f-aparencia">Aparência Geral</label>
           <textarea id="f-aparencia" placeholder="Descreva a aparência física do seu personagem..."></textarea>
@@ -258,31 +281,55 @@
           <div class="input-group"> <label>Cabelo</label> <input type="text" id="f-cabelo" placeholder="Ex: Rosa (Tingido)"> </div>
           <div class="input-group"> <label>Pele</label> <input type="text" id="f-pele" placeholder="Ex: Clara"> </div>
         </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Listas (Perfil Psicológico)</legend>
-        <p class="note">Um item por linha.</p>
+        
+        <hr style="border-color: var(--glass); margin: 15px 0;">
         <div class="grid-2">
-          <div class="input-group"> <label for="f-gostos">Gostos</label> <textarea id="f-gostos" placeholder="Ex: Filmes de ação"></textarea> </div>
-          <div class="input-group"> <label for="f-desgostos">Desgostos</label> <textarea id="f-desgostos" placeholder="Ex: Ficar sozinho"></textarea> </div>
-          <div class="input-group"> <label for="f-medos">Medos</label> <textarea id="f-medos" placeholder="Ex: Não ser capaz de salvar a todos"></textarea> </div>
-          <div class="input-group"> <label for="f-objetivos">Objetivos</label> <textarea id="f-objetivos" placeholder="Ex: Consumir todos os dedos de Sukuna"></textarea> </div>
+          <div class="input-group"> <label for="f-gostos">Gostos (Um por linha)</label> <textarea id="f-gostos" placeholder="Ex: Filmes de ação"></textarea> </div>
+          <div class="input-group"> <label for="f-desgostos">Desgostos (Um por linha)</label> <textarea id="f-desgostos" placeholder="Ex: Ficar sozinho"></textarea> </div>
+          <div class="input-group"> <label for="f-medos">Medos (Um por linha)</label> <textarea id="f-medos" placeholder="Ex: Não ser capaz de salvar a todos"></textarea> </div>
+          <div class="input-group"> <label for="f-objetivos">Objetivos (Um por linha)</label> <textarea id="f-objetivos" placeholder="Ex: Consumir todos os dedos de Sukuna"></textarea> </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Relações, Inventário e Biografia</legend>
-        <div class="input-group">
-          <label for="f-relacoes">Relações</label>
-          <p class="note">Formato: [Nome], [Status] | [Descrição]</p>
-          <textarea id="f-relacoes" placeholder="Ex: Megumi Fushiguro, Aliado, Rival | Primeiro feiticeiro que conheceu..."></textarea>
+        <legend>Relações</legend>
+        <p class="note">Preencha quantos slots precisar. Os vazios serão ignorados.</p>
+        <div class="dynamic-item-set relacao-item">
+          <div class="grid-2">
+            <div class="input-group"><label>Relação 1: Nome</label><input type="text" id="f-rel-nome-1" placeholder="Ex: Megumi Fushiguro"></div>
+            <div class="input-group"><label>Relação 1: Status</label><input type="text" id="f-rel-status-1" placeholder="Ex: Aliado, Rival"></div>
+          </div>
+          <div class="input-group"><label>Relação 1: Descrição</label><textarea id="f-rel-desc-1" rows="2" placeholder="Primeiro feiticeiro que conheceu..."></textarea></div>
         </div>
-        <div class="input-group">
-          <label for="f-inventario">Inventário</label>
-          <p class="note">Formato: [Nome do Item] | [Descrição (tooltip)]</p>
-          <textarea id="f-inventario" placeholder="Ex: Celular | Um smartphone comum para comunicação."></textarea>
+        <div class="dynamic-item-set relacao-item">
+          <div class="grid-2">
+            <div class="input-group"><label>Relação 2: Nome</label><input type="text" id="f-rel-nome-2"></div>
+            <div class="input-group"><label>Relação 2: Status</label><input type="text" id="f-rel-status-2"></div>
+          </div>
+          <div class="input-group"><label>Relação 2: Descrição</label><textarea id="f-rel-desc-2" rows="2"></textarea></div>
         </div>
+        <div class="dynamic-item-set relacao-item">
+          <div class="grid-2">
+            <div class="input-group"><label>Relação 3: Nome</label><input type="text" id="f-rel-nome-3"></div>
+            <div class="input-group"><label>Relação 3: Status</label><input type="text" id="f-rel-status-3"></div>
+          </div>
+          <div class="input-group"><label>Relação 3: Descrição</label><textarea id="f-rel-desc-3" rows="2"></textarea></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Inventário e Biografia</legend>
+        <h4>Inventário</h4>
+        <p class="note">Formato: [Nome] | [Descrição Tooltip]. Slots vazios serão ignorados.</p>
+        <div class="grid-2">
+          <div class="input-group"><label>Item 1</label><input type="text" id="f-inv-1" placeholder="Ex: Celular | Um smartphone comum..."></div>
+          <div class="input-group"><label>Item 2</label><input type="text" id="f-inv-2" placeholder="Ex: Faca Amaldiçoada | ..."></div>
+          <div class="input-group"><label>Item 3</label><input type="text" id="f-inv-3"></div>
+          <div class="input-group"><label>Item 4</label><input type="text" id="f-inv-4"></div>
+          <div class="input-group"><label>Item 5</label><input type="text" id="f-inv-5"></div>
+          <div class="input-group"><label>Item 6</label><input type="text" id="f-inv-6"></div>
+        </div>
+        <hr style="border-color: var(--glass); margin: 15px 0;">
         <div class="input-group">
           <label for="f-biografia">Biografia</label>
           <textarea id="f-biografia" placeholder="A história do seu personagem..."></textarea>
@@ -303,7 +350,7 @@
       const copyBtn = document.getElementById('copy-btn');
       const outputArea = document.getElementById('output-code');
       const allInputs = form.querySelectorAll('input, textarea');
-      const storageKey = 'jjkFichaGeneratorData_v3'; // Nova chave de storage
+      const storageKey = 'jjkFichaGeneratorData_v11';
 
       // --- Mapa de todas as Aptidões (para loop) ---
       const aptidoesMap = {
@@ -343,25 +390,23 @@
           { id: 'f-skill-sobrevivencia', class: 'skill-sobrevivencia' }
         ]
       };
+      
+      const MAX_SLOTS = {
+        tecnicas: 5,
+        equipamentos: 10, // Revertido para textarea
+        caracP: 10, // Revertido para textarea
+        caracN: 10, // Revertido para textarea
+        relacoes: 3,
+        inventario: 6
+      };
 
       // --- FUNÇÕES DE AJUDA ---
-      function getVal(id) {
-        return document.getElementById(id).value.trim();
-      }
-      function getNum(id) {
-        return parseInt(document.getElementById(id).value, 10) || 0;
-      }
-      // [CORRIGIDO] Escapa apenas os caracteres necessários para o HTML final
-      function escapeHTML(str) {
-        if (!str) return '';
-        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      }
-      // Escapa para dentro de um atributo HTML (como src="")
-      function escapeAttr(str) {
-        if (!str) return '';
-        return str.replace(/"/g, "&quot;");
-      }
+      function getVal(id) { return document.getElementById(id).value.trim(); }
+      function getNum(id) { return parseInt(document.getElementById(id).value, 10) || 0; }
+      function escapeHTML(str) { if (!str) return ''; return str.replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+      function escapeAttr(str) { if (!str) return ''; return str.replace(/"/g, "&quot;"); }
 
+      // Constrói <li>Item</li> a partir de um TEXTAREA
       function parseListSimple(textareaId) {
         const text = getVal(textareaId);
         if (!text) return '<li>...</li>';
@@ -371,67 +416,63 @@
                    .join('');
       }
       
-      function parseListLinks(textareaId) {
-        const text = getVal(textareaId);
-        if (!text) return '<li>...</li>';
-        return text.split('\n')
-                   .filter(line => line.trim() !== '')
-                   .map(line => {
-                     const parts = line.split('|');
-                     const nome = escapeHTML((parts[0] || 'Link').trim());
-                     const url = (parts[1] || '').trim();
-                     if (url) {
-                       return `<li>[url=${escapeAttr(url)}]${nome}[/url]</li>`;
-                     } else {
-                       return `<li>${nome}</li>`;
-                     }
-                   })
-                   .join('');
+      // Constrói <li>[url=...]Nome[/url]</li> a partir de SLOTS
+      function parseListLinks(baseId, maxSlots) {
+        let html = '';
+        for (let i = 1; i <= maxSlots; i++) {
+          const nome = getVal(`${baseId}-nome-${i}`);
+          const url = getVal(`${baseId}-url-${i}`);
+          if (nome) {
+            if (url) {
+              html += `<li>[url=${escapeAttr(url)}]${escapeHTML(nome)}[/url]</li>`;
+            } else {
+              html += `<li>${escapeHTML(nome)}</li>`;
+            }
+          }
+        }
+        return html || '<li>...</li>';
       }
       
-      function parseParticularidade(textareaId) {
-        const text = getVal(textareaId);
-        if (!text) return '<li>Nenhuma</li>';
-        const parts = text.split('|');
-        const nome = escapeHTML((parts[0] || 'Link').trim());
-        const url = (parts[1] || '').trim();
-        const desc = escapeHTML((parts[2] || '(Descrição IC)').trim());
-        
-        let linkContent = nome;
+      // Constrói <li>[b][url=...]Nome[/url]:[/b] (Descrição)</li>
+      function parseParticularidade() {
+        const nome = getVal('f-particularidade-nome');
+        if (!nome) return '<li>Nenhuma</li>';
+        const url = getVal('f-particularidade-url');
+        const desc = escapeHTML(getVal('f-particularidade-desc'));
+        let linkContent = escapeHTML(nome);
         if (url) {
-          linkContent = `[url=${escapeAttr(url)}]${nome}[/url]`;
+          linkContent = `[url=${escapeAttr(url)}]${escapeHTML(nome)}[/url]`;
         }
         return `<li>[b]${linkContent}:[/b] ${desc}</li>`;
       }
       
-      function parseRelacoes(textareaId) {
-        const text = getVal(textareaId);
-        if (!text) return '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">...</div><div class="jjk-dossier-relation-status">...</div></div><div class="jjk-dossier-relation-body">...</div></div>';
-        return text.split('\n')
-                   .filter(line => line.trim() !== '')
-                   .map(line => {
-                     const parts = line.split('|');
-                     const header = (parts[0] || '').split(',');
-                     const nome = escapeHTML((header[0] || 'Nome').trim());
-                     const status = escapeHTML((header[1] || 'Status').trim());
-                     const desc = escapeHTML((parts[1] || '...').trim());
-                     return `<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">${nome}</div><div class="jjk-dossier-relation-status">${status}</div></div><div class="jjk-dossier-relation-body">${desc}</div></div>`;
-                   })
-                   .join('');
+      // Constrói os cards de Relação a partir de SLOTS
+      function parseRelacoes(baseId, maxSlots) {
+        let html = '';
+        for (let i = 1; i <= maxSlots; i++) {
+          const nome = getVal(`${baseId}-nome-${i}`);
+          const status = getVal(`${baseId}-status-${i}`);
+          const desc = getVal(`${baseId}-desc-${i}`);
+          if (nome) {
+            html += `<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">${escapeHTML(nome)}</div><div class="jjk-dossier-relation-status">${escapeHTML(status)}</div></div><div class="jjk-dossier-relation-body">${escapeHTML(desc)}</div></div>`;
+          }
+        }
+        return html || '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">...</div></div></div>';
       }
       
-      function parseInventario(textareaId) {
-        const text = getVal(textareaId);
-        if (!text) return '<div class="jjk-dossier-inventory-item"><span>...</span><div class="jjk-dossier-tooltip-text">Slot de inventário vazio.</div></div>';
-        return text.split('\n')
-                         .filter(line => line.trim() !== '')
-                         .map(line => {
-                           const parts = line.split('|');
-                           const nome = escapeHTML((parts[0] || 'Item').trim());
-                           const desc = escapeHTML((parts[1] || 'Descrição do item.').trim());
-                           return `<div class="jjk-dossier-inventory-item"><span>${nome}</span><div class="jjk-dossier-tooltip-text">${desc}</div></div>`;
-                         })
-                         .join('');
+      // Constrói os cards de Inventário a partir de SLOTS
+      function parseInventario(baseId, maxSlots) {
+        let html = '';
+        for (let i = 1; i <= maxSlots; i++) {
+          const val = getVal(`${baseId}-${i}`);
+          if (val) {
+            const parts = val.split('|');
+            const nome = escapeHTML((parts[0] || 'Item').trim());
+            const desc = escapeHTML((parts[1] || '...').trim());
+            html += `<div class="jjk-dossier-inventory-item"><span>${nome}</span><div class="jjk-dossier-tooltip-text">${desc}</div></div>`;
+          }
+        }
+        return html || '<div class="jjk-dossier-inventory-item"><span>...</span></div>';
       }
       
       function gerarAptidoesHTML(tipo) {
@@ -447,7 +488,7 @@
         try {
           const charName = escapeHTML(getVal('f-char-name'));
           const charTitle = escapeHTML(getVal('f-char-title'));
-          const profileImg = escapeAttr(getVal('f-profile-img')); // Escapado para SRC
+          const profileImg = escapeAttr(getVal('f-profile-img'));
           const idade = escapeHTML(getVal('f-idade'));
           const grau = escapeHTML(getVal('f-grau'));
           const afiliacao = escapeHTML(getVal('f-afiliacao'));
@@ -468,11 +509,11 @@
           const aptDestrezaHtml = gerarAptidoesHTML('destreza');
           const aptInteligenciaHtml = gerarAptidoesHTML('inteligencia');
           
-          const tecnicasHtml = parseListLinks('f-tecnicas');
-          const equipamentosHtml = parseListSimple('f-equipamentos');
-          const caracPHtml = parseListSimple('f-carac-p');
-          const caracNHtml = parseListSimple('f-carac-n');
-          const particularidadeHtml = parseParticularidade('f-particularidade');
+          const tecnicasHtml = parseListLinks('f-tecnica-nome', MAX_SLOTS.tecnicas); // Erro estava aqui
+          const equipamentosHtml = parseListSimple('f-equipamentos'); // Revertido para textarea
+          const caracPHtml = parseListSimple('f-carac-p'); // Revertido para textarea
+          const caracNHtml = parseListSimple('f-carac-n'); // Revertido para textarea
+          const particularidadeHtml = parseParticularidade();
           
           const aparencia = escapeHTML(getVal('f-aparencia'));
           const altura = escapeHTML(getVal('f-altura'));
@@ -486,8 +527,8 @@
           const medosHtml = parseListSimple('f-medos');
           const objetivosHtml = parseListSimple('f-objetivos');
           
-          const relacoesHtml = parseRelacoes('f-relacoes');
-          const inventarioHtml = parseInventario('f-inventario');
+          const relacoesHtml = parseRelacoes('f-rel', MAX_SLOTS.relacoes);
+          const inventarioHtml = parseInventario('f-inv', MAX_SLOTS.inventario);
           const biografia = escapeHTML(getVal('f-biografia'));
 
           // --- GERA O CÓDIGO MINIFICADO ---
@@ -496,8 +537,8 @@
           outputArea.value = finalHTML;
         
         } catch (e) {
-          console.error("Erro ao gerar HTML:", e);
-          outputArea.value = "Erro! Verifique os valores do formulário. Detalhes no console (F12).";
+          // Fallback em caso de erro de JS
+          outputArea.value = "Erro ao gerar o código. Verifique se há caracteres inválidos no formulário.";
         }
       }
       
@@ -521,12 +562,13 @@
             }
           });
         }
-        generateAndDisplayHTML();
+        generateAndDisplayHTML(); // Gera o código na caixa de texto ao carregar
       }
 
       // --- EVENT LISTENERS ---
-      loadDataFromLocalStorage();
+      loadDataFromLocalStorage(); // Carrega os dados ao abrir a página
 
+      // [CORRIGIDO] Ouve o container do formulário pelo evento 'input'
       form.addEventListener('input', function(event) {
         generateAndDisplayHTML();
         saveDataToLocalStorage();
