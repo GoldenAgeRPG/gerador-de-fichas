@@ -572,6 +572,36 @@
 
     });
   </script>
+  <script>
+  // A URL exata do seu fórum
+  const targetOrigin = 'https://goldenagejjkrpg.forumeiros.com/t18-ficha-de-personagem#133';
+
+  // Função para enviar a altura
+  function sendHeight() {
+    var newHeight = document.body.scrollHeight;
+    window.parent.postMessage({ frameHeight: newHeight }, targetOrigin);
+  }
+
+  // Observador que detecta CADA mudança no tamanho da página
+  const resizeObserver = new ResizeObserver(entries => {
+    sendHeight();
+  });
+
+  // Começa a observar o corpo da página do gerador
+  resizeObserver.observe(document.body);
+
+  // Envia a altura assim que a página carrega
+  window.addEventListener('load', sendHeight);
+  
+  // Envia a altura sempre que uma aba de input é clicada (garantia extra)
+  document.querySelectorAll('button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      // Espera 300ms pela animação da aba e envia a nova altura
+      setTimeout(sendHeight, 300);
+    });
+  });
+</script>
 </body>
 </html>
+
 
