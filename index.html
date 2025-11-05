@@ -352,7 +352,6 @@
       const allInputs = form.querySelectorAll('input, textarea');
       const storageKey = 'jjkFichaGeneratorData_v12';
 
-      // --- Mapa de todas as Aptidões (para loop) ---
       const aptidoesMap = {
         forca: [
           { id: 'f-skill-combate-desarmado', class: 'skill-combate-desarmado' },
@@ -391,50 +390,42 @@
         ]
       };
       
-      // Número máximo de slots para cada seção dinâmica
       const MAX_SLOTS = {
         tecnicas: 5,
-        equipamentos: 1, // É um textarea
-        caracP: 1, // É um textarea
-        caracN: 1, // É um textarea
         relacoes: 3,
         inventario: 6
       };
 
-      // --- FUNÇÕES DE AJUDA ---
       function getVal(id) { return document.getElementById(id).value.trim(); }
       function getNum(id) { return parseInt(document.getElementById(id).value, 10) || 0; }
       function escapeHTML(str) { if (!str) return ''; return str.replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
       function escapeAttr(str) { if (!str) return ''; return str.replace(/"/g, "&quot;"); }
 
-      // Constrói <li>Item</li> a partir de um TEXTAREA
       function parseListSimple(textareaId) {
         const text = getVal(textareaId);
         if (!text) return '<li>...</li>';
         return text.split('\n')
                    .filter(line => line.trim() !== '')
-                   .map(line => `<li>${escapeHTML(line.trim())}</li>`)
+                   .map(line => '<li>' + escapeHTML(line.trim()) + '</li>')
                    .join('');
       }
       
-      // Constrói <li>[url=...]Nome[/url]</li> a partir de SLOTS
       function parseListLinks(baseId, maxSlots) {
         let html = '';
         for (let i = 1; i <= maxSlots; i++) {
-          const nome = getVal(`${baseId}-nome-${i}`);
-          const url = getVal(`${baseId}-url-${i}`);
+          const nome = getVal(baseId + '-nome-' + i);
+          const url = getVal(baseId + '-url-' + i);
           if (nome) {
             if (url) {
-              html += `<li>[url=${escapeAttr(url)}]${escapeHTML(nome)}[/url]</li>`;
+              html += '<li>[url=' + escapeAttr(url) + ']' + escapeHTML(nome) + '[/url]</li>';
             } else {
-              html += `<li>${escapeHTML(nome)}</li>`;
+              html += '<li>' + escapeHTML(nome) + '</li>';
             }
           }
         }
         return html || '<li>...</li>';
       }
       
-      // Constrói <li>[b][url=...]Nome[/url]:[/b] (Descrição)</li>
       function parseParticularidade() {
         const nome = getVal('f-particularidade-nome');
         if (!nome) return '<li>Nenhuma</li>';
@@ -442,35 +433,33 @@
         const desc = escapeHTML(getVal('f-particularidade-desc'));
         let linkContent = escapeHTML(nome);
         if (url) {
-          linkContent = `[url=${escapeAttr(url)}]${escapeHTML(nome)}[/url]`;
+          linkContent = '[url=' + escapeAttr(url) + ']' + escapeHTML(nome) + '[/url]';
         }
-        return `<li>[b]${linkContent}:[/b] ${desc}</li>`;
+        return '<li>[b]' + linkContent + ':[/b] ' + desc + '</li>';
       }
       
-      // Constrói os cards de Relação a partir de SLOTS
       function parseRelacoes(baseId, maxSlots) {
         let html = '';
         for (let i = 1; i <= maxSlots; i++) {
-          const nome = getVal(`${baseId}-nome-${i}`);
-          const status = getVal(`${baseId}-status-${i}`);
-          const desc = getVal(`${baseId}-desc-${i}`);
+          const nome = getVal(baseId + '-nome-' + i);
+          const status = getVal(baseId + '-status-' + i);
+          const desc = getVal(baseId + '-desc-' + i);
           if (nome) {
-            html += `<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">${escapeHTML(nome)}</div><div class="jjk-dossier-relation-status">${escapeHTML(status)}</div></div><div class="jjk-dossier-relation-body">${escapeHTML(desc)}</div></div>`;
+            html += '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">' + escapeHTML(nome) + '</div><div class="jjk-dossier-relation-status">' + escapeHTML(status) + '</div></div><div class="jjk-dossier-relation-body">' + escapeHTML(desc) + '</div></div>';
           }
         }
         return html || '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">...</div></div></div>';
       }
       
-      // Constrói os cards de Inventário a partir de SLOTS
       function parseInventario(baseId, maxSlots) {
         let html = '';
         for (let i = 1; i <= maxSlots; i++) {
-          const val = getVal(`${baseId}-${i}`);
+          const val = getVal(baseId + '-' + i);
           if (val) {
             const parts = val.split('|');
             const nome = escapeHTML((parts[0] || 'Item').trim());
             const desc = escapeHTML((parts[1] || '...').trim());
-            html += `<div class="jjk-dossier-inventory-item"><span>${nome}</span><div class="jjk-dossier-tooltip-text">${desc}</div></div>`;
+            html += '<div class="jjk-dossier-inventory-item"><span>' + nome + '</span><div class="jjk-dossier-tooltip-text">' + desc + '</div></div>';
           }
         }
         return html || '<div class="jjk-dossier-inventory-item"><span>...</span></div>';
@@ -479,12 +468,10 @@
       function gerarAptidoesHTML(tipo) {
         return aptidoesMap[tipo].map(apt => {
           const nivel = getNum(apt.id);
-          return `<div class="jjk-dossier-skill-item ${apt.class}"><span class="jjk-dossier-skill-name"></span><span class="jjk-dossier-skill-level">${nivel}</span></div>`;
+          return '<div class="jjk-dossier-skill-item ' + apt.class + '"><span class="jjk-dossier-skill-name"></span><span class="jjk-dossier-skill-level">' + nivel + '</span></div>';
         }).join('');
       }
 
-      // --- LÓGICA PRINCIPAL ---
-      
       function generateAndDisplayHTML() {
         try {
           const charName = escapeHTML(getVal('f-char-name'));
@@ -532,8 +519,6 @@
           const inventarioHtml = parseInventario('f-inv', MAX_SLOTS.inventario);
           const biografia = escapeHTML(getVal('f-biografia'));
 
-          // --- GERA O CÓDIGO MINIFICADO ---
-          // [CORRIGIDO] Usa concatenação de string (+) em vez de template literal (`)
           var finalHTML = '<link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha.css" rel="stylesheet" type="text/css"><div class="jjk-dossier-container"><input type="radio" name="dossier-tab" id="dossier-tab-1" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-2" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-3" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-4" checked="" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-5" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-6" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-7" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-8" style="display:none;"><div class="jjk-dossier-id-card"><div class="jjk-dossier-profile-img-wrapper"><img src="' + profileImg + '" class="jjk-dossier-profile-img"><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div></div><div class="jjk-dossier-profile-info"><h1 class="jjk-dossier-char-name">' + charName + '</h1><p class="jjk-dossier-char-title">' + charTitle + '</p><div class="jjk-dossier-status-bars"><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label hp"></span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-hp-fill"></div></div><span class="jjk-dossier-status-value">' + hpTotal + ' / ' + hpTotal + '</span></div></div><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label ea"></span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-ea-fill"></div></div><span class="jjk-dossier-status-value">' + eaTotal + ' / ' + eaTotal + '</span></div></div></div><div class="jjk-dossier-info-grid"><div class="jjk-dossier-info-box info-idade"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">' + idade + '</div></div><div class="jjk-dossier-info-box info-grau"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">' + grau + '</div></div><div class="jjk-dossier-info-box info-afiliacao"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">' + afiliacao + '</div></div><div class="jjk-dossier-info-box info-regen"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">' + regenTotal + ' / Turno</div></div></div></div></div><div class="jjk-dossier-body"><nav class="jjk-dossier-tabs-nav"><label for="dossier-tab-4" id="dossier-tab-4-label" class="jjk-dossier-tab-button tab-perfil" role="tab" aria-controls="dossier-content-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></label><label for="dossier-tab-1" id="dossier-tab-1-label" class="jjk-dossier-tab-button tab-atributos" role="tab" aria-controls="dossier-content-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V12L14 14"></path><circle cx="12" cy="12" r="10"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zM8 6c0-1.1.9-2 2-2M14 6c0-1.1.9-2 2-2"></path></svg></label><label for="dossier-tab-2" id="dossier-tab-2-label" class="jjk-dossier-tab-button tab-aptidoes" role="tab" aria-controls="dossier-content-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422 A12 12 0 0 1 12 22a12 12 0 0 1-6.16-11.422L12 14z"></path><path d="M12 14l9-5-9-5-9 5 9 5z"></path></svg></label><label for="dossier-tab-8" id="dossier-tab-8-label" class="jjk-dossier-tab-button tab-caracteristicas" role="tab" aria-controls="dossier-content-8"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></label><label for="dossier-tab-3" id="dossier-tab-3-label" class="jjk-dossier-tab-button tab-combate" role="tab" aria-controls="dossier-content-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 8.5L18 6l-2.5-2.5"></path><path d="M8.5 15.5L6 18l2.5 2.5"></path><path d="M12 2v20"></path><path d="M2 12h20"></path></svg></label><label for="dossier-tab-5" id="dossier-tab-5-label" class="jjk-dossier-tab-button tab-relacoes" role="tab" aria-controls="dossier-content-5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></label><label for="dossier-tab-6" id="dossier-tab-6-label" class="jjk-dossier-tab-button tab-inventario" role="tab" aria-controls="dossier-content-6"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></label><label for="dossier-tab-7" id="dossier-tab-7-label" class="jjk-dossier-tab-button tab-biografia" role="tab" aria-controls="dossier-content-7"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></label></nav><div id="dossier-content-1" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-1-label"><h3 class="h3-atributos-p"></h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item attr-forca"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + forca + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-destreza"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + destreza + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-inteligencia"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + inteligencia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-sorte"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + sorte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div><h3 class="h3-atributos-e" style="margin-top:25px;"></h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item attr-vigor"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + vigor + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-energia"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + energia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-fonte"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">' + fonte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div></div><div id="dossier-content-2" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-2-label"><h3 class="h3-aptidoes"></h3><div class="jjk-dossier-accordion"><div class="jjk-dossier-accordion-item apt-forca"><input type="checkbox" id="skill-for-v4"><label for="skill-for-v4" class="jjk-dossier-accordion-title"></label><div class="jjk-dossier-skill-list">' + aptForcaHtml + '</div></div><div class="jjk-dossier-accordion-item apt-destreza"><input type="checkbox" id="skill-des-v4"><label for="skill-des-v4" class="jjk-dossier-accordion-title"></label><div class="jjk-dossier-skill-list">' + aptDestrezaHtml + '</div></div><div class="jjk-dossier-accordion-item apt-inteligencia"><input type="checkbox" id="skill-int-v4"><label for="skill-int-v4" class="jjk-dossier-accordion-title"></label><div class="jjk-dossier-skill-list">' + aptInteligenciaHtml + '</div></div></div></div><div id="dossier-content-3" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-3-label"><div class="jjk-dossier-combat-grid"><div><h3 class="h3-tecnicas"></h3><div class="jjk-dossier-combat-box"><ul>' + tecnicasHtml + '</ul></div></div><div><h3 class="h3-equipamentos"></h3><div class="jjk-dossier-combat-box"><ul>' + equipamentosHtml + '</ul></div></div></div></div><div id="dossier-content-8" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-8-label"><div class="jjk-dossier-combat-grid"><div><h3 class="h3-carac-p"></h3><div class="jjk-dossier-combat-box"><ul>' + caracPHtml + '</ul></div></div><div><h3 class="h3-carac-n"></h3><div class="jjk-dossier-combat-box"><ul>' + caracNHtml + '</ul></div></div></div></div><div id="dossier-content-4" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-4-label"><div class="jjk-dossier-profile-section"><div class="jjk-dossier-profile-desc"><h4 style="margin-bottom: 10px;"></h4><p>' + aparencia + '</p></div><div class="jjk-dossier-profile-stats"><div class="jjk-dossier-profile-item profile-altura"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">' + altura + '</div></div><div class="jjk-dossier-profile-item profile-peso"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">' + peso + '</div></div><div class="jjk-dossier-profile-item profile-olhos"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">' + olhos + '</div></div><div class="jjk-dossier-profile-item profile-cabelo"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">' + cabelo + '</div></div><div class="jjk-dossier-profile-item profile-pele"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">' + pele + '</div></div></div></div><h3 class="h3-particularidade" style="margin-top:25px;"></h3><div class="jjk-dossier-combat-box"><ul>' + particularidadeHtml + '</ul></div><h3 class="h3-perfil-p" style="margin-top:25px;"></h3><div class="jjk-dossier-psyche-grid"><div class="jjk-dossier-psyche-card psyche-gostos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></h4><ul class="jjk-dossier-scrollable">' + gostosHtml + '</ul></div><div class="jjk-dossier-psyche-card psyche-desgostos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></h4><ul class="jjk-dossier-scrollable">' + desgostosHtml + '</ul></div><div class="jjk-dossier-psyche-card psyche-medos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></h4><ul class="jjk-dossier-scrollable">' + medosHtml + '</ul></div><div class="jjk-dossier-psyche-card psyche-objetivos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></h4><ul class="jjk-dossier-scrollable">' + objetivosHtml + '</ul></div></div></div><div id="dossier-content-5" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-5-label"><h3 class="h3-relacoes"></h3><div class="jjk-dossier-relations-grid">' + relacoesHtml + '</div></div><div id="dossier-content-6" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-6-label"><h3 class="h3-inventario"></h3><div class="jjk-dossier-inventory-grid">' + inventarioHtml + '</div></div><div id="dossier-content-7" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-7-label"><h3 class="h3-biografia"></h3><p class="jjk-dossier-bio-text">' + biografia + '</p></div></div></div>';
 
           outputArea.value = finalHTML;
