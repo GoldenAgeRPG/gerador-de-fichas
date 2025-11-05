@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Ficha - JJK RPG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Roboto+Mono:wght@400;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0c0c1a;
+      --panel: #13141c;
+      --muted: #bfc6e6;
+      --accent1: #9b00ff;
+      --highlight: #c48fff;
+      --text: #e7e9ff;
+      --ui: 'Inter', system-ui, sans-serif;
+      --title: 'Yuji Syuku', serif;
+      --mono: 'Roboto Mono', monospace;
+      --failure: #c53030;
+      --glass: rgba(255, 255, 255, 0.03);
+      --success: #00e091;
+    }
+    body {
+      font-family: var(--ui);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px; /* Largura de documento padrão */
+      margin: 0 auto;
+    }
+    #form-container {
+      background: var(--panel);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+    }
+    #output-container {
+      margin-top: 20px;
+    }
+    fieldset {
+      border: 1px solid var(--glass);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    legend {
+      font-family: var(--title);
+      font-size: 1.5em;
+      color: var(--highlight);
+      padding: 0 10px;
+      margin-left: 10px;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+    .input-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+    label { font-weight: 500; font-size: 13px; color: var(--muted); text-transform: uppercase; font-family: var(--mono); }
+    input[type="text"], input[type="url"], input[type="number"], textarea {
+      background: var(--bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 10px;
+      color: var(--text);
+      font-family: var(--ui);
+      font-size: 14px;
+    }
+    input[type="number"] { font-family: var(--mono); }
+    textarea { min-height: 80px; resize: vertical; }
+    .note { font-size: 12px; color: var(--muted); opacity: 0.8; margin-top: -5px; margin-bottom: 10px; }
+    
+    #output-code {
+      width: 100%;
+      height: 150px; /* Altura da caixa de código */
+      background: var(--bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+    #copy-btn {
+      width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--success);
+      color: var(--panel); font-size: 1em; font-family: var(--ui); font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
+    }
+    #copy-btn:hover { background: #00ffaa; }
+    
+    textarea::-webkit-scrollbar { width: 8px; }
+    textarea::-webkit-scrollbar-track { background: var(--panel); }
+    textarea::-webkit-scrollbar-thumb { background-color: var(--accent1); border-radius: 8px; }
+    
+    @media (max-width: 600px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div id="form-container">
+      <fieldset>
+        <legend>Cabeçalho</legend>
+        <div class="input-group">
+          <label for="f-char-name">Nome do Personagem</label>
+          <input type="text" id="f-char-name" placeholder="Ex: Yuji Itadori">
+        </div>
+        <div class="input-group">
+          <label for="f-char-title">Título/Alcunha</label>
+          <input type="text" id="f-char-title" placeholder="Ex: O Receptáculo de Ryomen Sukuna">
+        </div>
+        <div class="input-group">
+          <label for="f-profile-img">URL da Imagem de Perfil</label>
+          <input type="url" id="f-profile-img" placeholder="https://... .jpg">
+        </div>
+        <div class="grid-3">
+          <div class="input-group">
+            <label for="f-idade">Idade</label>
+            <input type="text" id="f-idade" placeholder="Ex: 15">
+          </div>
+          <div class="input-group">
+            <label for="f-grau">Grau</label>
+            <input type="text" id="f-grau" placeholder="Ex: Estudante">
+          </div>
+          <div class="input-group">
+            <label for="f-afiliacao">Afiliação</label>
+            <input type="text" id="f-afiliacao" placeholder="Ex: Escola de Tóquio">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Atributos (1-20)</legend>
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="f-forca">Força (FOR)</label>
+            <input type="number" id="f-forca" value="1" min="1" max="20">
+          </div>
+          <div class="input-group">
+            <label for="f-destreza">Destreza (DES)</label>
+            <input type="number" id="f-destreza" value="1" min="1" max="20">
+          </div>
+          <div class="input-group">
+            <label for="f-inteligencia">Inteligência (INT)</label>
+            <input type="number" id="f-inteligencia" value="1" min="1" max="20">
+          </div>
+          <div class="input-group">
+            <label for="f-sorte">Sorte (SOR)</label>
+            <input type="number" id="f-sorte" value="1" min="1" max="20">
+          </div>
+        </div>
+        <hr style="border-color: var(--glass); margin: 15px 0;">
+        <div class="grid-3">
+          <div class="input-group">
+            <label for="f-vigor">Vigor (VIG)</label>
+            <input type="number" id="f-vigor" value="1" min="1" max="20">
+          </div>
+          <div class="input-group">
+            <label for="f-energia">Energia (ENE)</label>
+            <input type="number" id="f-energia" value="1" min="1" max="20">
+          </div>
+          <div class="input-group">
+            <label for="f-fonte">Fonte (FON)</label>
+            <input type="number" id="f-fonte" value="1" min="1" max="20">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aptidões</legend>
+        <p class="note">Digite o nível (ex: 5). Deixe 0 para aptidões não treinadas.</p>
+        
+        <h3>Força (FOR)</h3>
+        <div class="grid-2">
+          <div class="input-group"><label>Combate Desarmado</label><input type="number" id="f-skill-combate-desarmado" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Espadas Longas</label><input type="number" id="f-skill-espadas-longas" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Machados Longos</label><input type="number" id="f-skill-machados-longos" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Martelos Longos</label><input type="number" id="f-skill-martelos-longos" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Clavas</label><input type="number" id="f-skill-clavas" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Escalada</label><input type="number" id="f-skill-escalada" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Acrobacia</label><input type="number" id="f-skill-acrobacia" value="0" min="0" max="50"></div>
+        </div>
+        <hr style="border-color: var(--glass); margin: 15px 0;">
+        
+        <h3>Destreza (DES)</h3>
+        <div class="grid-2">
+          <div class="input-group"><label>Espadas Curtas</label><input type="number" id="f-skill-espadas-curtas" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Adagas</label><input type="number" id="f-skill-adagas" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Lâminas Duplas</label><input type="number" id="f-skill-laminas-duplas" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Machados Curtos</label><input type="number" id="f-skill-machados-curtos" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Martelos Curtos</label><input type="number" id="f-skill-martelos-curtos" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Lanças</label><input type="number" id="f-skill-lancas" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Foices</label><input type="number" id="f-skill-foices" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Bastões</label><input type="number" id="f-skill-bastoes" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Correntes e Kusarigama</label><input type="number" id="f-skill-correntes" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Arremesso de Armas</label><input type="number" id="f-skill-arremesso" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Armas de Fogo</label><input type="number" id="f-skill-armas-de-fogo" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Furtividade</label><input type="number" id="f-skill-furtividade" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Natação</label><input type="number" id="f-skill-natacao" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Corrida</label><input type="number" id="f-skill-corrida" value="0" min="0" max="50"></div>
+        </div>
+        <hr style="border-color: var(--glass); margin: 15px 0;">
+        
+        <h3>Inteligência (INT)</h3>
+        <div class="grid-2">
+          <div class="input-group"><label>Feitiços</label><input type="number" id="f-skill-feiticos" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Barreiras</label><input type="number" id="f-skill-barreiras" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Pactos</label><input type="number" id="f-skill-pactos" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Percepção Mágica</label><input type="number" id="f-skill-percepcao-magica" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Primeiros Socorros</label><input type="number" id="f-skill-primeiros-socorros" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Técnica Reversa</label><input type="number" id="f-skill-tecnica-reversa" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Percepção Visual</label><input type="number" id="f-skill-percepcao-visual" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Sobrevivência</label><input type="number" id="f-skill-sobrevivencia" value="0" min="0" max="50"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Combate, Carac. e Perfil</legend>
+        <div class="input-group">
+          <label for="f-tecnicas">Técnicas</label>
+          <p class="note">Uma por linha. Formato: [Nome] | [URL] (Opcional)</p>
+          <textarea id="f-tecnicas" placeholder="Ex: Punho Divergente | https://..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-equipamentos">Equipamentos</label>
+          <p class="note">Um por linha.</p>
+          <textarea id="f-equipamentos" placeholder="Ex: Uniforme da Escola Jujutsu"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-carac-p">Características Positivas</label>
+          <p class="note">Um por linha. (Ex: Força Elevada (2 pts))</p>
+          <textarea id="f-carac-p"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-carac-n">Características Negativas</label>
+          <p class="note">Um por linha. (Ex: Impulsividade (5 pts))</p>
+          <textarea id="f-carac-n"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-particularidade">Particularidade (Apenas UMA)</label>
+          <p class="note">Formato: [Nome] | [URL] | [Descrição IC]</p>
+          <textarea id="f-particularidade" rows="2" placeholder="Ex: Receptáculo Amaldiçoado | https://... | Hospedeiro de..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-aparencia">Aparência Geral</label>
+          <textarea id="f-aparencia" placeholder="Descreva a aparência física do seu personagem..."></textarea>
+        </div>
+        <div class="grid-3">
+          <div class="input-group"> <label>Altura</label> <input type="text" id="f-altura" placeholder="Ex: 173 cm"> </div>
+          <div class="input-group"> <label>Peso</label> <input type="text" id="f-peso" placeholder="Ex: 80 kg"> </div>
+          <div class="input-group"> <label>Olhos</label> <input type="text" id="f-olhos" placeholder="Ex: Castanho Claro"> </div>
+          <div class="input-group"> <label>Cabelo</label> <input type="text" id="f-cabelo" placeholder="Ex: Rosa (Tingido)"> </div>
+          <div class="input-group"> <label>Pele</label> <input type="text" id="f-pele" placeholder="Ex: Clara"> </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Listas (Perfil Psicológico)</legend>
+        <p class="note">Um item por linha.</p>
+        <div class="grid-2">
+          <div class="input-group"> <label for="f-gostos">Gostos</label> <textarea id="f-gostos" placeholder="Ex: Filmes de ação"></textarea> </div>
+          <div class="input-group"> <label for="f-desgostos">Desgostos</label> <textarea id="f-desgostos" placeholder="Ex: Ficar sozinho"></textarea> </div>
+          <div class="input-group"> <label for="f-medos">Medos</label> <textarea id="f-medos" placeholder="Ex: Não ser capaz de salvar a todos"></textarea> </div>
+          <div class="input-group"> <label for="f-objetivos">Objetivos</label> <textarea id="f-objetivos" placeholder="Ex: Consumir todos os dedos de Sukuna"></textarea> </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Relações, Inventário e Biografia</legend>
+        <div class="input-group">
+          <label for="f-relacoes">Relações</label>
+          <p class="note">Formato: [Nome], [Status] | [Descrição]</p>
+          <textarea id="f-relacoes" placeholder="Ex: Megumi Fushiguro, Aliado, Rival | Primeiro feiticeiro que conheceu..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-inventario">Inventário</label>
+          <p class="note">Formato: [Nome do Item] | [Descrição (tooltip)]</p>
+          <textarea id="f-inventario" placeholder="Ex: Celular | Um smartphone comum para comunicação."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="f-biografia">Biografia</label>
+          <textarea id="f-biografia" placeholder="A história do seu personagem..."></textarea>
+        </div>
+      </fieldset>
+    </div>
+
+    <div id="output-container">
+      <textarea id="output-code" readonly>O HTML minificado da sua ficha aparecerá aqui...</textarea>
+      <button id="copy-btn">Copiar Código</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      const form = document.getElementById('form-container');
+      const copyBtn = document.getElementById('copy-btn');
+      const outputArea = document.getElementById('output-code');
+      const allInputs = form.querySelectorAll('input, textarea');
+      const storageKey = 'jjkFichaGeneratorData_v3'; // Nova chave de storage
+
+      // --- Mapa de todas as Aptidões (para loop) ---
+      const aptidoesMap = {
+        forca: [
+          { id: 'f-skill-combate-desarmado', class: 'skill-combate-desarmado' },
+          { id: 'f-skill-espadas-longas', class: 'skill-espadas-longas' },
+          { id: 'f-skill-machados-longos', class: 'skill-machados-longos' },
+          { id: 'f-skill-martelos-longos', class: 'skill-martelos-longos' },
+          { id: 'f-skill-clavas', class: 'skill-clavas' },
+          { id: 'f-skill-escalada', class: 'skill-escalada' },
+          { id: 'f-skill-acrobacia', class: 'skill-acrobacia' }
+        ],
+        destreza: [
+          { id: 'f-skill-espadas-curtas', class: 'skill-espadas-curtas' },
+          { id: 'f-skill-adagas', class: 'skill-adagas' },
+          { id: 'f-skill-laminas-duplas', class: 'skill-laminas-duplas' },
+          { id: 'f-skill-machados-curtos', class: 'skill-machados-curtos' },
+          { id: 'f-skill-martelos-curtos', class: 'skill-martelos-curtos' },
+          { id: 'f-skill-lancas', class: 'skill-lancas' },
+          { id: 'f-skill-foices', class: 'skill-foices' },
+          { id: 'f-skill-bastoes', class: 'skill-bastoes' },
+          { id: 'f-skill-correntes', class: 'skill-correntes' },
+          { id: 'f-skill-arremesso', class: 'skill-arremesso' },
+          { id: 'f-skill-armas-de-fogo', class: 'skill-armas-de-fogo' },
+          { id: 'f-skill-furtividade', class: 'skill-furtividade' },
+          { id: 'f-skill-natacao', class: 'skill-natacao' },
+          { id: 'f-skill-corrida', class: 'skill-corrida' }
+        ],
+        inteligencia: [
+          { id: 'f-skill-feiticos', class: 'skill-feiticos' },
+          { id: 'f-skill-barreiras', class: 'skill-barreiras' },
+          { id: 'f-skill-pactos', class: 'skill-pactos' },
+          { id: 'f-skill-percepcao-magica', class: 'skill-percepcao-magica' },
+          { id: 'f-skill-primeiros-socorros', class: 'skill-primeiros-socorros' },
+          { id: 'f-skill-tecnica-reversa', class: 'skill-tecnica-reversa' },
+          { id: 'f-skill-percepcao-visual', class: 'skill-percepcao-visual' },
+          { id: 'f-skill-sobrevivencia', class: 'skill-sobrevivencia' }
+        ]
+      };
+
+      // --- FUNÇÕES DE AJUDA ---
+      function getVal(id) {
+        return document.getElementById(id).value.trim();
+      }
+      function getNum(id) {
+        return parseInt(document.getElementById(id).value, 10) || 0;
+      }
+      // [CORRIGIDO] Escapa apenas os caracteres necessários para o HTML final
+      function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+      // Escapa para dentro de um atributo HTML (como src="")
+      function escapeAttr(str) {
+        if (!str) return '';
+        return str.replace(/"/g, "&quot;");
+      }
+
+      function parseListSimple(textareaId) {
+        const text = getVal(textareaId);
+        if (!text) return '<li>...</li>';
+        return text.split('\n')
+                   .filter(line => line.trim() !== '')
+                   .map(line => `<li>${escapeHTML(line.trim())}</li>`)
+                   .join('');
+      }
+      
+      function parseListLinks(textareaId) {
+        const text = getVal(textareaId);
+        if (!text) return '<li>...</li>';
+        return text.split('\n')
+                   .filter(line => line.trim() !== '')
+                   .map(line => {
+                     const parts = line.split('|');
+                     const nome = escapeHTML((parts[0] || 'Link').trim());
+                     const url = (parts[1] || '').trim();
+                     if (url) {
+                       return `<li>[url=${escapeAttr(url)}]${nome}[/url]</li>`;
+                     } else {
+                       return `<li>${nome}</li>`;
+                     }
+                   })
+                   .join('');
+      }
+      
+      function parseParticularidade(textareaId) {
+        const text = getVal(textareaId);
+        if (!text) return '<li>Nenhuma</li>';
+        const parts = text.split('|');
+        const nome = escapeHTML((parts[0] || 'Link').trim());
+        const url = (parts[1] || '').trim();
+        const desc = escapeHTML((parts[2] || '(Descrição IC)').trim());
+        
+        let linkContent = nome;
+        if (url) {
+          linkContent = `[url=${escapeAttr(url)}]${nome}[/url]`;
+        }
+        return `<li>[b]${linkContent}:[/b] ${desc}</li>`;
+      }
+      
+      function parseRelacoes(textareaId) {
+        const text = getVal(textareaId);
+        if (!text) return '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">...</div><div class="jjk-dossier-relation-status">...</div></div><div class="jjk-dossier-relation-body">...</div></div>';
+        return text.split('\n')
+                   .filter(line => line.trim() !== '')
+                   .map(line => {
+                     const parts = line.split('|');
+                     const header = (parts[0] || '').split(',');
+                     const nome = escapeHTML((header[0] || 'Nome').trim());
+                     const status = escapeHTML((header[1] || 'Status').trim());
+                     const desc = escapeHTML((parts[1] || '...').trim());
+                     return `<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">${nome}</div><div class="jjk-dossier-relation-status">${status}</div></div><div class="jjk-dossier-relation-body">${desc}</div></div>`;
+                   })
+                   .join('');
+      }
+      
+      function parseInventario(textareaId) {
+        const text = getVal(textareaId);
+        if (!text) return '<div class="jjk-dossier-inventory-item"><span>...</span><div class="jjk-dossier-tooltip-text">Slot de inventário vazio.</div></div>';
+        return text.split('\n')
+                         .filter(line => line.trim() !== '')
+                         .map(line => {
+                           const parts = line.split('|');
+                           const nome = escapeHTML((parts[0] || 'Item').trim());
+                           const desc = escapeHTML((parts[1] || 'Descrição do item.').trim());
+                           return `<div class="jjk-dossier-inventory-item"><span>${nome}</span><div class="jjk-dossier-tooltip-text">${desc}</div></div>`;
+                         })
+                         .join('');
+      }
+      
+      function gerarAptidoesHTML(tipo) {
+        return aptidoesMap[tipo].map(apt => {
+          const nivel = getNum(apt.id);
+          return `<div class="jjk-dossier-skill-item ${apt.class}"><span class="jjk-dossier-skill-name"></span><span class="jjk-dossier-skill-level">${nivel}</span></div>`;
+        }).join('');
+      }
+
+      // --- LÓGICA PRINCIPAL ---
+      
+      function generateAndDisplayHTML() {
+        try {
+          const charName = escapeHTML(getVal('f-char-name'));
+          const charTitle = escapeHTML(getVal('f-char-title'));
+          const profileImg = escapeAttr(getVal('f-profile-img')); // Escapado para SRC
+          const idade = escapeHTML(getVal('f-idade'));
+          const grau = escapeHTML(getVal('f-grau'));
+          const afiliacao = escapeHTML(getVal('f-afiliacao'));
+          
+          const forca = getNum('f-forca');
+          const destreza = getNum('f-destreza');
+          const inteligencia = getNum('f-inteligencia');
+          const sorte = getNum('f-sorte');
+          const vigor = getNum('f-vigor');
+          const energia = getNum('f-energia');
+          const fonte = getNum('f-fonte');
+          
+          const hpTotal = vigor * 400;
+          const eaTotal = energia * 400;
+          const regenTotal = fonte * 40;
+          
+          const aptForcaHtml = gerarAptidoesHTML('forca');
+          const aptDestrezaHtml = gerarAptidoesHTML('destreza');
+          const aptInteligenciaHtml = gerarAptidoesHTML('inteligencia');
+          
+          const tecnicasHtml = parseListLinks('f-tecnicas');
+          const equipamentosHtml = parseListSimple('f-equipamentos');
+          const caracPHtml = parseListSimple('f-carac-p');
+          const caracNHtml = parseListSimple('f-carac-n');
+          const particularidadeHtml = parseParticularidade('f-particularidade');
+          
+          const aparencia = escapeHTML(getVal('f-aparencia'));
+          const altura = escapeHTML(getVal('f-altura'));
+          const peso = escapeHTML(getVal('f-peso'));
+          const olhos = escapeHTML(getVal('f-olhos'));
+          const cabelo = escapeHTML(getVal('f-cabelo'));
+          const pele = escapeHTML(getVal('f-pele'));
+
+          const gostosHtml = parseListSimple('f-gostos');
+          const desgostosHtml = parseListSimple('f-desgostos');
+          const medosHtml = parseListSimple('f-medos');
+          const objetivosHtml = parseListSimple('f-objetivos');
+          
+          const relacoesHtml = parseRelacoes('f-relacoes');
+          const inventarioHtml = parseInventario('f-inventario');
+          const biografia = escapeHTML(getVal('f-biografia'));
+
+          // --- GERA O CÓDIGO MINIFICADO ---
+          const finalHTML = `<link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha.css" rel="stylesheet" type="text/css"><div class="jjk-dossier-container"><input type="radio" name="dossier-tab" id="dossier-tab-1" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-2" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-3" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-4" checked="" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-5" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-6" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-7" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-8" style="display:none;"><div class="jjk-dossier-id-card"><div class="jjk-dossier-profile-img-wrapper"><img src="${profileImg}" class="jjk-dossier-profile-img"><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div></div><div class="jjk-dossier-profile-info"><h1 class="jjk-dossier-char-name">${charName}</h1><p class="jjk-dossier-char-title">${charTitle}</p><div class="jjk-dossier-status-bars"><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label hp"></span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-hp-fill"></div></div><span class="jjk-dossier-status-value">${hpTotal} / ${hpTotal}</span></div></div><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label ea"></span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-ea-fill"></div></div><span class="jjk-dossier-status-value">${eaTotal} / ${eaTotal}</span></div></div></div><div class="jjk-dossier-info-grid"><div class="jjk-dossier-info-box info-idade"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">${idade}</div></div><div class="jjk-dossier-info-box info-grau"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">${grau}</div></div><div class="jjk-dossier-info-box info-afiliacao"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">${afiliacao}</div></div><div class="jjk-dossier-info-box info-regen"><div class="jjk-dossier-label"></div><div class="jjk-dossier-value">${regenTotal} / Turno</div></div></div></div></div><div class="jjk-dossier-body"><nav class="jjk-dossier-tabs-nav"><label for="dossier-tab-4" id="dossier-tab-4-label" class="jjk-dossier-tab-button tab-perfil" role="tab" aria-controls="dossier-content-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></label><label for="dossier-tab-1" id="dossier-tab-1-label" class="jjk-dossier-tab-button tab-atributos" role="tab" aria-controls="dossier-content-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V12L14 14"></path><circle cx="12" cy="12" r="10"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zM8 6c0-1.1.9-2 2-2M14 6c0-1.1.9-2 2-2"></path></svg></label><label for="dossier-tab-2" id="dossier-tab-2-label" class="jjk-dossier-tab-button tab-aptidoes" role="tab" aria-controls="dossier-content-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422 A12 12 0 0 1 12 22a12 12 0 0 1-6.16-11.422L12 14z"></path><path d="M12 14l9-5-9-5-9 5 9 5z"></path></svg></label><label for="dossier-tab-8" id="dossier-tab-8-label" class="jjk-dossier-tab-button tab-caracteristicas" role="tab" aria-controls="dossier-content-8"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></label><label for="dossier-tab-3" id="dossier-tab-3-label" class="jjk-dossier-tab-button tab-combate" role="tab" aria-controls="dossier-content-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 8.5L18 6l-2.5-2.5"></path><path d="M8.5 15.5L6 18l2.5 2.5"></path><path d="M12 2v20"></path><path d="M2 12h20"></path></svg></label><label for="dossier-tab-5" id="dossier-tab-5-label" class="jjk-dossier-tab-button tab-relacoes" role="tab" aria-controls="dossier-content-5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></label><label for="dossier-tab-6" id="dossier-tab-6-label" class="jjk-dossier-tab-button tab-inventario" role="tab" aria-controls="dossier-content-6"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></label><label for="dossier-tab-7" id="dossier-tab-7-label" class="jjk-dossier-tab-button tab-biografia" role="tab" aria-controls="dossier-content-7"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></label></nav><div id="dossier-content-1" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-1-label"><h3 class="h3-atributos-p"></h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item attr-forca"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${forca} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-destreza"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${destreza} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-inteligencia"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${inteligencia} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-sorte"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${sorte} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div><h3 class="h3-atributos-e" style="margin-top:25px;"></h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item attr-vigor"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${vigor} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-energia"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${energia} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item attr-fonte"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name"></span><span class="jjk-dossier-attr-value">${fonte} / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div></div><div id="dossier-content-2" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-2-label"><h3 class="h3-aptidoes"></h3><div class="jjk-dossier-accordion"><div class="jjk-dossier-accordion-item apt-forca"><input type="checkbox" id="skill-for-v4"><label for="skill-for-v4" class="jjk-dossier-accordion-title"></label><div class="jjk-dossier-skill-list">${aptForcaHtml}</div></div><div class="jjk-dossier-accordion-item apt-destreza"><input type="checkbox" id="skill-des-v4"><label for="skill-des-v4" class="jjk-dossier-accordion-title"></label><div class="jjk-dossier-skill-list">${aptDestrezaHtml}</div></div><div class="jjk-dossier-accordion-item apt-inteligencia"><input type="checkbox" id="skill-int-v4"><label for="skill-int-v4" class="jjk-dossier-accordion-title"></label><div class="jjk-dossier-skill-list">${aptInteligenciaHtml}</div></div></div></div><div id="dossier-content-3" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-3-label"><div class="jjk-dossier-combat-grid"><div><h3 class="h3-tecnicas"></h3><div class="jjk-dossier-combat-box"><ul>${tecnicasHtml}</ul></div></div><div><h3 class="h3-equipamentos"></h3><div class="jjk-dossier-combat-box"><ul>${equipamentosHtml}</ul></div></div></div></div><div id="dossier-content-8" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-8-label"><div class="jjk-dossier-combat-grid"><div><h3 class="h3-carac-p"></h3><div class="jjk-dossier-combat-box"><ul>${caracPHtml}</ul></div></div><div><h3 class="h3-carac-n"></h3><div class="jjk-dossier-combat-box"><ul>${caracNHtml}</ul></div></div></div></div><div id="dossier-content-4" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-4-label"><div class="jjk-dossier-profile-section"><div class="jjk-dossier-profile-desc"><h4 style="margin-bottom: 10px;"></h4><p>${aparencia}</p></div><div class="jjk-dossier-profile-stats"><div class="jjk-dossier-profile-item profile-altura"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">${altura}</div></div><div class="jjk-dossier-profile-item profile-peso"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">${peso}</div></div><div class="jjk-dossier-profile-item profile-olhos"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">${olhos}</div></div><div class="jjk-dossier-profile-item profile-cabelo"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">${cabelo}</div></div><div class="jjk-dossier-profile-item profile-pele"><div class="jjk-dossier-label"></div><div class="jjk-dossier-profile-value">${pele}</div></div></div></div><h3 class="h3-particularidade" style="margin-top:25px;"></h3><div class="jjk-dossier-combat-box"><ul>${particularidadeHtml}</ul></div><h3 class="h3-perfil-p" style="margin-top:25px;"></h3><div class="jjk-dossier-psyche-grid"><div class="jjk-dossier-psyche-card psyche-gostos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></h4><ul class="jjk-dossier-scrollable">${gostosHtml}</ul></div><div class="jjk-dossier-psyche-card psyche-desgostos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></h4><ul class="jjk-dossier-scrollable">${desgostosHtml}</ul></div><div class="jjk-dossier-psyche-card psyche-medos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></h4><ul class="jjk-dossier-scrollable">${medosHtml}</ul></div><div class="jjk-dossier-psyche-card psyche-objetivos"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></h4><ul class="jjk-dossier-scrollable">${objetivosHtml}</ul></div></div></div><div id="dossier-content-5" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-5-label"><h3 class="h3-relacoes"></h3><div class="jjk-dossier-relations-grid">${relacoesHtml}</div></div><div id="dossier-content-6" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-6-label"><h3 class="h3-inventario"></h3><div class="jjk-dossier-inventory-grid">${inventarioHtml}</div></div><div id="dossier-content-7" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-7-label"><h3 class="h3-biografia"></h3><p class="jjk-dossier-bio-text">${biografia}</p></div></div></div>`;
+
+          outputArea.value = finalHTML;
+        
+        } catch (e) {
+          console.error("Erro ao gerar HTML:", e);
+          outputArea.value = "Erro! Verifique os valores do formulário. Detalhes no console (F12).";
+        }
+      }
+      
+      // --- LÓGICA DE MEMÓRIA (localStorage) ---
+      function saveDataToLocalStorage() {
+        const data = {};
+        allInputs.forEach(input => {
+          if(input.id) {
+            data[input.id] = input.value;
+          }
+        });
+        localStorage.setItem(storageKey, JSON.stringify(data));
+      }
+
+      function loadDataFromLocalStorage() {
+        const data = JSON.parse(localStorage.getItem(storageKey));
+        if (data) {
+          allInputs.forEach(input => {
+            if (input.id && data[input.id] !== undefined) {
+              input.value = data[input.id];
+            }
+          });
+        }
+        generateAndDisplayHTML();
+      }
+
+      // --- EVENT LISTENERS ---
+      loadDataFromLocalStorage();
+
+      form.addEventListener('input', function(event) {
+        generateAndDisplayHTML();
+        saveDataToLocalStorage();
+      });
+
+      copyBtn.addEventListener('click', function() {
+        outputArea.select();
+        document.execCommand('copy');
+        copyBtn.textContent = 'Copiado!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copiar Código';
+        }, 2000);
+      });
+
+    });
+  </script>
+</body>
+</html>
