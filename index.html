@@ -58,6 +58,7 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
     .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
     .input-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
     label { font-weight: 500; font-size: 13px; color: var(--muted); text-transform: uppercase; font-family: var(--mono); }
     input[type="text"], input[type="url"], input[type="number"], textarea, select {
@@ -69,7 +70,7 @@
       font-family: var(--ui);
       font-size: 14px;
     }
-    input[type="number"], select { font-family: var(--mono); }
+    input[type="number"], select, input[placeholder*="XP"] { font-family: var(--mono); }
     textarea { min-height: 80px; resize: vertical; }
     .note { font-size: 12px; color: var(--muted); opacity: 0.8; margin-top: -5px; margin-bottom: 10px; }
     h4 {
@@ -113,7 +114,7 @@
     textarea::-webkit-scrollbar-thumb { background-color: var(--accent1); border-radius: 8px; }
     
     @media (max-width: 600px) {
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -135,6 +136,29 @@
         <div class="input-group">
           <label for="f-profile-img">URL da Imagem de Perfil</label>
           <input type="url" id="f-profile-img" placeholder="https://... .jpg">
+        </div>
+
+        <div class="grid-5">
+            <div class="input-group">
+              <label for="f-hp-atual">HP Atual</label>
+              <input type="number" id="f-hp-atual" value="400">
+            </div>
+            <div class="input-group">
+              <label for="f-hp-max">HP Máximo</label>
+              <input type="number" id="f-hp-max" value="400">
+            </div>
+            <div class="input-group">
+              <label for="f-ea-atual">EA Atual</label>
+              <input type="number" id="f-ea-atual" value="400">
+            </div>
+            <div class="input-group">
+              <label for="f-ea-max">EA Máxima</label>
+              <input type="number" id="f-ea-max" value="400">
+            </div>
+            <div class="input-group">
+              <label for="f-regen-ea">Regen. EA</label>
+              <input type="number" id="f-regen-ea" value="40">
+            </div>
         </div>
         <div class="grid-4">
           <div class="input-group">
@@ -168,7 +192,8 @@
 
       <fieldset>
         <legend>Atributos (1-20)</legend>
-        <div class="grid-2">
+        <p class="note">Vigor, Energia e Fonte são usados apenas para referência de nível. O HP/EA/Regen são definidos no Cabeçalho.</p>
+        <div class="grid-4">
           <div class="input-group"><label for="f-forca">Força (FOR)</label><input type="number" id="f-forca" value="1" min="1" max="20"></div>
           <div class="input-group"><label for="f-destreza">Destreza (DES)</label><input type="number" id="f-destreza" value="1" min="1" max="20"></div>
           <div class="input-group"><label for="f-inteligencia">Inteligência (INT)</label><input type="number" id="f-inteligencia" value="1" min="1" max="20"></div>
@@ -184,49 +209,77 @@
 
       <fieldset>
         <legend>Aptidões</legend>
-        <p class="note">Digite o nível (ex: 5). Deixe 0 para aptidões não treinadas.</p>
+        <p class="note">Digite o Nível (0-50) e o valor de XP (Ex: 0 / 200 XP).</p>
         <h3>Força (FOR)</h3>
         <div class="grid-2">
-          <div class="input-group"><label>Combate Desarmado</label><input type="number" id="f-skill-combate-desarmado" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Espadas Longas</label><input type="number" id="f-skill-espadas-longas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Machados Longos</label><input type="number" id="f-skill-machados-longos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Martelos Longos</label><input type="number" id="f-skill-martelos-longos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Clavas</label><input type="number" id="f-skill-clavas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Escalada</label><input type="number" id="f-skill-escalada" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Acrobacia</label><input type="number" id="f-skill-acrobacia" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Combate Desarmado (Nível)</label><input type="number" id="f-skill-combate-desarmado-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Combate Desarmado (XP)</label><input type="text" id="f-skill-combate-desarmado-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Espadas Longas (Nível)</label><input type="number" id="f-skill-espadas-longas-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Espadas Longas (XP)</label><input type="text" id="f-skill-espadas-longas-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Machados Longos (Nível)</label><input type="number" id="f-skill-machados-longos-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Machados Longos (XP)</label><input type="text" id="f-skill-machados-longos-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Martelos Longos (Nível)</label><input type="number" id="f-skill-martelos-longos-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Martelos Longos (XP)</label><input type="text" id="f-skill-martelos-longos-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Clavas (Nível)</label><input type="number" id="f-skill-clavas-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Clavas (XP)</label><input type="text" id="f-skill-clavas-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Escalada (Nível)</label><input type="number" id="f-skill-escalada-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Escalada (XP)</label><input type="text" id="f-skill-escalada-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Acrobacia (Nível)</label><input type="number" id="f-skill-acrobacia-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Acrobacia (XP)</label><input type="text" id="f-skill-acrobacia-xp" value="0 / 200 XP"></div>
         </div>
         <hr style="border-color: var(--glass); margin: 15px 0;">
         <h3>Destreza (DES)</h3>
         <div class="grid-2">
-          <div class="input-group"><label>Espadas Curtas</label><input type="number" id="f-skill-espadas-curtas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Adagas</label><input type="number" id="f-skill-adagas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Lâminas Duplas</label><input type="number" id="f-skill-laminas-duplas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Machados Curtos</label><input type="number" id="f-skill-machados-curtos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Martelos Curtos</label><input type="number" id="f-skill-martelos-curtos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Lanças</label><input type="number" id="f-skill-lancas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Foices</label><input type="number" id="f-skill-foices" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Bastões</label><input type="number" id="f-skill-bastoes" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Correntes e Kusarigama</label><input type="number" id="f-skill-correntes" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Arremesso de Armas</label><input type="number" id="f-skill-arremesso" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Armas de Fogo</label><input type="number" id="f-skill-armas-de-fogo" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Furtividade</label><input type="number" id="f-skill-furtividade" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Natação</label><input type="number" id="f-skill-natacao" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Corrida</label><input type="number" id="f-skill-corrida" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Espadas Curtas (Nível)</label><input type="number" id="f-skill-espadas-curtas-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Espadas Curtas (XP)</label><input type="text" id="f-skill-espadas-curtas-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Adagas (Nível)</label><input type="number" id="f-skill-adagas-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Adagas (XP)</label><input type="text" id="f-skill-adagas-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Lâminas Duplas (Nível)</label><input type="number" id="f-skill-laminas-duplas-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Lâminas Duplas (XP)</label><input type="text" id="f-skill-laminas-duplas-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Machados Curtos (Nível)</label><input type="number" id="f-skill-machados-curtos-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Machados Curtos (XP)</label><input type="text" id="f-skill-machados-curtos-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Martelos Curtos (Nível)</label><input type="number" id="f-skill-martelos-curtos-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Martelos Curtos (XP)</label><input type="text" id="f-skill-martelos-curtos-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Lanças (Nível)</label><input type="number" id="f-skill-lancas-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Lanças (XP)</label><input type="text" id="f-skill-lancas-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Foices (Nível)</label><input type="number" id="f-skill-foices-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Foices (XP)</label><input type="text" id="f-skill-foices-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Bastões (Nível)</label><input type="number" id="f-skill-bastoes-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Bastões (XP)</label><input type="text" id="f-skill-bastoes-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Correntes (Nível)</label><input type="number" id="f-skill-correntes-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Correntes (XP)</label><input type="text" id="f-skill-correntes-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Arremesso (Nível)</label><input type="number" id="f-skill-arremesso-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Arremesso (XP)</label><input type="text" id="f-skill-arremesso-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Armas de Fogo (Nível)</label><input type="number" id="f-skill-armas-de-fogo-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Armas de Fogo (XP)</label><input type="text" id="f-skill-armas-de-fogo-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Furtividade (Nível)</label><input type="number" id="f-skill-furtividade-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Furtividade (XP)</label><input type="text" id="f-skill-furtividade-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Natação (Nível)</label><input type="number" id="f-skill-natacao-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Natação (XP)</label><input type="text" id="f-skill-natacao-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Corrida (Nível)</label><input type="number" id="f-skill-corrida-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Corrida (XP)</label><input type="text" id="f-skill-corrida-xp" value="0 / 200 XP"></div>
         </div>
         <hr style="border-color: var(--glass); margin: 15px 0;">
         <h3>Inteligência (INT)</h3>
         <div class="grid-2">
-          <div class="input-group"><label>Feitiços</label><input type="number" id="f-skill-feiticos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Barreiras</label><input type="number" id="f-skill-barreiras" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Pactos</label><input type="number" id="f-skill-pactos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Percepção Mágica</label><input type="number" id="f-skill-percepcao-magica" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Primeiros Socorros</label><input type="number" id="f-skill-primeiros-socorros" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Técnica Reversa</label><input type="number" id="f-skill-tecnica-reversa" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Percepção Visual</label><input type="number" id="f-skill-percepcao-visual" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Sobrevivência</label><input type="number" id="f-skill-sobrevivencia" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Feitiços (Nível)</label><input type="number" id="f-skill-feiticos-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Feitiços (XP)</label><input type="text" id="f-skill-feiticos-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Barreiras (Nível)</label><input type="number" id="f-skill-barreiras-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Barreiras (XP)</label><input type="text" id="f-skill-barreiras-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Pactos (Nível)</label><input type="number" id="f-skill-pactos-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Pactos (XP)</label><input type="text" id="f-skill-pactos-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Percepção Mágica (Nível)</label><input type="number" id="f-skill-percepcao-magica-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Percepção Mágica (XP)</label><input type="text" id="f-skill-percepcao-magica-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Primeiros Socorros (Nível)</label><input type="number" id="f-skill-primeiros-socorros-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Primeiros Socorros (XP)</label><input type="text" id="f-skill-primeiros-socorros-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Técnica Reversa (Nível)</label><input type="number" id="f-skill-tecnica-reversa-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Técnica Reversa (XP)</label><input type="text" id="f-skill-tecnica-reversa-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Percepção Visual (Nível)</label><input type="number" id="f-skill-percepcao-visual-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Percepção Visual (XP)</label><input type="text" id="f-skill-percepcao-visual-xp" value="0 / 200 XP"></div>
+          <div class="input-group"><label>Sobrevivência (Nível)</label><input type="number" id="f-skill-sobrevivencia-lvl" value="0" min="0" max="50"></div>
+          <div class="input-group"><label>Sobrevivência (XP)</label><input type="text" id="f-skill-sobrevivencia-xp" value="0 / 200 XP"></div>
         </div>
       </fieldset>
-      
       <fieldset>
         <legend>Combate</legend>
         <h4>Técnicas</h4>
@@ -352,43 +405,44 @@
       const copyBtn = document.getElementById('copy-btn');
       const outputArea = document.getElementById('output-code');
       const allInputs = form.querySelectorAll('input, textarea, select');
-      const storageKey = 'jjkFichaGeneratorData_v13'; // Nova chave
+      const storageKey = 'jjkFichaGeneratorData_v14'; // Chave atualizada
 
+      // MAPA DE APTIDÕES ATUALIZADO (USA idBase)
       const aptidoesMap = {
         forca: [
-          { id: 'f-skill-combate-desarmado', label: 'Combate Desarmado' },
-          { id: 'f-skill-espadas-longas', label: 'Espadas Longas' },
-          { id: 'f-skill-machados-longos', label: 'Machados Longos' },
-          { id: 'f-skill-martelos-longos', label: 'Martelos Longos' },
-          { id: 'f-skill-clavas', label: 'Clavas' },
-          { id: 'f-skill-escalada', label: 'Escalada' },
-          { id: 'f-skill-acrobacia', label: 'Acrobacia' }
+          { idBase: 'f-skill-combate-desarmado', label: 'Combate Desarmado' },
+          { idBase: 'f-skill-espadas-longas', label: 'Espadas Longas' },
+          { idBase: 'f-skill-machados-longos', label: 'Machados Longos' },
+          { idBase: 'f-skill-martelos-longos', label: 'Martelos Longos' },
+          { idBase: 'f-skill-clavas', label: 'Clavas' },
+          { idBase: 'f-skill-escalada', label: 'Escalada' },
+          { idBase: 'f-skill-acrobacia', label: 'Acrobacia' }
         ],
         destreza: [
-          { id: 'f-skill-espadas-curtas', label: 'Espadas Curtas' },
-          { id: 'f-skill-adagas', label: 'Adagas' },
-          { id: 'f-skill-laminas-duplas', label: 'Lâminas Duplas' },
-          { id: 'f-skill-machados-curtos', label: 'Machados Curtos' },
-          { id: 'f-skill-martelos-curtos', label: 'Martelos Curtos' },
-          { id: 'f-skill-lancas', label: 'Lanças' },
-          { id: 'f-skill-foices', label: 'Foices' },
-          { id: 'f-skill-bastoes', label: 'Bastões' },
-          { id: 'f-skill-correntes', label: 'Correntes e Kusarigama' },
-          { id: 'f-skill-arremesso', label: 'Arremesso de Armas' },
-          { id: 'f-skill-armas-de-fogo', label: 'Armas de Fogo' },
-          { id: 'f-skill-furtividade', label: 'Furtividade' },
-          { id: 'f-skill-natacao', label: 'Natação' },
-          { id: 'f-skill-corrida', label: 'Corrida' }
+          { idBase: 'f-skill-espadas-curtas', label: 'Espadas Curtas' },
+          { idBase: 'f-skill-adagas', label: 'Adagas' },
+          { idBase: 'f-skill-laminas-duplas', label: 'Lâminas Duplas' },
+          { idBase: 'f-skill-machados-curtos', label: 'Machados Curtos' },
+          { idBase: 'f-skill-martelos-curtos', label: 'Martelos Curtos' },
+          { idBase: 'f-skill-lancas', label: 'Lanças' },
+          { idBase: 'f-skill-foices', label: 'Foices' },
+          { idBase: 'f-skill-bastoes', label: 'Bastões' },
+          { idBase: 'f-skill-correntes', label: 'Correntes e Kusarigama' },
+          { idBase: 'f-skill-arremesso', label: 'Arremesso de Armas' },
+          { idBase: 'f-skill-armas-de-fogo', label: 'Armas de Fogo' },
+          { idBase: 'f-skill-furtividade', label: 'Furtividade' },
+          { idBase: 'f-skill-natacao', label: 'Natação' },
+          { idBase: 'f-skill-corrida', label: 'Corrida' }
         ],
         inteligencia: [
-          { id: 'f-skill-feiticos', label: 'Feitiços' },
-          { id: 'f-skill-barreiras', label: 'Barreiras' },
-          { id: 'f-skill-pactos', label: 'Pactos' },
-          { id: 'f-skill-percepcao-magica', label: 'Percepção Mágica' },
-          { id: 'f-skill-primeiros-socorros', label: 'Primeiros Socorros' },
-          { id: 'f-skill-tecnica-reversa', label: 'Técnica Reversa' },
-          { id: 'f-skill-percepcao-visual', label: 'Percepção Visual' },
-          { id: 'f-skill-sobrevivencia', label: 'Sobrevivência' }
+          { idBase: 'f-skill-feiticos', label: 'Feitiços' },
+          { idBase: 'f-skill-barreiras', label: 'Barreiras' },
+          { idBase: 'f-skill-pactos', label: 'Pactos' },
+          { idBase: 'f-skill-percepcao-magica', label: 'Percepção Mágica' },
+          { idBase: 'f-skill-primeiros-socorros', label: 'Primeiros Socorros' },
+          { idBase: 'f-skill-tecnica-reversa', label: 'Técnica Reversa' },
+          { idBase: 'f-skill-percepcao-visual', label: 'Percepção Visual' },
+          { idBase: 'f-skill-sobrevivencia', label: 'Sobrevivência' }
         ]
       };
       
@@ -467,11 +521,24 @@
         return html || '<div class="jjk-dossier-inventory-item"><span>...</span></div>';
       }
       
+      // FUNÇÃO DE APTIDÕES ATUALIZADA
       function gerarAptidoesHTML(tipo) {
         return aptidoesMap[tipo].map(apt => {
-          const nivel = getNum(apt.id);
-          // [CORRIGIDO] Adiciona o rótulo de volta
-          return '<div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">' + apt.label + '</span><span class="jjk-dossier-skill-level">' + nivel + '</span></div>';
+          const baseId = apt.idBase;
+          const label = apt.label;
+          const nivel = getNum(baseId + '-lvl');
+          const xp = escapeHTML(getVal(baseId + '-xp'));
+          
+          return '<div class="jjk-dossier-skill-item">' +
+                   '<div class="jjk-dossier-skill-info">' +
+                     '<span class="jjk-dossier-skill-name">' + label + '</span>' +
+                     '<span class="jjk-dossier-skill-level">' + nivel + '</span>' +
+                   '</div>' +
+                   '<span class="jjk-dossier-skill-xp">' + xp + '</span>' +
+                   '<div class="jjk-dossier-skill-bar-wrapper">' +
+                     '<div class="jjk-dossier-skill-bar-fill"></div>' +
+                   '</div>' +
+                 '</div>';
         }).join('');
       }
 
@@ -485,6 +552,13 @@
           const afiliacao = escapeHTML(getVal('f-afiliacao'));
           const alinhamento = escapeHTML(getVal('f-alinhamento'));
           
+          // LÓGICA DE HP/EA/REGEN ATUALIZADA
+          const hpAtual = getNum('f-hp-atual');
+          const hpMax = getNum('f-hp-max');
+          const eaAtual = getNum('f-ea-atual');
+          const eaMax = getNum('f-ea-max');
+          const regenTotal = getNum('f-regen-ea');
+          
           const forca = getNum('f-forca');
           const destreza = getNum('f-destreza');
           const inteligencia = getNum('f-inteligencia');
@@ -492,10 +566,6 @@
           const vigor = getNum('f-vigor');
           const energia = getNum('f-energia');
           const fonte = getNum('f-fonte');
-          
-          const hpTotal = vigor * 400;
-          const eaTotal = energia * 400;
-          const regenTotal = fonte * 40;
           
           const aptForcaHtml = gerarAptidoesHTML('forca');
           const aptDestrezaHtml = gerarAptidoesHTML('destreza');
@@ -523,8 +593,8 @@
           const inventarioHtml = parseInventario('f-inv', MAX_SLOTS.inventario);
           const biografia = escapeHTML(getVal('f-biografia'));
 
-          // [CORRIGIDO] USA CONCATENAÇÃO (+) PARA SER SEGURO
-          var finalHTML = '<link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha.css" rel="stylesheet" type="text/css"><div class="jjk-dossier-container"><input type="radio" name="dossier-tab" id="dossier-tab-1" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-2" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-3" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-4" checked="" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-5" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-6" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-7" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-8" style="display:none;"><div class="jjk-dossier-id-card"><div class="jjk-dossier-profile-img-wrapper"><img src="' + profileImg + '" class="jjk-dossier-profile-img"><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div></div><div class="jjk-dossier-profile-info"><h1 class="jjk-dossier-char-name">' + charName + '</h1><p class="jjk-dossier-char-title">' + charTitle + '</p><div class="jjk-dossier-status-bars"><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label">HP</span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-hp-fill"></div></div><span class="jjk-dossier-status-value">' + hpTotal + ' / ' + hpTotal + '</span></div></div><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label">EA</span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-ea-fill"></div></div><span class="jjk-dossier-status-value">' + eaTotal + ' / ' + eaTotal + '</span></div></div></div><div class="jjk-dossier-info-grid"><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Idade</div><div class="jjk-dossier-value">' + idade + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Grau</div><div class="jjk-dossier-value">' + grau + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Afiliação</div><div class="jjk-dossier-value">' + afiliacao + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Alinhamento</div><div class="jjk-dossier-value">' + alinhamento + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Regen. EA</div><div class="jjk-dossier-value">' + regenTotal + ' / Turno</div></div></div></div></div><div class="jjk-dossier-body"><nav class="jjk-dossier-tabs-nav"><label for="dossier-tab-4" id="dossier-tab-4-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Perfil</label><label for="dossier-tab-1" id="dossier-tab-1-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V12L14 14"></path><circle cx="12" cy="12" r="10"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zM8 6c0-1.1.9-2 2-2M14 6c0-1.1.9-2 2-2"></path></svg>Atributos</label><label for="dossier-tab-2" id="dossier-tab-2-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422 A12 12 0 0 1 12 22a12 12 0 0 1-6.16-11.422L12 14z"></path><path d="M12 14l9-5-9-5-9 5 9 5z"></path></svg>Aptidões</label><label for="dossier-tab-8" id="dossier-tab-8-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Características</label><label for="dossier-tab-3" id="dossier-tab-3-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 8.5L18 6l-2.5-2.5"></path><path d="M8.5 15.5L6 18l2.5 2.5"></path><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>Combate</label><label for="dossier-tab-5" id="dossier-tab-5-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Relações</label><label for="dossier-tab-6" id="dossier-tab-6-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Inventário</label><label for="dossier-tab-7" id="dossier-tab-7-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>Biografia</label></nav><div id="dossier-content-1" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-1-label"><h3>Atributos Principais</h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">' + forca + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">' + destreza + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Inteligência</span><span class="jjk-dossier-attr-value">' + inteligencia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">' + sorte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div><h3 style="margin-top:25px;">Atributos Especiais</h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor (HP)</span><span class="jjk-dossier-attr-value">' + vigor + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia (EA)</span><span class="jjk-dossier-attr-value">' + energia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Fonte (Regen. EA)</span><span class="jjk-dossier-attr-value">' + fonte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div></div><div id="dossier-content-2" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-2-label"><h3>Aptidões</h3><div class="jjk-dossier-accordion"><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-for-v4"><label for="skill-for-v4" class="jjk-dossier-accordion-title">Força (FOR)</label><div class="jjk-dossier-skill-list">' + aptForcaHtml + '</div></div><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-des-v4"><label for="skill-des-v4" class="jjk-dossier-accordion-title">Destreza (DES)</label><div class="jjk-dossier-skill-list">' + aptDestrezaHtml + '</div></div><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-int-v4"><label for="skill-int-v4" class="jjk-dossier-accordion-title">Inteligência (INT)</label><div class="jjk-dossier-skill-list">' + aptInteligenciaHtml + '</div></div></div></div><div id="dossier-content-3" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-3-label"><div class="jjk-dossier-combat-grid"><div><h3>Técnicas</h3><div class="jjk-dossier-combat-box"><ul>' + tecnicasHtml + '</ul></div></div><div><h3>Equipamentos</h3><div class="jjk-dossier-combat-box"><ul>' + equipamentosHtml + '</ul></div></div></div></div><div id="dossier-content-8" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-8-label"><div class="jjk-dossier-combat-grid"><div><h3>Características Positivas</h3><div class="jjk-dossier-combat-box"><ul>' + caracPHtml + '</ul></div></div><div><h3>Características Negativas</h3><div class="jjk-dossier-combat-box"><ul>' + caracNHtml + '</ul></div></div></div></div><div id="dossier-content-4" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-4-label"><div class="jjk-dossier-profile-section"><div class="jjk-dossier-profile-desc"><h3>Aparência Geral</h3><p>' + aparencia + '</p></div><div class="jjk-dossier-profile-stats"><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Altura</div><div class="jjk-dossier-profile-value">' + altura + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Peso</div><div class="jjk-dossier-profile-value">' + peso + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Olhos</div><div class="jjk-dossier-profile-value">' + olhos + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Cabelo</div><div class="jjk-dossier-profile-value">' + cabelo + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Pele</div><div class="jjk-dossier-profile-value">' + pele + '</div></div></div></div><h3 style="margin-top:25px;">Particularidade</h3><div class="jjk-dossier-combat-box"><ul>' + particularidadeHtml + '</ul></div><h3 style="margin-top:25px;">Perfil Psicológico</h3><div class="jjk-dossier-psyche-grid"><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>Gostos</h4><ul class="jjk-dossier-scrollable">' + gostosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>Desgostos</h4><ul class="jjk-dossier-scrollable">' + desgostosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Medos</h4><ul class="jjk-dossier-scrollable">' + medosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>Objetivos</h4><ul class="jjk-dossier-scrollable">' + objetivosHtml + '</ul></div></div></div><div id="dossier-content-5" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-5-label"><h3>Relações</h3><div class="jjk-dossier-relations-grid">' + relacoesHtml + '</div></div><div id="dossier-content-6" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-6-label"><h3>Inventário</h3><div class="jjk-dossier-inventory-grid">' + inventarioHtml + '</div></div><div id="dossier-content-7" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-7-label"><h3>Biografia</h3><p class="jjk-dossier-bio-text">' + biografia + '</p></div></div></div>';
+          // String HTML ATUALIZADA com os novos valores de HP/EA/Regen
+          var finalHTML = '<link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha.css" rel="stylesheet" type="text/css"><div class="jjk-dossier-container"><input type="radio" name="dossier-tab" id="dossier-tab-1" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-2" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-3" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-4" checked="" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-5" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-6" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-7" style="display:none;"><input type="radio" name="dossier-tab" id="dossier-tab-8" style="display:none;"><div class="jjk-dossier-id-card"><div class="jjk-dossier-profile-img-wrapper"><img src="' + profileImg + '" class="jjk-dossier-profile-img"><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div></div><div class="jjk-dossier-profile-info"><h1 class="jjk-dossier-char-name">' + charName + '</h1><p class="jjk-dossier-char-title">' + charTitle + '</p><div class="jjk-dossier-status-bars"><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label">HP</span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-hp-fill"></div></div><span class="jjk-dossier-status-value">' + hpAtual + ' / ' + hpMax + '</span></div></div><div class="jjk-dossier-status-item"><span class="jjk-dossier-status-label">EA</span><div class="jjk-dossier-status-bar-wrapper"><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-ea-fill"></div></div><span class="jjk-dossier-status-value">' + eaAtual + ' / ' + eaMax + '</span></div></div></div><div class="jjk-dossier-info-grid"><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Idade</div><div class="jjk-dossier-value">' + idade + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Grau</div><div class="jjk-dossier-value">' + grau + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Afiliação</div><div class="jjk-dossier-value">' + afiliacao + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Alinhamento</div><div class="jjk-dossier-value">' + alinhamento + '</div></div><div class="jjk-dossier-info-box"><div class="jjk-dossier-label">Regen. EA</div><div class="jjk-dossier-value">' + regenTotal + ' / Turno</div></div></div></div></div><div class="jjk-dossier-body"><nav class="jjk-dossier-tabs-nav"><label for="dossier-tab-4" id="dossier-tab-4-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Perfil</label><label for="dossier-tab-1" id="dossier-tab-1-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V12L14 14"></path><circle cx="12" cy="12" r="10"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zM8 6c0-1.1.9-2 2-2M14 6c0-1.1.9-2 2-2"></path></svg>Atributos</label><label for="dossier-tab-2" id="dossier-tab-2-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422 A12 12 0 0 1 12 22a12 12 0 0 1-6.16-11.422L12 14z"></path><path d="M12 14l9-5-9-5-9 5 9 5z"></path></svg>Aptidões</label><label for="dossier-tab-8" id="dossier-tab-8-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Características</label><label for="dossier-tab-3" id="dossier-tab-3-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 8.5L18 6l-2.5-2.5"></path><path d="M8.5 15.5L6 18l2.5 2.5"></path><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>Combate</label><label for="dossier-tab-5" id="dossier-tab-5-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Relações</label><label for="dossier-tab-6" id="dossier-tab-6-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Inventário</label><label for="dossier-tab-7" id="dossier-tab-7-label" class="jjk-dossier-tab-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>Biografia</label></nav><div id="dossier-content-1" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-1-label"><h3>Atributos Principais</h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">' + forca + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">' + destreza + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Inteligência</span><span class="jjk-dossier-attr-value">' + inteligencia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">' + sorte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div><h3 style="margin-top:25px;">Atributos Especiais</h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor (HP)</span><span class="jjk-dossier-attr-value">' + vigor + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia (EA)</span><span class="jjk-dossier-attr-value">' + energia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Fonte (Regen. EA)</span><span class="jjk-dossier-attr-value">' + fonte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div></div></div><div id="dossier-content-2" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-2-label"><h3>Aptidões</h3><div class="jjk-dossier-accordion"><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-for-v4"><label for="skill-for-v4" class="jjk-dossier-accordion-title">Força (FOR)</label><div class="jjk-dossier-skill-list">' + aptForcaHtml + '</div></div><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-des-v4"><label for="skill-des-v4" class="jjk-dossier-accordion-title">Destreza (DES)</label><div class="jjk-dossier-skill-list">' + aptDestrezaHtml + '</div></div><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-int-v4"><label for="skill-int-v4" class="jjk-dossier-accordion-title">Inteligência (INT)</label><div class="jjk-dossier-skill-list">' + aptInteligenciaHtml + '</div></div></div></div><div id="dossier-content-3" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-3-label"><div class="jjk-dossier-combat-grid"><div><h3>Técnicas</h3><div class="jjk-dossier-combat-box"><ul>' + tecnicasHtml + '</ul></div></div><div><h3>Equipamentos</h3><div class="jjk-dossier-combat-box"><ul>' + equipamentosHtml + '</ul></div></div></div></div><div id="dossier-content-8" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-8-label"><div class="jjk-dossier-combat-grid"><div><h3>Características Positivas</h3><div class="jjk-dossier-combat-box"><ul>' + caracPHtml + '</ul></div></div><div><h3>Características Negativas</h3><div class="jjk-dossier-combat-box"><ul>' + caracNHtml + '</ul></div></div></div></div><div id="dossier-content-4" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-4-label"><div class="jjk-dossier-profile-section"><div class="jjk-dossier-profile-desc"><h3>Aparência Geral</h3><p>' + aparencia + '</p></div><div class="jjk-dossier-profile-stats"><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Altura</div><div class="jjk-dossier-profile-value">' + altura + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Peso</div><div class="jjk-dossier-profile-value">' + peso + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Olhos</div><div class="jjk-dossier-profile-value">' + olhos + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Cabelo</div><div class="jjk-dossier-profile-value">' + cabelo + '</div></div><div class="jjk-dossier-profile-item"><div class="jjk-dossier-profile-label">Pele</div><div class="jjk-dossier-profile-value">' + pele + '</div></div></div></div><h3 style="margin-top:25px;">Particularidade</h3><div class="jjk-dossier-combat-box"><ul>' + particularidadeHtml + '</ul></div><h3 style="margin-top:25px;">Perfil Psicológico</h3><div class="jjk-dossier-psyche-grid"><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>Gostos</h4><ul class="jjk-dossier-scrollable">' + gostosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>Desgostos</h4><ul class="jjk-dossier-scrollable">' + desgostosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Medos</h4><ul class="jjk-dossier-scrollable">' + medosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>Objetivos</h4><ul class="jjk-dossier-scrollable">' + objetivosHtml + '</ul></div></div></div><div id="dossier-content-5" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-5-label"><h3>Relações</h3><div class="jjk-dossier-relations-grid">' + relacoesHtml + '</div></div><div id="dossier-content-6" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-6-label"><h3>Inventário</h3><div class="jjk-dossier-inventory-grid">' + inventarioHtml + '</div></div><div id="dossier-content-7" class="jjk-dossier-tab-content" role="tabpanel" aria-labelledby="dossier-tab-7-label"><h3>Biografia</h3><p class="jjk-dossier-bio-text">' + biografia + '</p></div></div></div>';
 
           outputArea.value = finalHTML;
         
