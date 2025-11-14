@@ -62,7 +62,6 @@
     .input-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
     label { font-weight: 500; font-size: 13px; color: var(--muted); text-transform: uppercase; font-family: var(--mono); }
     
-    /* --- LINHA CORRIGIDA --- */
     input[type="text"], input[type="url"], input[type="number"], textarea, select {
       background: var(--bg);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -71,12 +70,10 @@
       color: var(--text);
       font-family: var(--ui);
       font-size: 14px;
-      /* --- ADICIONADO PARA CORRIGIR O OVERFLOW --- */
       box-sizing: border-box; 
       width: 100%;
       min-width: 0;
     }
-    /* --- FIM DA CORREÇÃO --- */
 
     input[type="number"], select, input[placeholder*="XP"] { font-family: var(--mono); }
     textarea { min-height: 80px; resize: vertical; }
@@ -168,14 +165,23 @@
               <input type="number" id="f-regen-ea" value="40">
             </div>
         </div>
+
         <div class="grid-4">
           <div class="input-group">
             <label for="f-idade">Idade</label>
             <input type="text" id="f-idade" placeholder="Ex: 15">
           </div>
+          
           <div class="input-group">
             <label for="f-grau">Grau</label>
-            <input type="text" id="f-grau" placeholder="Ex: Estudante">
+            <select id="f-grau">
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
+              <option value="Semi-Especial">Semi-Especial</option>
+              <option value="Especial">Especial</option>
+            </select>
           </div>
           <div class="input-group">
             <label for="f-afiliacao">Afiliação</label>
@@ -288,6 +294,7 @@
           <div class="input-group"><label>Sobrevivência (XP)</label><input type="text" id="f-skill-sobrevivencia-xp" value="0 / 200 XP"></div>
         </div>
       </fieldset>
+      
       <fieldset>
         <legend>Combate</legend>
         <h4>Técnicas</h4>
