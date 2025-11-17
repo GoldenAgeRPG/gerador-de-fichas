@@ -81,15 +81,17 @@
       gap: 15px;
     }
 
+    /* [CORRIGIDO] Grid de Aptidões */
     .form-grid-3-col {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 15px 20px;
     }
     
     .aptidao-item {
       display: grid;
-      grid-template-columns: 1fr 60px 80px;
+      /* Label | "Nv." | Input Nv | Input XP */
+      grid-template-columns: 1fr auto 50px 80px; 
       gap: 8px;
       align-items: center;
     }
@@ -98,11 +100,19 @@
       margin-bottom: 0;
       color: var(--jjk-text-primary);
     }
-    .aptidao-item input {
+    /* [NOVO] Prefixo "Nv." */
+    .aptidao-item .input-prefix {
       grid-column: 2 / 3;
+      text-align: right;
+      color: var(--jjk-text-secondary);
+      font-weight: 700;
+      padding-right: 5px;
+    }
+    .aptidao-item input {
+      grid-column: 3 / 4; /* Input Nv */
     }
     .aptidao-item input.xp-input {
-      grid-column: 3 / 4;
+      grid-column: 4 / 5; /* Input XP */
     }
     .aptidao-header {
       grid-column: 1 / -1;
@@ -113,9 +123,8 @@
       border-bottom: 1px solid var(--jjk-border);
       padding-bottom: 5px;
     }
+    /* Fim da correção de Aptidões */
 
-
-    /* Campos de grade com 3 colunas */
     #attributes-grid {
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
@@ -290,7 +299,8 @@
         grid-template-columns: 1fr;
       }
       .aptidao-item {
-        grid-template-columns: 1fr 70px 90px;
+        /* Label | "Nv." | Input Nv | Input XP */
+        grid-template-columns: 1fr auto 70px 90px;
       }
     }
   </style>
@@ -441,151 +451,151 @@
           <span class="aptidao-header">Força (FOR)</span>
           <div class="aptidao-item">
             <label>Combate Desarmado</label>
-            <input type="text" id="apt-combate-desarmado-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-combate-desarmado-lvl" value="00">
             <input type="text" id="apt-combate-desarmado-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Espadas Longas</label>
-            <input type="text" id="apt-espadas-longas-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-espadas-longas-lvl" value="00">
             <input type="text" id="apt-espadas-longas-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Machados Longos</label>
-            <input type="text" id="apt-machados-longos-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-machados-longos-lvl" value="00">
             <input type="text" id="apt-machados-longos-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Martelos Longos</label>
-            <input type="text" id="apt-martelos-longos-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-martelos-longos-lvl" value="00">
             <input type="text" id="apt-martelos-longos-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Clavas</label>
-            <input type="text" id="apt-clavas-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-clavas-lvl" value="00">
             <input type="text" id="apt-clavas-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Escalada</label>
-            <input type="text" id="apt-escalada-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-escalada-lvl" value="00">
             <input type="text" id="apt-escalada-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Acrobacia</label>
-            <input type="text" id="apt-acrobacia-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-acrobacia-lvl" value="00">
             <input type="text" id="apt-acrobacia-xp" class="xp-input" value="000/200">
           </div>
 
           <span class="aptidao-header">Destreza (DES)</span>
           <div class="aptidao-item">
             <label>Espadas Curtas</label>
-            <input type="text" id="apt-espadas-curtas-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-espadas-curtas-lvl" value="00">
             <input type="text" id="apt-espadas-curtas-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Adagas</label>
-            <input type="text" id="apt-adagas-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-adagas-lvl" value="00">
             <input type="text" id="apt-adagas-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Lâminas Duplas</label>
-            <input type="text" id="apt-laminas-duplas-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-laminas-duplas-lvl" value="00">
             <input type="text" id="apt-laminas-duplas-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Machados Curtos</label>
-            <input type="text" id="apt-machados-curtos-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-machados-curtos-lvl" value="00">
             <input type="text" id="apt-machados-curtos-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Martelos Curtos</label>
-            <input type="text" id="apt-martelos-curtos-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-martelos-curtos-lvl" value="00">
             <input type="text" id="apt-martelos-curtos-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Lanças</label>
-            <input type="text" id="apt-lancas-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-lancas-lvl" value="00">
             <input type="text" id="apt-lancas-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Foices</label>
-            <input type="text" id="apt-foices-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-foices-lvl" value="00">
             <input type="text" id="apt-foices-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Bastões</label>
-            <input type="text" id="apt-bastoes-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-bastoes-lvl" value="00">
             <input type="text" id="apt-bastoes-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Correntes</label>
-            <input type="text" id="apt-correntes-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-correntes-lvl" value="00">
             <input type="text" id="apt-correntes-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Arremesso de Armas</label>
-            <input type="text" id="apt-arremesso-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-arremesso-lvl" value="00">
             <input type="text" id="apt-arremesso-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Armas de Fogo</label>
-            <input type="text" id="apt-armas-fogo-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-armas-fogo-lvl" value="00">
             <input type="text" id="apt-armas-fogo-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Furtividade</label>
-            <input type="text" id="apt-furtividade-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-furtividade-lvl" value="00">
             <input type="text" id="apt-furtividade-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Natação</label>
-            <input type="text" id="apt-natacao-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-natacao-lvl" value="00">
             <input type="text" id="apt-natacao-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Corrida</label>
-            <input type="text" id="apt-corrida-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-corrida-lvl" value="00">
             <input type="text" id="apt-corrida-xp" class="xp-input" value="000/200">
           </div>
 
           <span class="aptidao-header">Inteligência (INT)</span>
           <div class="aptidao-item">
             <label>Feitiços</label>
-            <input type="text" id="apt-feiticos-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-feiticos-lvl" value="00">
             <input type="text" id="apt-feiticos-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Barreiras</label>
-            <input type="text" id="apt-barreiras-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-barreiras-lvl" value="00">
             <input type="text" id="apt-barreiras-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Pactos</label>
-            <input type="text" id="apt-pactos-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-pactos-lvl" value="00">
             <input type="text" id="apt-pactos-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Percepção Mágica</label>
-            <input type="text" id="apt-percepcao-magica-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-percepcao-magica-lvl" value="00">
             <input type="text" id="apt-percepcao-magica-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Primeiros Socorros</label>
-            <input type="text" id="apt-primeiros-socorros-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-primeiros-socorros-lvl" value="00">
             <input type="text" id="apt-primeiros-socorros-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Técnica Reversa</label>
-            <input type="text" id="apt-tecnica-reversa-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-tecnica-reversa-lvl" value="00">
             <input type="text" id="apt-tecnica-reversa-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Percepção Visual</label>
-            <input type="text" id="apt-percepcao-visual-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-percepcao-visual-lvl" value="00">
             <input type="text" id="apt-percepcao-visual-xp" class="xp-input" value="000/200">
           </div>
           <div class="aptidao-item">
             <label>Sobrevivência</label>
-            <input type="text" id="apt-sobrevivencia-lvl" value="Nv. 00">
+            <span class="input-prefix">Nv.</span><input type="text" id="apt-sobrevivencia-lvl" value="00">
             <input type="text" id="apt-sobrevivencia-xp" class="xp-input" value="000/200">
           </div>
         </div>
@@ -695,7 +705,7 @@
       const traitsList = document.getElementById('traits-list');
       const relationsList = document.getElementById('relations-list');
 
-      // --- [NOVO] IDs de todas as Aptidões ---
+      // --- [CORRIGIDO] IDs de todas as Aptidões ---
       const aptidaoIDs = [
         'apt-combate-desarmado', 'apt-espadas-longas', 'apt-machados-longos', 'apt-martelos-longos', 'apt-clavas', 'apt-escalada', 'apt-acrobacia',
         'apt-espadas-curtas', 'apt-adagas', 'apt-laminas-duplas', 'apt-machados-curtos', 'apt-martelos-curtos', 'apt-lancas', 'apt-foices', 'apt-bastoes', 'apt-correntes', 'apt-arremesso', 'apt-armas-fogo', 'apt-furtividade', 'apt-natacao', 'apt-corrida',
@@ -855,26 +865,24 @@
 
       // --- FUNÇÃO DE GERAR O HTML ---
       
-      // [NOVO] Helper para pegar valor do campo
       function getVal(id) {
         return document.getElementById(id).value;
       }
       
-      // [NOVO] Helper para gerar um item de aptidão
+      // [CORRIGIDO] Helper para gerar um item de aptidão
       function createSkillHTML(name, levelId, xpId) {
-        const level = getVal(levelId);
+        const level = getVal(levelId); // Pega só o número (ex: "00")
         const xp = getVal(xpId);
-        return `<div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">${name}</span><span class="jjk-dossier-skill-level">${level}</span><span class="jjk-dossier-skill-xp">${xp}</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>`;
+        // Monta o "Nv. 00" no código final
+        return `<div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">${name}</span><span class="jjk-dossier-skill-level">Nv. ${level}</span><span class="jjk-dossier-skill-xp">${xp}</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>`;
       }
       
       function generateAndDisplayHTML() {
         const values = {};
-        // Pega todos os valores simples e de aptidões
         allValueIDs.forEach(id => {
           values[id] = getVal(id);
         });
         
-        // Substitui quebras de linha por <br>
         ['profile-phys-desc', 'profile-psy-desc', 'domain-desc', 'part-desc', 'part-notes', 'bio-text'].forEach(id => {
           if (values[id]) values[id] = values[id].replace(/\n/g, '<br>');
         });
@@ -922,7 +930,7 @@
           relationsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${relName} ${statusTag}</div><div class="jjk-dossier-card-subtitle">Relação: ${relType}</div><div class="jjk-dossier-card-desc">${relDesc}</div></div>`;
         });
 
-        // --- [ATUALIZADO] Bloco de Aptidões Dinâmico ---
+        // --- [CORRIGIDO] Bloco de Aptidões Dinâmico ---
         const skillsHtml = `
           <div class="jjk-dossier-skills-category">
             <h4 class="jjk-category-title">Força (FOR)</h4>
@@ -1127,7 +1135,7 @@
         
         allValueIDs.forEach(id => {
             const el = document.getElementById(id);
-            if (el && data.simpleValues[id]) {
+            if (el && data.simpleValues[id] !== undefined) { // Checa por undefined
               el.value = data.simpleValues[id];
             }
         });
@@ -1177,4 +1185,3 @@
   </script>
 </body>
 </html>
-
