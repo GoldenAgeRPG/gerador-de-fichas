@@ -574,8 +574,7 @@
       const traitsList = document.getElementById('traits-list');
       const relationsList = document.getElementById('relations-list');
 
-      // --- MAPA DE APTIDÕES (Para o Parser) ---
-      // Mapeia o Nome da Aptidão (no HTML) para o ID do campo do formulário
+      // --- [CORRIGIDO] MAPA DE APTIDÕES ---
       const aptidaoNameMap = {
         'Combate Desarmado': 'apt-combate-desarmado',
         'Espadas Longas': 'apt-espadas-longas',
@@ -629,15 +628,8 @@
           el.value = value;
         }
       }
-      // Converte ...<br>... para ...\n...
-      function brToNewline(str) {
-        return str.replace(/<br\s*\/?>/gi, '\n');
-      }
-      // Converte ...\n... para ...<br>...
-      function newlineTobr(str) {
-        return str.replace(/\n/g, '<br>');
-      }
-      // Limpa todos os cards dinâmicos
+      function brToNewline(str) { return str.replace(/<br\s*\/?>/gi, '\n'); }
+      function newlineTobr(str) { return str.replace(/\n/g, '<br>'); }
       function clearDynamicLists() {
         techniqueGroupsList.innerHTML = '';
         equipmentList.innerHTML = '';
@@ -673,8 +665,6 @@
           </div>
         `;
         techniqueGroupsList.appendChild(card);
-        
-        // Se houver dados de feitiços, adiciona-os
         if (data.spells && data.spells.length > 0) {
           data.spells.forEach(spellData => addSpell(`spell-list-${cardId}`, spellData));
         }
@@ -767,7 +757,6 @@
             <textarea class="relation-desc" rows="2" placeholder="Breve descrição do relacionamento...">${data.desc || ''}</textarea>
           </div>
         `;
-        // Corrige o select
         if(data.status) card.querySelector('.relation-status').value = data.status;
         relationsList.appendChild(card);
       }
@@ -851,7 +840,6 @@
           relationsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${relName} ${statusTag}</div><div class="jjk-dossier-card-subtitle">Relação: ${relType}</div><div class="jjk-dossier-card-desc">${relDesc}</div></div>`;
         });
 
-        // --- Bloco de Aptidões Dinâmico ---
         const skillsHtml = `
           <div class="jjk-dossier-skills-category">
             <h4 class="jjk-category-title">Força (FOR)</h4>
@@ -899,7 +887,6 @@
           </div>
         `;
 
-        // --- MONTAGEM DO HTML FINAL ---
         let finalHTML = `
 <link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha-v2.css" rel="stylesheet" type="text/css">
 <div class="jjk-dossier-container">
@@ -1050,7 +1037,6 @@
         }
         
         try {
-          // Limpa o formulário antes de carregar
           clearFormAndStorage();
 
           const parser = new DOMParser();
@@ -1066,7 +1052,7 @@
           setVal('char-name', ficha.querySelector('.jjk-dossier-name')?.textContent || '');
           setVal('char-nickname', ficha.querySelector('.jjk-dossier-apelido')?.textContent || '');
           const headerStyle = ficha.querySelector('.jjk-dossier-header')?.style.backgroundImage || '';
-          setVal('char-header-img', headerStyle.replace('url("', '').replace('")', ''));
+          setVal('char-header-img', headerStyle.replace(/url\("?|"?\)/g, '')); // Limpa url("...")
           setVal('char-profile-pic', ficha.querySelector('.jjk-dossier-profile-pic')?.src || '');
           
           setVal('char-age', ficha.querySelector('.jjk-info-item:nth-of-type(1) .jjk-info-value')?.textContent || '');
@@ -1077,12 +1063,11 @@
           setVal('char-hp', ficha.querySelector('.jjk-dossier-status-item:nth-child(1) .jjk-dossier-status-value')?.textContent || '400/400');
           setVal('char-ea', ficha.querySelector('.jjk-dossier-status-item:nth-child(2) .jjk-dossier-status-value')?.textContent || '400/400');
 
-          setVal('attr-for', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(1) .jjk-dossier-attr-value')?.textContent || '00/20');
-          setVal('attr-des', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(2) .jjk-dossier-attr-value')?.textContent || '00/20');
-          setVal('attr-sor', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(3) .jjk-dossier-attr-value')?.textContent || '00/20');
-          setVal('attr-vig', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(4) .jjk-dossier-attr-value')?.textContent || '00/20');
-          setVal('attr-ene', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(5) .jjk-dossier-attr-value')?.textContent || '00/20');
-          setVal('attr-fon', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(6) .jjk-dossier-attr-value')?.textContent || '00/20');
+          ficha.querySelectorAll('.jjk-dossier-attr-item').forEach(item => {
+            const name = item.querySelector('.jjk-dossier-attr-name')?.textContent.toLowerCase();
+            const value = item.querySelector('.jjk-dossier-attr-value')?.textContent || '00/20';
+            if (name) setVal(`attr-${name.substring(0, 3)}`, value);
+          });
 
           setVal('profile-phys-desc', brToNewline(ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-description')?.innerHTML || ''));
           setVal('phys-cabelo', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(1)')?.textContent.replace('Cabelo: ', '') || '');
@@ -1184,11 +1169,10 @@
             addRelation(data);
           });
           
-          // Dispara a geração de HTML para preencher o campo de saída
           generateAndDisplayHTML();
-          // Salva os dados carregados no localStorage
           saveDataToLocalStorage();
           alert('Ficha carregada com sucesso! Você já pode editar.');
+          setTimeout(calculateAndSendHeight, 150); // Recalcula a altura
 
         } catch (e) {
           console.error('Erro ao processar o HTML:', e);
@@ -1199,12 +1183,10 @@
       // --- LOCALSTORAGE (Salvar/Carregar Progresso) ---
       function saveDataToLocalStorage() {
         const data = { simpleValues: {} };
-        // Salva simples e aptidões
         allValueIDs.forEach(id => {
           data.simpleValues[id] = getVal(id);
         });
         
-        // Salva dinâmicos
         data.techGroups = [];
         techniqueGroupsList.querySelectorAll('.dynamic-card').forEach(groupCard => {
           const spells = [];
@@ -1257,10 +1239,8 @@
         const data = JSON.parse(localStorage.getItem('jjkSheetData'));
         if (!data) return;
         
-        // Limpa campos dinâmicos antes de carregar
         clearDynamicLists();
         
-        // Carrega valores simples e aptidões
         if (data.simpleValues) {
           allValueIDs.forEach(id => {
             if (data.simpleValues[id] !== undefined) {
@@ -1269,30 +1249,27 @@
           });
         }
         
-        // Recria cards dinâmicos
         data.techGroups?.forEach(groupData => addTechniqueGroup(groupData));
         data.equipment?.forEach(equipData => addEquipment(equipData));
         data.traits?.forEach(traitData => addTrait(traitData.type, traitData));
         data.relations?.forEach(relationData => addRelation(relationData));
         
-        // Gera o HTML na saída
         generateAndDisplayHTML();
       }
       
       function clearFormAndStorage() {
-        form.reset(); // Reseta os campos do formulário para o padrão
-        clearDynamicLists(); // Limpa os cards
-        localStorage.removeItem('jjkSheetData'); // Limpa o save
-        generateAndDisplayHTML(); // Atualiza a saída
+        form.reset(); 
+        clearDynamicLists(); 
+        localStorage.removeItem('jjkSheetData'); 
+        generateAndDisplayHTML(); 
         setTimeout(calculateAndSendHeight, 100);
       }
 
-      // --- SCRIPT DE IFRAME (Fornecido por você) ---
+      // --- SCRIPT DE IFRAME ---
       const targetOrigin = 'https://goldenagejjkrpg.forumeiros.com';
       let lastHeightSent = 0;
 
       function calculateAndSendHeight() {
-        // Adiciona um pequeno delay para garantir que o DOM se ajustou
         setTimeout(() => {
           const height = document.documentElement.scrollHeight;
           if (height !== lastHeightSent) {
@@ -1308,33 +1285,25 @@
       form.addEventListener('input', function(event) {
         generateAndDisplayHTML();
         saveDataToLocalStorage();
-        calculateAndSendHeight(); // Recalcula a altura a cada input
+        calculateAndSendHeight(); 
       });
 
-      // Botões de Ação
+      // [CORRIGIDO] Botão de Copiar
       copyBtn.addEventListener('click', function() {
-        if (navigator.clipboard && window.isSecureContext) {
-          // Método Moderno (HTTPS)
-          navigator.clipboard.writeText(outputArea.value)
-            .then(() => {
-              copyBtn.textContent = 'Copiado!';
-              setTimeout(() => { copyBtn.textContent = 'Copiar Código'; }, 2000);
-            })
-            .catch(err => {
-              copyBtn.textContent = 'Erro ao copiar!';
-              setTimeout(() => { copyBtn.textContent = 'Copiar Código'; }, 2000);
-            });
-        } else {
-          // Método Antigo (Fallback)
-          outputArea.select();
-          try {
-            document.execCommand('copy');
-            copyBtn.textContent = 'Copiado!';
-          } catch (err) {
-            copyBtn.textContent = 'Erro ao copiar!';
-          }
-          setTimeout(() => { copyBtn.textContent = 'Copiar Código'; }, 2000);
+        // Força o método clássico, que é mais compatível com iframes
+        try {
+          outputArea.focus(); // Garante que o campo está focado
+          outputArea.select(); // Seleciona todo o texto
+          document.execCommand('copy'); // Tenta copiar
+          copyBtn.textContent = 'Copiado!';
+        } catch (err) {
+          // Se falhar, instrui o usuário a copiar manualmente
+          copyBtn.textContent = 'Pressione Ctrl+C para copiar!';
+          console.error('Falha ao copiar automaticamente: ', err);
         }
+        setTimeout(() => {
+          copyBtn.textContent = 'Copiar Código';
+        }, 2500); // Tempo extra para ler a instrução de falha
       });
       
       loadHtmlBtn.addEventListener('click', parseAndLoadHTML);
@@ -1348,7 +1317,7 @@
       setTimeout(calculateAndSendHeight, 150);
       window.addEventListener('resize', calculateAndSendHeight);
       
-      // Gera o HTML uma vez ao carregar (com os dados do localStorage)
+      // Gera o HTML uma vez ao carregar
       generateAndDisplayHTML();
     });
   </script>
