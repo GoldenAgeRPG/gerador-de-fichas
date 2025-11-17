@@ -81,6 +81,40 @@
       gap: 15px;
     }
 
+    .form-grid-3-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px 20px;
+    }
+    
+    .aptidao-item {
+      display: grid;
+      grid-template-columns: 1fr 60px 80px;
+      gap: 8px;
+      align-items: center;
+    }
+    .aptidao-item label {
+      grid-column: 1 / 2;
+      margin-bottom: 0;
+      color: var(--jjk-text-primary);
+    }
+    .aptidao-item input {
+      grid-column: 2 / 3;
+    }
+    .aptidao-item input.xp-input {
+      grid-column: 3 / 4;
+    }
+    .aptidao-header {
+      grid-column: 1 / -1;
+      color: var(--jjk-purple-light);
+      font-size: 1.1em;
+      font-weight: 700;
+      margin-top: 10px;
+      border-bottom: 1px solid var(--jjk-border);
+      padding-bottom: 5px;
+    }
+
+
     /* Campos de grade com 3 colunas */
     #attributes-grid {
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -252,8 +286,11 @@
 
     /* --- Responsividade --- */
     @media (max-width: 768px) {
-      .form-grid {
+      .form-grid, .form-grid-3-col {
         grid-template-columns: 1fr;
+      }
+      .aptidao-item {
+        grid-template-columns: 1fr 70px 90px;
       }
     }
   </style>
@@ -319,7 +356,7 @@
               <option value="Neutro e Bom">Neutro e Bom</option>
               <option value="Caótico e Bom">Caótico e Bom</option>
               <option value="Leal e Neutro">Leal e Neutro</option>
-              <option value="Neutro" selected>Neutro</option>
+              <option value="Neutro Verdadeiro" selected>Neutro Verdadeiro</option>
               <option value="Caótico e Neutro">Caótico e Neutro</option>
               <option value="Leal e Mau">Leal e Mau</option>
               <option value="Neutro e Mau">Neutro e Mau</option>
@@ -342,27 +379,27 @@
         <div class="form-grid" id="attributes-grid">
           <div class="form-group">
             <label for="attr-for">Força</label>
-            <input type="text" id="attr-for" value="05/20">
+            <input type="text" id="attr-for" value="00/20">
           </div>
           <div class="form-group">
             <label for="attr-des">Destreza</label>
-            <input type="text" id="attr-des" value="05/20">
+            <input type="text" id="attr-des" value="00/20">
           </div>
           <div class="form-group">
             <label for="attr-sor">Sorte</label>
-            <input type="text" id="attr-sor" value="05/20">
+            <input type="text" id="attr-sor" value="00/20">
           </div>
           <div class="form-group">
             <label for="attr-vig">Vigor</label>
-            <input type="text" id="attr-vig" value="05/20">
+            <input type="text" id="attr-vig" value="00/20">
           </div>
           <div class="form-group">
             <label for="attr-ene">Energia</label>
-            <input type="text" id="attr-ene" value="05/20">
+            <input type="text" id="attr-ene" value="00/20">
           </div>
           <div class="form-group">
             <label for="attr-fon">Fonte</label>
-            <input type="text" id="attr-fon" value="05/20">
+            <input type="text" id="attr-fon" value="00/20">
           </div>
         </div>
       </fieldset>
@@ -397,8 +434,165 @@
       </fieldset>
 
       <fieldset>
-        <legend>Aba: Combate</legend>
-        <p class="form-note">As Aptidões são fixas. O gerador irá preenchê-las com Nv. 00 e 000/200 XP.</p>
+        <legend>Aba: Combate (Aptidões)</legend>
+        <p class="form-note">Edite os níveis e XP das suas aptidões. Bônus de particularidade devem ser aplicados aqui.</p>
+        
+        <div class="form-grid-3-col">
+          <span class="aptidao-header">Força (FOR)</span>
+          <div class="aptidao-item">
+            <label>Combate Desarmado</label>
+            <input type="text" id="apt-combate-desarmado-lvl" value="Nv. 00">
+            <input type="text" id="apt-combate-desarmado-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Espadas Longas</label>
+            <input type="text" id="apt-espadas-longas-lvl" value="Nv. 00">
+            <input type="text" id="apt-espadas-longas-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Machados Longos</label>
+            <input type="text" id="apt-machados-longos-lvl" value="Nv. 00">
+            <input type="text" id="apt-machados-longos-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Martelos Longos</label>
+            <input type="text" id="apt-martelos-longos-lvl" value="Nv. 00">
+            <input type="text" id="apt-martelos-longos-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Clavas</label>
+            <input type="text" id="apt-clavas-lvl" value="Nv. 00">
+            <input type="text" id="apt-clavas-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Escalada</label>
+            <input type="text" id="apt-escalada-lvl" value="Nv. 00">
+            <input type="text" id="apt-escalada-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Acrobacia</label>
+            <input type="text" id="apt-acrobacia-lvl" value="Nv. 00">
+            <input type="text" id="apt-acrobacia-xp" class="xp-input" value="000/200">
+          </div>
+
+          <span class="aptidao-header">Destreza (DES)</span>
+          <div class="aptidao-item">
+            <label>Espadas Curtas</label>
+            <input type="text" id="apt-espadas-curtas-lvl" value="Nv. 00">
+            <input type="text" id="apt-espadas-curtas-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Adagas</label>
+            <input type="text" id="apt-adagas-lvl" value="Nv. 00">
+            <input type="text" id="apt-adagas-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Lâminas Duplas</label>
+            <input type="text" id="apt-laminas-duplas-lvl" value="Nv. 00">
+            <input type="text" id="apt-laminas-duplas-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Machados Curtos</label>
+            <input type="text" id="apt-machados-curtos-lvl" value="Nv. 00">
+            <input type="text" id="apt-machados-curtos-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Martelos Curtos</label>
+            <input type="text" id="apt-martelos-curtos-lvl" value="Nv. 00">
+            <input type="text" id="apt-martelos-curtos-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Lanças</label>
+            <input type="text" id="apt-lancas-lvl" value="Nv. 00">
+            <input type="text" id="apt-lancas-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Foices</label>
+            <input type="text" id="apt-foices-lvl" value="Nv. 00">
+            <input type="text" id="apt-foices-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Bastões</label>
+            <input type="text" id="apt-bastoes-lvl" value="Nv. 00">
+            <input type="text" id="apt-bastoes-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Correntes/Kusarigama</label>
+            <input type="text" id="apt-correntes-lvl" value="Nv. 00">
+            <input type="text" id="apt-correntes-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Arremesso de Armas</label>
+            <input type="text" id="apt-arremesso-lvl" value="Nv. 00">
+            <input type="text" id="apt-arremesso-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Armas de Fogo</label>
+            <input type="text" id="apt-armas-fogo-lvl" value="Nv. 00">
+            <input type="text" id="apt-armas-fogo-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Furtividade</label>
+            <input type="text" id="apt-furtividade-lvl" value="Nv. 00">
+            <input type="text" id="apt-furtividade-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Natação</label>
+            <input type="text" id="apt-natacao-lvl" value="Nv. 00">
+            <input type="text" id="apt-natacao-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Corrida</label>
+            <input type="text" id="apt-corrida-lvl" value="Nv. 00">
+            <input type="text" id="apt-corrida-xp" class="xp-input" value="000/200">
+          </div>
+
+          <span class="aptidao-header">Inteligência (INT)</span>
+          <div class="aptidao-item">
+            <label>Feitiços</label>
+            <input type="text" id="apt-feiticos-lvl" value="Nv. 00">
+            <input type="text" id="apt-feiticos-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Barreiras</label>
+            <input type="text" id="apt-barreiras-lvl" value="Nv. 00">
+            <input type="text" id="apt-barreiras-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Pactos</label>
+            <input type="text" id="apt-pactos-lvl" value="Nv. 00">
+            <input type="text" id="apt-pactos-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Percepção Mágica</label>
+            <input type="text" id="apt-percepcao-magica-lvl" value="Nv. 00">
+            <input type="text" id="apt-percepcao-magica-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Primeiros Socorros</label>
+            <input type="text" id="apt-primeiros-socorros-lvl" value="Nv. 00">
+            <input type="text" id="apt-primeiros-socorros-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Técnica Reversa</label>
+            <input type="text" id="apt-tecnica-reversa-lvl" value="Nv. 00">
+            <input type="text" id="apt-tecnica-reversa-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Percepção Visual</label>
+            <input type="text" id="apt-percepcao-visual-lvl" value="Nv. 00">
+            <input type="text" id="apt-percepcao-visual-xp" class="xp-input" value="000/200">
+          </div>
+          <div class="aptidao-item">
+            <label>Sobrevivência</label>
+            <input type="text" id="apt-sobrevivencia-lvl" value="Nv. 00">
+            <input type="text" id="apt-sobrevivencia-xp" class="xp-input" value="000/200">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aba: Combate (Técnicas)</legend>
         
         <div class="dynamic-section">
           <h4>Técnicas (CTs, Barreiras, etc.)</h4>
@@ -417,7 +611,7 @@
           </div>
           <div class="form-group">
             <label for="domain-desc">Descrição do Domínio</label>
-            <textarea id="domain-desc" rows="3" placeholder="(O personagem pode não ter uma ainda) Descrição do domínio, seu sinal de mão, regras, e efeito garantido."></textarea>
+            <textarea id="domain-desc" rows="3" placeholder="Ainda não possui uma"></textarea>
           </div>
         </div>
         
@@ -501,8 +695,26 @@
       const traitsList = document.getElementById('traits-list');
       const relationsList = document.getElementById('relations-list');
 
-      // --- FUNÇÕES DE ADICIONAR CARDS ---
+      // --- [NOVO] IDs de todas as Aptidões ---
+      const aptidaoIDs = [
+        'apt-combate-desarmado', 'apt-espadas-longas', 'apt-machados-longos', 'apt-martelos-longos', 'apt-clavas', 'apt-escalada', 'apt-acrobacia',
+        'apt-espadas-curtas', 'apt-adagas', 'apt-laminas-duplas', 'apt-machados-curtos', 'apt-martelos-curtos', 'apt-lancas', 'apt-foices', 'apt-bastoes', 'apt-correntes', 'apt-arremesso', 'apt-armas-fogo', 'apt-furtividade', 'apt-natacao', 'apt-corrida',
+        'apt-feiticos', 'apt-barreiras', 'apt-pactos', 'apt-percepcao-magica', 'apt-primeiros-socorros', 'apt-tecnica-reversa', 'apt-percepcao-visual', 'apt-sobrevivencia'
+      ];
+      const simpleValueIDs = [
+        'char-name', 'char-nickname', 'char-header-img', 'char-profile-pic', 'char-age', 'char-species', 'char-grade', 'char-alignment', 'char-hp', 'char-ea',
+        'attr-for', 'attr-des', 'attr-sor', 'attr-vig', 'attr-ene', 'attr-fon',
+        'profile-phys-desc', 'phys-cabelo', 'phys-olhos', 'phys-pele', 'phys-altura', 'phys-peso', 'phys-extras',
+        'profile-psy-desc', 'psy-gostos', 'psy-desgostos', 'psy-medos', 'psy-traumas', 'psy-objetivos', 'psy-sonhos',
+        'domain-name', 'domain-link', 'domain-desc',
+        'part-name', 'part-link', 'part-desc', 'part-notes',
+        'bio-text'
+      ];
+      // Combina os IDs simples com os de aptidão (lvl e xp)
+      const allValueIDs = simpleValueIDs.concat(aptidaoIDs.flatMap(id => [`${id}-lvl`, `${id}-xp`]));
 
+
+      // --- FUNÇÕES DE ADICIONAR CARDS ---
       function addTechniqueGroup() {
         const cardId = Date.now();
         const card = document.createElement('div');
@@ -535,7 +747,6 @@
       function addSpell(targetListId) {
         const spellList = document.getElementById(targetListId);
         if (!spellList) return;
-        
         const subCard = document.createElement('div');
         subCard.className = 'dynamic-sub-card';
         subCard.innerHTML = `
@@ -578,7 +789,6 @@
         const isPositive = type === 'positive';
         card.className = `dynamic-card trait-card ${isPositive ? 'trait-positive' : 'trait-negative'}`;
         card.dataset.type = type;
-        
         card.innerHTML = `
           <button type="button" class="remove-button">Remover</button>
           <div class="form-group">
@@ -644,67 +854,43 @@
       });
 
       // --- FUNÇÃO DE GERAR O HTML ---
+      
+      // [NOVO] Helper para pegar valor do campo
+      function getVal(id) {
+        return document.getElementById(id).value;
+      }
+      
+      // [NOVO] Helper para gerar um item de aptidão
+      function createSkillHTML(name, levelId, xpId) {
+        const level = getVal(levelId);
+        const xp = getVal(xpId);
+        return `<div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">${name}</span><span class="jjk-dossier-skill-level">${level}</span><span class="jjk-dossier-skill-xp">${xp}</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>`;
+      }
+      
       function generateAndDisplayHTML() {
-        const values = {
-          name: document.getElementById('char-name').value,
-          nickname: document.getElementById('char-nickname').value,
-          headerImg: document.getElementById('char-header-img').value || 'https://i.imgur.com/example.jpeg',
-          profilePic: document.getElementById('char-profile-pic').value || 'https://i.imgur.com/example-profile.png',
-          age: document.getElementById('char-age').value,
-          species: document.getElementById('char-species').value,
-          grade: document.getElementById('char-grade').value,
-          alignment: document.getElementById('char-alignment').value,
-          hp: document.getElementById('char-hp').value,
-          ea: document.getElementById('char-ea').value,
-          attrFor: document.getElementById('attr-for').value,
-          attrDes: document.getElementById('attr-des').value,
-          attrSor: document.getElementById('attr-sor').value,
-          attrVig: document.getElementById('attr-vig').value,
-          attrEne: document.getElementById('attr-ene').value,
-          attrFon: document.getElementById('attr-fon').value,
-          physDesc: document.getElementById('profile-phys-desc').value.replace(/\n/g, '<br>'),
-          physCabelo: document.getElementById('phys-cabelo').value,
-          physOlhos: document.getElementById('phys-olhos').value,
-          physPele: document.getElementById('phys-pele').value,
-          physAltura: document.getElementById('phys-altura').value,
-          physPeso: document.getElementById('phys-peso').value,
-          physExtras: document.getElementById('phys-extras').value,
-          psyDesc: document.getElementById('profile-psy-desc').value.replace(/\n/g, '<br>'),
-          psyGostos: document.getElementById('psy-gostos').value,
-          psyDesgostos: document.getElementById('psy-desgostos').value,
-          psyMedos: document.getElementById('psy-medos').value,
-          psyTraumas: document.getElementById('psy-traumas').value,
-          psyObjetivos: document.getElementById('psy-objetivos').value,
-          psySonhos: document.getElementById('psy-sonhos').value,
-          domainName: document.getElementById('domain-name').value,
-          domainLink: document.getElementById('domain-link').value || '#',
-          domainDesc: document.getElementById('domain-desc').value.replace(/\n/g, '<br>'),
-          partName: document.getElementById('part-name').value,
-          partLink: document.getElementById('part-link').value || '#',
-          partDesc: document.getElementById('part-desc').value.replace(/\n/g, '<br>'),
-          partNotes: document.getElementById('part-notes').value.replace(/\n/g, '<br>'),
-          bio: document.getElementById('bio-text').value.replace(/\n/g, '<br>'),
-        };
+        const values = {};
+        // Pega todos os valores simples e de aptidões
+        allValueIDs.forEach(id => {
+          values[id] = getVal(id);
+        });
+        
+        // Substitui quebras de linha por <br>
+        ['profile-phys-desc', 'profile-psy-desc', 'domain-desc', 'part-desc', 'part-notes', 'bio-text'].forEach(id => {
+          if (values[id]) values[id] = values[id].replace(/\n/g, '<br>');
+        });
 
         let techniqueGroupsHtml = '';
         techniqueGroupsList.querySelectorAll('.dynamic-card').forEach(groupCard => {
           const groupName = groupCard.querySelector('.tech-group-name').value;
           const groupLink = groupCard.querySelector('.tech-group-link').value || '#';
           const groupDesc = groupCard.querySelector('.tech-group-desc').value.replace(/\n/g, '<br>');
-          
           let spellsHtml = '';
           groupCard.querySelectorAll('.dynamic-sub-card').forEach(spellCard => {
             const spellName = spellCard.querySelector('.spell-name').value;
             const spellDesc = spellCard.querySelector('.spell-desc').value.replace(/\n/g, '<br>');
             spellsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${spellName}</div><div class="jjk-dossier-card-desc">${spellDesc}</div></div>`;
           });
-
-          techniqueGroupsHtml += `
-            <div class="jjk-technique-group">
-              <h4 class="jjk-technique-title"><a href="${groupLink}">${groupName}</a></h4>
-              <div class="jjk-technique-desc jjk-scrollable-content">${groupDesc}</div>
-              <div class="jjk-dossier-card-list">${spellsHtml}</div>
-            </div>`;
+          techniqueGroupsHtml += `<div class="jjk-technique-group"><h4 class="jjk-technique-title"><a href="${groupLink}">${groupName}</a></h4><div class="jjk-technique-desc jjk-scrollable-content">${groupDesc}</div><div class="jjk-dossier-card-list">${spellsHtml}</div></div>`;
         });
 
         let equipmentHtml = '';
@@ -733,59 +919,53 @@
           let statusTag = '';
           if (relStatus === 'vivo') statusTag = '<span class="jjk-status-tag jjk-status-vivo">(Vivo)</span>';
           if (relStatus === 'morto') statusTag = '<span class="jjk-status-tag jjk-status-morto">(Morto)</span>';
-
-          relationsHtml += `
-            <div class="jjk-dossier-card-item">
-              <div class="jjk-dossier-card-title">${relName} ${statusTag}</div>
-              <div class="jjk-dossier-card-subtitle">Relação: ${relType}</div>
-              <div class="jjk-dossier-card-desc">${relDesc}</div>
-            </div>`;
+          relationsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${relName} ${statusTag}</div><div class="jjk-dossier-card-subtitle">Relação: ${relType}</div><div class="jjk-dossier-card-desc">${relDesc}</div></div>`;
         });
 
-        // --- [ATUALIZADO] Bloco de Aptidões com Nível ---
+        // --- [ATUALIZADO] Bloco de Aptidões Dinâmico ---
         const skillsHtml = `
           <div class="jjk-dossier-skills-category">
             <h4 class="jjk-category-title">Força (FOR)</h4>
             <div class="jjk-dossier-skills-list">
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Combate Desarmado</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Espadas Longas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Machados Longos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Martelos Longos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Clavas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Escalada</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Acrobacia</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              ${createSkillHTML('Combate Desarmado', 'apt-combate-desarmado-lvl', 'apt-combate-desarmado-xp')}
+              ${createSkillHTML('Espadas Longas', 'apt-espadas-longas-lvl', 'apt-espadas-longas-xp')}
+              ${createSkillHTML('Machados Longos', 'apt-machados-longos-lvl', 'apt-machados-longos-xp')}
+              ${createSkillHTML('Martelos Longos', 'apt-martelos-longos-lvl', 'apt-martelos-longos-xp')}
+              ${createSkillHTML('Clavas', 'apt-clavas-lvl', 'apt-clavas-xp')}
+              ${createSkillHTML('Escalada', 'apt-escalada-lvl', 'apt-escalada-xp')}
+              ${createSkillHTML('Acrobacia', 'apt-acrobacia-lvl', 'apt-acrobacia-xp')}
             </div>
           </div>
           <div class="jjk-dossier-skills-category">
             <h4 class="jjk-category-title">Destreza (DES)</h4>
             <div class="jjk-dossier-skills-list">
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Espadas Curtas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Adagas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Lâminas Duplas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Machados Curtos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Martelos Curtos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Lanças</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Foices (0)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Bastões (15)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Correntes/Kusarigama (40)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Arremesso de Armas (20)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Armas de Fogo (0)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Furtividade</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Natação</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Corrida</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              ${createSkillHTML('Espadas Curtas', 'apt-espadas-curtas-lvl', 'apt-espadas-curtas-xp')}
+              ${createSkillHTML('Adagas', 'apt-adagas-lvl', 'apt-adagas-xp')}
+              ${createSkillHTML('Lâminas Duplas', 'apt-laminas-duplas-lvl', 'apt-laminas-duplas-xp')}
+              ${createSkillHTML('Machados Curtos', 'apt-machados-curtos-lvl', 'apt-machados-curtos-xp')}
+              ${createSkillHTML('Martelos Curtos', 'apt-martelos-curtos-lvl', 'apt-martelos-curtos-xp')}
+              ${createSkillHTML('Lanças', 'apt-lancas-lvl', 'apt-lancas-xp')}
+              ${createSkillHTML('Foices', 'apt-foices-lvl', 'apt-foices-xp')}
+              ${createSkillHTML('Bastões', 'apt-bastoes-lvl', 'apt-bastoes-xp')}
+              ${createSkillHTML('Correntes/Kusarigama', 'apt-correntes-lvl', 'apt-correntes-xp')}
+              ${createSkillHTML('Arremesso de Armas', 'apt-arremesso-lvl', 'apt-arremesso-xp')}
+              ${createSkillHTML('Armas de Fogo', 'apt-armas-fogo-lvl', 'apt-armas-fogo-xp')}
+              ${createSkillHTML('Furtividade', 'apt-furtividade-lvl', 'apt-furtividade-xp')}
+              ${createSkillHTML('Natação', 'apt-natacao-lvl', 'apt-natacao-xp')}
+              ${createSkillHTML('Corrida', 'apt-corrida-lvl', 'apt-corrida-xp')}
             </div>
           </div>
           <div class="jjk-dossier-skills-category">
             <h4 class="jjk-category-title">Inteligência (INT)</h4>
             <div class="jjk-dossier-skills-list">
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Feitiços</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Barreiras</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Pactos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Percepção Mágica</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Primeiros Socorros</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Técnica Reversa</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Percepção Visual</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
-              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Sobrevivência</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              ${createSkillHTML('Feitiços', 'apt-feiticos-lvl', 'apt-feiticos-xp')}
+              ${createSkillHTML('Barreiras', 'apt-barreiras-lvl', 'apt-barreiras-xp')}
+              ${createSkillHTML('Pactos', 'apt-pactos-lvl', 'apt-pactos-xp')}
+              ${createSkillHTML('Percepção Mágica', 'apt-percepcao-magica-lvl', 'apt-percepcao-magica-xp')}
+              ${createSkillHTML('Primeiros Socorros', 'apt-primeiros-socorros-lvl', 'apt-primeiros-socorros-xp')}
+              ${createSkillHTML('Técnica Reversa', 'apt-tecnica-reversa-lvl', 'apt-tecnica-reversa-xp')}
+              ${createSkillHTML('Percepção Visual', 'apt-percepcao-visual-lvl', 'apt-percepcao-visual-xp')}
+              ${createSkillHTML('Sobrevivência', 'apt-sobrevivencia-lvl', 'apt-sobrevivencia-xp')}
             </div>
           </div>
         `;
@@ -794,38 +974,38 @@
         let finalHTML = `
 <link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha-v2.css" rel="stylesheet" type="text/css">
 <div class="jjk-dossier-container">
-  <div class="jjk-dossier-header" style="background-image: url('${values.headerImg}');">
+  <div class="jjk-dossier-header" style="background-image: url('${values['char-header-img'] || 'https://i.imgur.com/example.jpeg'}');">
     <div class="jjk-dossier-header-overlay">
-      <div class="jjk-dossier-name">${values.name}</div>
-      <div class="jjk-dossier-subtitle"><span class="jjk-dossier-apelido">${values.nickname}</span> | <span class="jjk-dossier-grau">Grau ${values.grade}</span></div>
+      <div class="jjk-dossier-name">${values['char-name']}</div>
+      <div class="jjk-dossier-subtitle"><span class="jjk-dossier-apelido">${values['char-nickname']}</span> | <span class="jjk-dossier-grau">Grau ${values['char-grade']}</span></div>
     </div>
   </div>
   <div class="jjk-dossier-body">
     <div class="jjk-dossier-left-col">
-      <img class="jjk-dossier-profile-pic" src="${values.profilePic}" alt="Foto do Personagem">
+      <img class="jjk-dossier-profile-pic" src="${values['char-profile-pic'] || 'https://i.imgur.com/example-profile.png'}" alt="Foto do Personagem">
       <div class="jjk-dossier-info-box">
-        <div class="jjk-info-item"><span class="jjk-info-label">Idade</span><span class="jjk-info-value">${values.age}</span></div>
-        <div class="jjk-info-item"><span class="jjk-info-label">Espécie</span><span class="jjk-info-value">${values.species}</span></div>
-        <div class="jjk-info-item"><span class="jjk-info-label">Alinhamento</span><span class="jjk-info-value">${values.alignment}</span></div>
+        <div class="jjk-info-item"><span class="jjk-info-label">Idade</span><span class="jjk-info-value">${values['char-age']}</span></div>
+        <div class="jjk-info-item"><span class="jjk-info-label">Espécie</span><span class="jjk-info-value">${values['char-species']}</span></div>
+        <div class="jjk-info-item"><span class="jjk-info-label">Alinhamento</span><span class="jjk-info-value">${values['char-alignment']}</span></div>
       </div>
     </div>
     <div class="jjk-dossier-right-col">
       <div class="jjk-dossier-block">
         <h3 class="jjk-block-title">Status</h3>
         <div class="jjk-status-wrapper">
-          <div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-name">Vigor (HP)</span><span class="jjk-dossier-status-value">${values.hp}</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-hp-fill"></div></div></div>
-          <div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-name">Energia (EA)</span><span class="jjk-dossier-status-value">${values.ea}</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-ea-fill"></div></div></div>
+          <div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-name">Vigor (HP)</span><span class="jjk-dossier-status-value">${values['char-hp']}</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-hp-fill"></div></div></div>
+          <div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-name">Energia (EA)</span><span class="jjk-dossier-status-value">${values['char-ea']}</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-ea-fill"></div></div></div>
         </div>
       </div>
       <div class="jjk-dossier-block">
         <h3 class="jjk-block-title">Atributos</h3>
         <div class="jjk-dossier-attr-list">
-          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">${values.attrFor}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
-          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">${values.attrDes}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
-          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">${values.attrSor}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
-          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor</span><span class="jjk-dossier-attr-value">${values.attrVig}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
-          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia</span><span class="jjk-dossier-attr-value">${values.attrEne}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
-          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Fonte</span><span class="jjk-dossier-attr-value">${values.attrFon}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">${values['attr-for']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">${values['attr-des']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">${values['attr-sor']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor</span><span class="jjk-dossier-attr-value">${values['attr-vig']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia</span><span class="jjk-dossier-attr-value">${values['attr-ene']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Fonte</span><span class="jjk-dossier-attr-value">${values['attr-fon']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
         </div>
       </div>
     </div>
@@ -842,26 +1022,26 @@
       <div class="jjk-tab-content">
         <div class="jjk-dossier-block">
           <h3 class="jjk-block-title">Físico</h3>
-          <div class="jjk-profile-description jjk-scrollable-content">${values.physDesc}</div>
+          <div class="jjk-profile-description jjk-scrollable-content">${values['profile-phys-desc']}</div>
           <div class="jjk-profile-list">
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Cabelo:</span> ${values.physCabelo}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Olhos:</span> ${values.physOlhos}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Pele:</span> ${values.physPele}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Altura:</span> ${values.physAltura}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Peso:</span> ${values.physPeso}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Extras:</span> ${values.physExtras}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Cabelo:</span> ${values['phys-cabelo']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Olhos:</span> ${values['phys-olhos']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Pele:</span> ${values['phys-pele']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Altura:</span> ${values['phys-altura']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Peso:</span> ${values['phys-peso']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Extras:</span> ${values['phys-extras']}</div>
           </div>
         </div>
         <div class="jjk-dossier-block">
           <h3 class="jjk-block-title">Psicológico</h3>
-          <div class="jjk-profile-description jjk-scrollable-content">${values.psyDesc}</div>
+          <div class="jjk-profile-description jjk-scrollable-content">${values['profile-psy-desc']}</div>
           <div class="jjk-profile-list">
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Gostos:</span> ${values.psyGostos}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Desgostos:</span> ${values.psyDesgostos}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Medos:</span> ${values.psyMedos}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Traumas:</span> ${values.psyTraumas}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Objetivos:</span> ${values.psyObjetivos}</div>
-            <div class="jjk-profile-item"><span class="jjk-profile-label">Sonhos:</span> ${values.psySonhos}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Gostos:</span> ${values['psy-gostos']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Desgostos:</span> ${values['psy-desgostos']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Medos:</span> ${values['psy-medos']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Traumas:</span> ${values['psy-traumas']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Objetivos:</span> ${values['psy-objetivos']}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Sonhos:</span> ${values['psy-sonhos']}</div>
           </div>
         </div>
       </div>
@@ -877,8 +1057,8 @@
         <div class="jjk-dossier-block jjk-domain-expansion">
           <h3 class="jjk-block-title">Expansão de Domínio</h3>
           <div class="jjk-technique-group">
-            <h4 class="jjk-technique-title"><a href="${values.domainLink}">${values.domainName || '(Nome da Expansão)'}</a></h4>
-            <div class="jjk-technique-desc jjk-scrollable-content">${values.domainDesc || '(O personagem pode não ter uma ainda)'}</div>
+            <h4 class="jjk-technique-title"><a href="${values['domain-link'] || '#'}">${values['domain-name'] || '(Nome da Expansão)'}</a></h4>
+            <div class="jjk-technique-desc jjk-scrollable-content">${values['domain-desc'] || 'Ainda não possui uma'}</div>
           </div>
         </div>
         <div class="jjk-dossier-block">
@@ -890,14 +1070,14 @@
         <div class="jjk-dossier-block">
           <h3 class="jjk-block-title">Particularidade</h3>
           <div class="jjk-particularidade-card">
-            <h4 class="jjk-particularidade-name"><a href="${values.partLink}">${values.partName}</a></h4>
+            <h4 class="jjk-particularidade-name"><a href="${values['part-link'] || '#'}">${values['part-name']}</a></h4>
             <div class="jjk-particularidade-section">
               <h5 class="jjk-particularidade-section-title">Descrição Geral</h5>
-              <div class="jjk-particularidade-desc jjk-scrollable-content">${values.partDesc}</div>
+              <div class="jjk-particularidade-desc jjk-scrollable-content">${values['part-desc']}</div>
             </div>
             <div class="jjk-particularidade-section">
               <h5 class="jjk-particularidade-section-title">Sistemas / Notas Adicionais</h5>
-              <div class="jjk-particularidade-notes jjk-scrollable-content">${values.partNotes}</div>
+              <div class="jjk-particularidade-notes jjk-scrollable-content">${values['part-notes']}</div>
             </div>
           </div>
         </div>
@@ -915,7 +1095,7 @@
       <div class="jjk-tab-content">
         <div class="jjk-dossier-block">
           <h3 class="jjk-block-title">Biografia</h3>
-          <div class="jjk-dossier-textarea jjk-scrollable-content">${values.bio}</div>
+          <div class="jjk-dossier-textarea jjk-scrollable-content">${values['bio-text']}</div>
         </div>
       </div>
     </div>
@@ -934,64 +1114,24 @@
 
       // --- LOCALSTORAGE (Salvar Progresso) ---
       function saveDataToLocalStorage() {
-        const data = {
-          simpleValues: {
-            'char-name': document.getElementById('char-name').value,
-            'char-nickname': document.getElementById('char-nickname').value,
-            'char-header-img': document.getElementById('char-header-img').value,
-            'char-profile-pic': document.getElementById('char-profile-pic').value,
-            'char-age': document.getElementById('char-age').value,
-            'char-species': document.getElementById('char-species').value,
-            'char-grade': document.getElementById('char-grade').value,
-            'char-alignment': document.getElementById('char-alignment').value,
-            'char-hp': document.getElementById('char-hp').value,
-            'char-ea': document.getElementById('char-ea').value,
-            'attr-for': document.getElementById('attr-for').value,
-            'attr-des': document.getElementById('attr-des').value,
-            'attr-sor': document.getElementById('attr-sor').value,
-            'attr-vig': document.getElementById('attr-vig').value,
-            'attr-ene': document.getElementById('attr-ene').value,
-            'attr-fon': document.getElementById('attr-fon').value,
-            'profile-phys-desc': document.getElementById('profile-phys-desc').value,
-            'phys-cabelo': document.getElementById('phys-cabelo').value,
-            'phys-olhos': document.getElementById('phys-olhos').value,
-            'phys-pele': document.getElementById('phys-pele').value,
-            'phys-altura': document.getElementById('phys-altura').value,
-            'phys-peso': document.getElementById('phys-peso').value,
-            'phys-extras': document.getElementById('phys-extras').value,
-            'profile-psy-desc': document.getElementById('profile-psy-desc').value,
-            'psy-gostos': document.getElementById('psy-gostos').value,
-            'psy-desgostos': document.getElementById('psy-desgostos').value,
-            'psy-medos': document.getElementById('psy-medos').value,
-            'psy-traumas': document.getElementById('psy-traumas').value,
-            'psy-objetivos': document.getElementById('psy-objetivos').value,
-            'psy-sonhos': document.getElementById('psy-sonhos').value,
-            'domain-name': document.getElementById('domain-name').value,
-            'domain-link': document.getElementById('domain-link').value,
-            'domain-desc': document.getElementById('domain-desc').value,
-            'part-name': document.getElementById('part-name').value,
-            'part-link': document.getElementById('part-link').value,
-            'part-desc': document.getElementById('part-desc').value,
-            'part-notes': document.getElementById('part-notes').value,
-            'bio-text': document.getElementById('bio-text').value,
-          },
-          // A lógica de salvar/carregar os cards dinâmicos é mais complexa
-          // e foi omitida por enquanto para focar na geração.
-        };
+        const data = { simpleValues: {} };
+        allValueIDs.forEach(id => {
+          data.simpleValues[id] = getVal(id);
+        });
         localStorage.setItem('jjkSheetData', JSON.stringify(data));
       }
       
       function loadDataFromLocalStorage() {
         const data = JSON.parse(localStorage.getItem('jjkSheetData'));
-        if (!data) return;
-        if (data.simpleValues) {
-          for (const [id, value] of Object.entries(data.simpleValues)) {
+        if (!data || !data.simpleValues) return;
+        
+        allValueIDs.forEach(id => {
             const el = document.getElementById(id);
-            if (el) {
-              el.value = value;
+            if (el && data.simpleValues[id]) {
+              el.value = data.simpleValues[id];
             }
-          }
-        }
+        });
+        // A lógica de recriar os cards dinâmicos ainda está omitida.
       }
 
       // --- SCRIPT DE IFRAME (Fornecido por você) ---
