@@ -1,11 +1,262 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-T-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador de Ficha - Golden Age RPG</title>
-  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- Variáveis de Cor --- */
+    :root {
+      --jjk-bg: #101118;
+      --jjk-bg-light: #1b1d29;
+      --jjk-bg-darker: #0c0d13;
+      --jjk-purple: #6D20C5;
+      --jjk-purple-light: #8a40e3;
+      --jjk-border: #2a2d3d;
+      --jjk-text-primary: #e0e0e0;
+      --jjk-text-secondary: #a0a0a0;
+      --jjk-positive: #20c56d;
+      --jjk-negative: #c52020;
+    }
+
+    /* --- Reset Básico --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--jjk-bg);
+      color: var(--jjk-text-primary);
+      line-height: 1.5;
+    }
+
+    /* --- Layout Principal --- */
+    .generator-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 15px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      color: var(--jjk-purple);
+      font-weight: 900;
+      font-size: 2.5em;
+    }
+
+    header p {
+      font-size: 1.1em;
+      color: var(--jjk-text-secondary);
+    }
+
+    /* --- Formulário e Fieldsets --- */
+    fieldset {
+      background-color: var(--jjk-bg-light);
+      border: 1px solid var(--jjk-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    legend {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--jjk-purple);
+      padding: 0 10px;
+      margin-left: -10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    /* Campos de grade com 3 colunas */
+    #attributes-grid {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.9em;
+      font-weight: 700;
+      color: var(--jjk-text-secondary);
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    select,
+    textarea {
+      background-color: var(--jjk-bg-darker);
+      border: 1px solid var(--jjk-border);
+      color: var(--jjk-text-primary);
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--jjk-purple);
+      box-shadow: 0 0 5px rgba(109, 32, 197, 0.5);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--jjk-border);
+      margin: 20px 0;
+    }
+
+    .form-note {
+      font-size: 0.9em;
+      color: var(--jjk-text-secondary);
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    /* --- Botões --- */
+    button, .add-button {
+      background-color: var(--jjk-purple);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1em;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    button:hover, .add-button:hover {
+      background-color: var(--jjk-purple-light);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .add-button.positive { background-color: var(--jjk-positive); }
+    .add-button.positive:hover { background-color: #2edc7e; }
+    .add-button.negative { background-color: var(--jjk-negative); }
+    .add-button.negative:hover { background-color: #e04040; }
+
+    .remove-button {
+      background-color: #444;
+      color: var(--jjk-text-primary);
+      padding: 5px 10px;
+      font-size: 0.8em;
+    }
+    .remove-button:hover { background-color: var(--jjk-negative); }
+
+    /* --- Seções Dinâmicas (Cards) --- */
+    .dynamic-section {
+      border-top: 1px solid var(--jjk-border);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+    .dynamic-section h4 {
+      color: var(--jjk-purple-light);
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    .dynamic-card {
+      background-color: var(--jjk-bg-darker);
+      border: 1px solid var(--jjk-border);
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .dynamic-card .remove-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    /* Card de Sub-item (Feitiços) */
+    .sub-card-list {
+      margin-top: 15px;
+      padding-left: 15px;
+      border-left: 2px solid var(--jjk-purple);
+    }
+    .dynamic-sub-card {
+      background-color: var(--jjk-bg);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    /* --- Seção de Saída --- */
+    .output-section {
+      background-color: var(--jjk-bg-light);
+      border: 1px solid var(--jjk-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .output-section legend {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--jjk-purple);
+      padding: 0;
+      margin: 0 0 15px 0;
+    }
+    #output-html {
+      width: 100%;
+      height: 200px;
+      background-color: var(--jjk-bg-darker);
+      border: 1px solid var(--jjk-border);
+      color: var(--jjk-text-secondary);
+      font-family: monospace;
+      font-size: 0.9em;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    #copy-html-btn {
+      width: 100%;
+      font-size: 1.1em;
+      padding: 12px;
+    }
+
+    /* --- Responsividade --- */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -147,7 +398,7 @@
 
       <fieldset>
         <legend>Aba: Combate</legend>
-        <p class="form-note">As Aptidões são fixas e iniciam em 000/200 no código.</p>
+        <p class="form-note">As Aptidões são fixas. O gerador irá preenchê-las com Nv. 00 e 000/200 XP.</p>
         
         <div class="dynamic-section">
           <h4>Técnicas (CTs, Barreiras, etc.)</h4>
@@ -233,6 +484,556 @@
       <button type="button" id="copy-html-btn">Copiar Código</button>
     </div>
 
-  </div> <script src="script.js"></script>
+  </div> <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      // --- SELETORES GLOBAIS ---
+      const form = document.getElementById('sheet-generator-form');
+      const outputArea = document.getElementById('output-html');
+      const copyBtn = document.getElementById('copy-html-btn');
+      const addTechniqueGroupBtn = document.getElementById('add-technique-group');
+      const addEquipmentBtn = document.getElementById('add-equipment');
+      const addTraitPosBtn = document.getElementById('add-trait-pos');
+      const addTraitNegBtn = document.getElementById('add-trait-neg');
+      const addRelationBtn = document.getElementById('add-relation');
+      const techniqueGroupsList = document.getElementById('technique-groups-list');
+      const equipmentList = document.getElementById('equipment-list');
+      const traitsList = document.getElementById('traits-list');
+      const relationsList = document.getElementById('relations-list');
+
+      // --- FUNÇÕES DE ADICIONAR CARDS ---
+
+      function addTechniqueGroup() {
+        const cardId = Date.now();
+        const card = document.createElement('div');
+        card.className = 'dynamic-card';
+        card.innerHTML = `
+          <button type="button" class="remove-button">Remover Grupo</button>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Nome do Grupo (Ex: Técnica Amaldiçoada)</label>
+              <input type="text" class="tech-group-name" placeholder="Ex: Técnica da Boneca de Palha">
+            </div>
+            <div class="form-group full-width">
+              <label>Link do Tópico</label>
+              <input type="url" class="tech-group-link" placeholder="https://.../link-do-topico">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Descrição do Grupo</label>
+            <textarea class="tech-group-desc" rows="2" placeholder="Descrição geral da sua Técnica Amaldiçoada..."></textarea>
+          </div>
+          <div class="sub-card-list">
+            <h4>Feitiços Vinculados</h4>
+            <div class="spell-list" id="spell-list-${cardId}"></div>
+            <button type="button" class="add-button add-spell-btn" data-target-list="spell-list-${cardId}">Adicionar Feitiço</button>
+          </div>
+        `;
+        techniqueGroupsList.appendChild(card);
+      }
+
+      function addSpell(targetListId) {
+        const spellList = document.getElementById(targetListId);
+        if (!spellList) return;
+        
+        const subCard = document.createElement('div');
+        subCard.className = 'dynamic-sub-card';
+        subCard.innerHTML = `
+          <button type="button" class="remove-button">Remover</button>
+          <div class="form-group">
+            <label>Nome do Feitiço</label>
+            <input type="text" class="spell-name" placeholder="Ex: Ressonância">
+          </div>
+          <div class="form-group">
+            <label>Descrição do Feitiço</label>
+            <textarea class="spell-desc" rows="2" placeholder="Descrição, custo de EA, dano..."></textarea>
+          </div>
+        `;
+        spellList.appendChild(subCard);
+      }
+
+      function addEquipment() {
+        const card = document.createElement('div');
+        card.className = 'dynamic-card';
+        card.innerHTML = `
+          <button type="button" class="remove-button">Remover</button>
+          <div class="form-group">
+            <label>Nome do Equipamento</label>
+            <input type="text" class="equip-name" placeholder="Ex: Faca Amaldiçoada">
+          </div>
+          <div class="form-group">
+            <label>Tipo</label>
+            <input type="text" class="equip-type" placeholder="Ex: Arma Amaldiçoada Grau 3">
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea class="equip-desc" rows="2" placeholder="Descrição do item, seus efeitos..."></textarea>
+          </div>
+        `;
+        equipmentList.appendChild(card);
+      }
+
+      function addTrait(type) {
+        const card = document.createElement('div');
+        const isPositive = type === 'positive';
+        card.className = `dynamic-card trait-card ${isPositive ? 'trait-positive' : 'trait-negative'}`;
+        card.dataset.type = type;
+        
+        card.innerHTML = `
+          <button type="button" class="remove-button">Remover</button>
+          <div class="form-group">
+            <label>Nome da Característica (${isPositive ? 'Positiva' : 'Negativa'})</label>
+            <input type="text" class="trait-name" placeholder="Ex: Energia Amaldiçoada Vasta">
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea class="trait-desc" rows="2" placeholder="Descrição da característica..."></textarea>
+          </div>
+        `;
+        traitsList.appendChild(card);
+      }
+
+      function addRelation() {
+        const card = document.createElement('div');
+        card.className = 'dynamic-card';
+        card.innerHTML = `
+          <button type="button" class="remove-button">Remover</button>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome da Pessoa</label>
+              <input type="text" class="relation-name" placeholder="Ex: Suguru Geto">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select class="relation-status">
+                <option value="vivo" selected>Vivo</option>
+                <option value="morto">Morto</option>
+                <option value="incerto">Incerto</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Relação</label>
+            <input type="text" class="relation-type" placeholder="Ex: Melhor Amigo, Rival">
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea class="relation-desc" rows="2" placeholder="Breve descrição do relacionamento..."></textarea>
+          </div>
+        `;
+        relationsList.appendChild(card);
+      }
+
+      // --- EVENT LISTENERS (Botões de Adicionar) ---
+      addTechniqueGroupBtn.addEventListener('click', addTechniqueGroup);
+      addEquipmentBtn.addEventListener('click', addEquipment);
+      addTraitPosBtn.addEventListener('click', () => addTrait('positive'));
+      addTraitNegBtn.addEventListener('click', () => addTrait('negative'));
+      addRelationBtn.addEventListener('click', addRelation);
+
+      form.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-button')) {
+          e.target.closest('.dynamic-card, .dynamic-sub-card').remove();
+          setTimeout(calculateAndSendHeight, 100);
+        }
+        if (e.target.classList.contains('add-spell-btn')) {
+          const targetListId = e.target.dataset.targetList;
+          addSpell(targetListId);
+          setTimeout(calculateAndSendHeight, 100);
+        }
+      });
+
+      // --- FUNÇÃO DE GERAR O HTML ---
+      function generateAndDisplayHTML() {
+        const values = {
+          name: document.getElementById('char-name').value,
+          nickname: document.getElementById('char-nickname').value,
+          headerImg: document.getElementById('char-header-img').value || 'https://i.imgur.com/example.jpeg',
+          profilePic: document.getElementById('char-profile-pic').value || 'https://i.imgur.com/example-profile.png',
+          age: document.getElementById('char-age').value,
+          species: document.getElementById('char-species').value,
+          grade: document.getElementById('char-grade').value,
+          alignment: document.getElementById('char-alignment').value,
+          hp: document.getElementById('char-hp').value,
+          ea: document.getElementById('char-ea').value,
+          attrFor: document.getElementById('attr-for').value,
+          attrDes: document.getElementById('attr-des').value,
+          attrSor: document.getElementById('attr-sor').value,
+          attrVig: document.getElementById('attr-vig').value,
+          attrEne: document.getElementById('attr-ene').value,
+          attrFon: document.getElementById('attr-fon').value,
+          physDesc: document.getElementById('profile-phys-desc').value.replace(/\n/g, '<br>'),
+          physCabelo: document.getElementById('phys-cabelo').value,
+          physOlhos: document.getElementById('phys-olhos').value,
+          physPele: document.getElementById('phys-pele').value,
+          physAltura: document.getElementById('phys-altura').value,
+          physPeso: document.getElementById('phys-peso').value,
+          physExtras: document.getElementById('phys-extras').value,
+          psyDesc: document.getElementById('profile-psy-desc').value.replace(/\n/g, '<br>'),
+          psyGostos: document.getElementById('psy-gostos').value,
+          psyDesgostos: document.getElementById('psy-desgostos').value,
+          psyMedos: document.getElementById('psy-medos').value,
+          psyTraumas: document.getElementById('psy-traumas').value,
+          psyObjetivos: document.getElementById('psy-objetivos').value,
+          psySonhos: document.getElementById('psy-sonhos').value,
+          domainName: document.getElementById('domain-name').value,
+          domainLink: document.getElementById('domain-link').value || '#',
+          domainDesc: document.getElementById('domain-desc').value.replace(/\n/g, '<br>'),
+          partName: document.getElementById('part-name').value,
+          partLink: document.getElementById('part-link').value || '#',
+          partDesc: document.getElementById('part-desc').value.replace(/\n/g, '<br>'),
+          partNotes: document.getElementById('part-notes').value.replace(/\n/g, '<br>'),
+          bio: document.getElementById('bio-text').value.replace(/\n/g, '<br>'),
+        };
+
+        let techniqueGroupsHtml = '';
+        techniqueGroupsList.querySelectorAll('.dynamic-card').forEach(groupCard => {
+          const groupName = groupCard.querySelector('.tech-group-name').value;
+          const groupLink = groupCard.querySelector('.tech-group-link').value || '#';
+          const groupDesc = groupCard.querySelector('.tech-group-desc').value.replace(/\n/g, '<br>');
+          
+          let spellsHtml = '';
+          groupCard.querySelectorAll('.dynamic-sub-card').forEach(spellCard => {
+            const spellName = spellCard.querySelector('.spell-name').value;
+            const spellDesc = spellCard.querySelector('.spell-desc').value.replace(/\n/g, '<br>');
+            spellsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${spellName}</div><div class="jjk-dossier-card-desc">${spellDesc}</div></div>`;
+          });
+
+          techniqueGroupsHtml += `
+            <div class="jjk-technique-group">
+              <h4 class="jjk-technique-title"><a href="${groupLink}">${groupName}</a></h4>
+              <div class="jjk-technique-desc jjk-scrollable-content">${groupDesc}</div>
+              <div class="jjk-dossier-card-list">${spellsHtml}</div>
+            </div>`;
+        });
+
+        let equipmentHtml = '';
+        equipmentList.querySelectorAll('.dynamic-card').forEach(card => {
+          const equipName = card.querySelector('.equip-name').value;
+          const equipType = card.querySelector('.equip-type').value;
+          const equipDesc = card.querySelector('.equip-desc').value.replace(/\n/g, '<br>');
+          equipmentHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${equipName}</div><div class="jjk-dossier-card-subtitle">Tipo: ${equipType}</div><div class="jjk-dossier-card-desc">${equipDesc}</div></div>`;
+        });
+
+        let traitsHtml = '';
+        traitsList.querySelectorAll('.dynamic-card').forEach(card => {
+          const type = card.dataset.type;
+          const traitName = card.querySelector('.trait-name').value;
+          const traitDesc = card.querySelector('.trait-desc').value.replace(/\n/g, '<br>');
+          const typeClass = type === 'positive' ? 'jjk-card-positive' : 'jjk-card-negative';
+          traitsHtml += `<div class="jjk-dossier-card-item ${typeClass}"><div class="jjk-dossier-card-title">${traitName}</div><div class="jjk-dossier-card-desc">${traitDesc}</div></div>`;
+        });
+
+        let relationsHtml = '';
+        relationsList.querySelectorAll('.dynamic-card').forEach(card => {
+          const relName = card.querySelector('.relation-name').value;
+          const relStatus = card.querySelector('.relation-status').value;
+          const relType = card.querySelector('.relation-type').value;
+          const relDesc = card.querySelector('.relation-desc').value.replace(/\n/g, '<br>');
+          let statusTag = '';
+          if (relStatus === 'vivo') statusTag = '<span class="jjk-status-tag jjk-status-vivo">(Vivo)</span>';
+          if (relStatus === 'morto') statusTag = '<span class="jjk-status-tag jjk-status-morto">(Morto)</span>';
+
+          relationsHtml += `
+            <div class="jjk-dossier-card-item">
+              <div class="jjk-dossier-card-title">${relName} ${statusTag}</div>
+              <div class="jjk-dossier-card-subtitle">Relação: ${relType}</div>
+              <div class="jjk-dossier-card-desc">${relDesc}</div>
+            </div>`;
+        });
+
+        // --- [ATUALIZADO] Bloco de Aptidões com Nível ---
+        const skillsHtml = `
+          <div class="jjk-dossier-skills-category">
+            <h4 class="jjk-category-title">Força (FOR)</h4>
+            <div class="jjk-dossier-skills-list">
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Combate Desarmado</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Espadas Longas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Machados Longos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Martelos Longos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Clavas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Escalada</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Acrobacia</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+            </div>
+          </div>
+          <div class="jjk-dossier-skills-category">
+            <h4 class="jjk-category-title">Destreza (DES)</h4>
+            <div class="jjk-dossier-skills-list">
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Espadas Curtas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Adagas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Lâminas Duplas</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Machados Curtos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Martelos Curtos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Lanças</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Foices (0)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Bastões (15)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Correntes/Kusarigama (40)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Arremesso de Armas (20)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Armas de Fogo (0)</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Furtividade</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Natação</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Corrida</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+            </div>
+          </div>
+          <div class="jjk-dossier-skills-category">
+            <h4 class="jjk-category-title">Inteligência (INT)</h4>
+            <div class="jjk-dossier-skills-list">
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Feitiços</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Barreiras</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Pactos</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Percepção Mágica</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Primeiros Socorros</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Técnica Reversa</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Percepção Visual</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+              <div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">Sobrevivência</span><span class="jjk-dossier-skill-level">Nv. 00</span><span class="jjk-dossier-skill-xp">000/200</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>
+            </div>
+          </div>
+        `;
+
+        // --- MONTAGEM DO HTML FINAL ---
+        let finalHTML = `
+<link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha-v2.css" rel="stylesheet" type="text/css">
+<div class="jjk-dossier-container">
+  <div class="jjk-dossier-header" style="background-image: url('${values.headerImg}');">
+    <div class="jjk-dossier-header-overlay">
+      <div class="jjk-dossier-name">${values.name}</div>
+      <div class="jjk-dossier-subtitle"><span class="jjk-dossier-apelido">${values.nickname}</span> | <span class="jjk-dossier-grau">Grau ${values.grade}</span></div>
+    </div>
+  </div>
+  <div class="jjk-dossier-body">
+    <div class="jjk-dossier-left-col">
+      <img class="jjk-dossier-profile-pic" src="${values.profilePic}" alt="Foto do Personagem">
+      <div class="jjk-dossier-info-box">
+        <div class="jjk-info-item"><span class="jjk-info-label">Idade</span><span class="jjk-info-value">${values.age}</span></div>
+        <div class="jjk-info-item"><span class="jjk-info-label">Espécie</span><span class="jjk-info-value">${values.species}</span></div>
+        <div class="jjk-info-item"><span class="jjk-info-label">Alinhamento</span><span class="jjk-info-value">${values.alignment}</span></div>
+      </div>
+    </div>
+    <div class="jjk-dossier-right-col">
+      <div class="jjk-dossier-block">
+        <h3 class="jjk-block-title">Status</h3>
+        <div class="jjk-status-wrapper">
+          <div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-name">Vigor (HP)</span><span class="jjk-dossier-status-value">${values.hp}</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-hp-fill"></div></div></div>
+          <div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-name">Energia (EA)</span><span class="jjk-dossier-status-value">${values.ea}</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-ea-fill"></div></div></div>
+        </div>
+      </div>
+      <div class="jjk-dossier-block">
+        <h3 class="jjk-block-title">Atributos</h3>
+        <div class="jjk-dossier-attr-list">
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">${values.attrFor}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">${values.attrDes}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">${values.attrSor}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor</span><span class="jjk-dossier-attr-value">${values.attrVig}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia</span><span class="jjk-dossier-attr-value">${values.attrEne}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Fonte</span><span class="jjk-dossier-attr-value">${values.attrFon}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jjk-dossier-tabs-container jjk-tabs-js">
+    <div class="jjk-dossier-tab-nav">
+      <label class="jjk-tab-label">Perfil</label>
+      <label class="jjk-tab-label">Combate</label>
+      <label class="jjk-tab-label">Detalhes</label>
+      <label class="jjk-tab-label">Relações</label>
+      <label class="jjk-tab-label">Biografia</label>
+    </div>
+    <div class="jjk-tab-content-wrapper">
+      <div class="jjk-tab-content">
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Físico</h3>
+          <div class="jjk-profile-description jjk-scrollable-content">${values.physDesc}</div>
+          <div class="jjk-profile-list">
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Cabelo:</span> ${values.physCabelo}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Olhos:</span> ${values.physOlhos}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Pele:</span> ${values.physPele}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Altura:</span> ${values.physAltura}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Peso:</span> ${values.physPeso}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Extras:</span> ${values.physExtras}</div>
+          </div>
+        </div>
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Psicológico</h3>
+          <div class="jjk-profile-description jjk-scrollable-content">${values.psyDesc}</div>
+          <div class="jjk-profile-list">
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Gostos:</span> ${values.psyGostos}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Desgostos:</span> ${values.psyDesgostos}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Medos:</span> ${values.psyMedos}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Traumas:</span> ${values.psyTraumas}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Objetivos:</span> ${values.psyObjetivos}</div>
+            <div class="jjk-profile-item"><span class="jjk-profile-label">Sonhos:</span> ${values.psySonhos}</div>
+          </div>
+        </div>
+      </div>
+      <div class="jjk-tab-content">
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Aptidões</h3>
+          ${skillsHtml}
+        </div>
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Técnicas</h3>
+          ${techniqueGroupsHtml}
+        </div>
+        <div class="jjk-dossier-block jjk-domain-expansion">
+          <h3 class="jjk-block-title">Expansão de Domínio</h3>
+          <div class="jjk-technique-group">
+            <h4 class="jjk-technique-title"><a href="${values.domainLink}">${values.domainName || '(Nome da Expansão)'}</a></h4>
+            <div class="jjk-technique-desc jjk-scrollable-content">${values.domainDesc || '(O personagem pode não ter uma ainda)'}</div>
+          </div>
+        </div>
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Equipamento</h3>
+          <div class="jjk-dossier-card-list">${equipmentHtml}</div>
+        </div>
+      </div>
+      <div class="jjk-tab-content">
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Particularidade</h3>
+          <div class="jjk-particularidade-card">
+            <h4 class="jjk-particularidade-name"><a href="${values.partLink}">${values.partName}</a></h4>
+            <div class="jjk-particularidade-section">
+              <h5 class="jjk-particularidade-section-title">Descrição Geral</h5>
+              <div class="jjk-particularidade-desc jjk-scrollable-content">${values.partDesc}</div>
+            </div>
+            <div class="jjk-particularidade-section">
+              <h5 class="jjk-particularidade-section-title">Sistemas / Notas Adicionais</h5>
+              <div class="jjk-particularidade-notes jjk-scrollable-content">${values.partNotes}</div>
+            </div>
+          </div>
+        </div>
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Características</h3>
+          <div class="jjk-dossier-card-list">${traitsHtml}</div>
+        </div>
+      </div>
+      <div class="jjk-tab-content">
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Relacionamentos</h3>
+          <div class="jjk-dossier-card-list">${relationsHtml}</div>
+        </div>
+      </div>
+      <div class="jjk-tab-content">
+        <div class="jjk-dossier-block">
+          <h3 class="jjk-block-title">Biografia</h3>
+          <div class="jjk-dossier-textarea jjk-scrollable-content">${values.bio}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    `;
+
+        // Minifica o HTML para linha única
+        const singleLineHTML = finalHTML
+          .replace(/(\r\n|\n|\r)/gm, "") // Remove quebras de linha
+          .replace(/\s+/g, ' ')           // Remove espaços extras
+          .replace(/> </g, '><');         // Remove espaços entre tags
+
+        outputArea.value = singleLineHTML;
+      }
+
+      // --- LOCALSTORAGE (Salvar Progresso) ---
+      function saveDataToLocalStorage() {
+        const data = {
+          simpleValues: {
+            'char-name': document.getElementById('char-name').value,
+            'char-nickname': document.getElementById('char-nickname').value,
+            'char-header-img': document.getElementById('char-header-img').value,
+            'char-profile-pic': document.getElementById('char-profile-pic').value,
+            'char-age': document.getElementById('char-age').value,
+            'char-species': document.getElementById('char-species').value,
+            'char-grade': document.getElementById('char-grade').value,
+            'char-alignment': document.getElementById('char-alignment').value,
+            'char-hp': document.getElementById('char-hp').value,
+            'char-ea': document.getElementById('char-ea').value,
+            'attr-for': document.getElementById('attr-for').value,
+            'attr-des': document.getElementById('attr-des').value,
+            'attr-sor': document.getElementById('attr-sor').value,
+            'attr-vig': document.getElementById('attr-vig').value,
+            'attr-ene': document.getElementById('attr-ene').value,
+            'attr-fon': document.getElementById('attr-fon').value,
+            'profile-phys-desc': document.getElementById('profile-phys-desc').value,
+            'phys-cabelo': document.getElementById('phys-cabelo').value,
+            'phys-olhos': document.getElementById('phys-olhos').value,
+            'phys-pele': document.getElementById('phys-pele').value,
+            'phys-altura': document.getElementById('phys-altura').value,
+            'phys-peso': document.getElementById('phys-peso').value,
+            'phys-extras': document.getElementById('phys-extras').value,
+            'profile-psy-desc': document.getElementById('profile-psy-desc').value,
+            'psy-gostos': document.getElementById('psy-gostos').value,
+            'psy-desgostos': document.getElementById('psy-desgostos').value,
+            'psy-medos': document.getElementById('psy-medos').value,
+            'psy-traumas': document.getElementById('psy-traumas').value,
+            'psy-objetivos': document.getElementById('psy-objetivos').value,
+            'psy-sonhos': document.getElementById('psy-sonhos').value,
+            'domain-name': document.getElementById('domain-name').value,
+            'domain-link': document.getElementById('domain-link').value,
+            'domain-desc': document.getElementById('domain-desc').value,
+            'part-name': document.getElementById('part-name').value,
+            'part-link': document.getElementById('part-link').value,
+            'part-desc': document.getElementById('part-desc').value,
+            'part-notes': document.getElementById('part-notes').value,
+            'bio-text': document.getElementById('bio-text').value,
+          },
+          // A lógica de salvar/carregar os cards dinâmicos é mais complexa
+          // e foi omitida por enquanto para focar na geração.
+        };
+        localStorage.setItem('jjkSheetData', JSON.stringify(data));
+      }
+      
+      function loadDataFromLocalStorage() {
+        const data = JSON.parse(localStorage.getItem('jjkSheetData'));
+        if (!data) return;
+        if (data.simpleValues) {
+          for (const [id, value] of Object.entries(data.simpleValues)) {
+            const el = document.getElementById(id);
+            if (el) {
+              el.value = value;
+            }
+          }
+        }
+      }
+
+      // --- SCRIPT DE IFRAME (Fornecido por você) ---
+      const targetOrigin = 'https://goldenagejjkrpg.forumeiros.com';
+      let lastHeightSent = 0;
+
+      function calculateAndSendHeight() {
+        const height = document.documentElement.scrollHeight;
+        if (height !== lastHeightSent) {
+          lastHeightSent = height;
+          window.parent.postMessage({ frameHeight: height }, targetOrigin);
+        }
+      }
+      
+      // --- EVENT LISTENERS FINAIS (Seus) ---
+      loadDataFromLocalStorage();
+
+      form.addEventListener('input', function(event) {
+        generateAndDisplayHTML();
+        saveDataToLocalStorage();
+        setTimeout(calculateAndSendHeight, 50);
+      });
+
+      copyBtn.addEventListener('click', function() {
+        outputArea.select();
+        try {
+          document.execCommand('copy');
+          copyBtn.textContent = 'Copiado!';
+        } catch (err) {
+          copyBtn.textContent = 'Erro ao copiar!';
+        }
+        setTimeout(() => {
+          copyBtn.textContent = 'Copiar Código';
+        }, 2000);
+      });
+      
+      setTimeout(calculateAndSendHeight, 150);
+      window.addEventListener('resize', () => setTimeout(calculateAndSendHeight, 100));
+
+      // Gera o HTML uma vez ao carregar
+      generateAndDisplayHTML();
+    });
+  </script>
 </body>
 </html>
