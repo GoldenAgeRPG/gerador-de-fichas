@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador de Ficha - Golden Age RPG</title>
+  <title>Gerador & Editor de Ficha - Golden Age RPG</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
   
   <style>
@@ -19,15 +19,11 @@
       --jjk-text-secondary: #a0a0a0;
       --jjk-positive: #20c56d;
       --jjk-negative: #c52020;
+      --jjk-warn: #e08f2f;
     }
 
     /* --- Reset Básico --- */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Roboto', sans-serif;
       background-color: var(--jjk-bg);
@@ -36,27 +32,10 @@
     }
 
     /* --- Layout Principal --- */
-    .generator-container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 15px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    header h1 {
-      color: var(--jjk-purple);
-      font-weight: 900;
-      font-size: 2.5em;
-    }
-
-    header p {
-      font-size: 1.1em;
-      color: var(--jjk-text-secondary);
-    }
+    .generator-container { max-width: 900px; margin: 20px auto; padding: 15px; }
+    header { text-align: center; margin-bottom: 25px; }
+    header h1 { color: var(--jjk-purple); font-weight: 900; font-size: 2.5em; }
+    header p { font-size: 1.1em; color: var(--jjk-text-secondary); }
 
     /* --- Formulário e Fieldsets --- */
     fieldset {
@@ -66,7 +45,6 @@
       padding: 20px;
       margin-bottom: 20px;
     }
-
     legend {
       font-size: 1.4em;
       font-weight: 700;
@@ -74,81 +52,27 @@
       padding: 0 10px;
       margin-left: -10px;
     }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    /* [CORRIGIDO] Grid de Aptidões */
-    .form-grid-3-col {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 15px 20px;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .form-grid-3-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px 20px; }
     
     .aptidao-item {
       display: grid;
-      /* Label | "Nv." | Input Nv | Input XP */
       grid-template-columns: 1fr auto 50px 80px; 
       gap: 8px;
       align-items: center;
     }
-    .aptidao-item label {
-      grid-column: 1 / 2;
-      margin-bottom: 0;
-      color: var(--jjk-text-primary);
-    }
-    /* [NOVO] Prefixo "Nv." */
-    .aptidao-item .input-prefix {
-      grid-column: 2 / 3;
-      text-align: right;
-      color: var(--jjk-text-secondary);
-      font-weight: 700;
-      padding-right: 5px;
-    }
-    .aptidao-item input {
-      grid-column: 3 / 4; /* Input Nv */
-    }
-    .aptidao-item input.xp-input {
-      grid-column: 4 / 5; /* Input XP */
-    }
-    .aptidao-header {
-      grid-column: 1 / -1;
-      color: var(--jjk-purple-light);
-      font-size: 1.1em;
-      font-weight: 700;
-      margin-top: 10px;
-      border-bottom: 1px solid var(--jjk-border);
-      padding-bottom: 5px;
-    }
-    /* Fim da correção de Aptidões */
+    .aptidao-item label { grid-column: 1 / 2; margin-bottom: 0; color: var(--jjk-text-primary); }
+    .aptidao-item .input-prefix { grid-column: 2 / 3; text-align: right; color: var(--jjk-text-secondary); font-weight: 700; padding-right: 5px; }
+    .aptidao-item input { grid-column: 3 / 4; }
+    .aptidao-item input.xp-input { grid-column: 4 / 5; }
+    .aptidao-header { grid-column: 1 / -1; color: var(--jjk-purple-light); font-size: 1.1em; font-weight: 700; margin-top: 10px; border-bottom: 1px solid var(--jjk-border); padding-bottom: 5px; }
+    
+    #attributes-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    .form-group { display: flex; flex-direction: column; }
+    .full-width { grid-column: 1 / -1; }
+    label { font-size: 0.9em; font-weight: 700; color: var(--jjk-text-secondary); margin-bottom: 5px; }
 
-    #attributes-grid {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-size: 0.9em;
-      font-weight: 700;
-      color: var(--jjk-text-secondary);
-      margin-bottom: 5px;
-    }
-
-    input[type="text"],
-    input[type="url"],
-    select,
-    textarea {
+    input[type="text"], input[type="url"], select, textarea {
       background-color: var(--jjk-bg-darker);
       border: 1px solid var(--jjk-border);
       color: var(--jjk-text-primary);
@@ -156,32 +80,14 @@
       border-radius: 5px;
       font-size: 1em;
     }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--jjk-purple);
       box-shadow: 0 0 5px rgba(109, 32, 197, 0.5);
     }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid var(--jjk-border);
-      margin: 20px 0;
-    }
-
-    .form-note {
-      font-size: 0.9em;
-      color: var(--jjk-text-secondary);
-      font-style: italic;
-      margin-bottom: 15px;
-    }
+    textarea { resize: vertical; min-height: 60px; }
+    hr { border: none; border-top: 1px solid var(--jjk-border); margin: 20px 0; }
+    .form-note { font-size: 0.9em; color: var(--jjk-text-secondary); font-style: italic; margin-bottom: 15px; }
 
     /* --- Botões --- */
     button, .add-button {
@@ -197,87 +103,39 @@
       text-align: center;
       text-decoration: none;
     }
-
-    button:hover, .add-button:hover {
-      background-color: var(--jjk-purple-light);
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-    }
-
+    button:hover, .add-button:hover { background-color: var(--jjk-purple-light); }
+    .button-group { display: flex; gap: 10px; flex-wrap: wrap; }
     .add-button.positive { background-color: var(--jjk-positive); }
     .add-button.positive:hover { background-color: #2edc7e; }
     .add-button.negative { background-color: var(--jjk-negative); }
     .add-button.negative:hover { background-color: #e04040; }
-
-    .remove-button {
-      background-color: #444;
-      color: var(--jjk-text-primary);
-      padding: 5px 10px;
-      font-size: 0.8em;
-    }
+    .remove-button { background-color: #444; color: var(--jjk-text-primary); padding: 5px 10px; font-size: 0.8em; }
     .remove-button:hover { background-color: var(--jjk-negative); }
+    #load-html-btn { background-color: var(--jjk-warn); width: 100%; }
+    #load-html-btn:hover { background-color: #f5a64a; }
+    #clear-form-btn { background-color: var(--jjk-negative); }
+    #clear-form-btn:hover { background-color: #e04040; }
 
     /* --- Seções Dinâmicas (Cards) --- */
-    .dynamic-section {
-      border-top: 1px solid var(--jjk-border);
-      padding-top: 20px;
-      margin-top: 20px;
-    }
-    .dynamic-section h4 {
-      color: var(--jjk-purple-light);
-      font-size: 1.1em;
-      margin-bottom: 15px;
-    }
+    .dynamic-section { border-top: 1px solid var(--jjk-border); padding-top: 20px; margin-top: 20px; }
+    .dynamic-section h4 { color: var(--jjk-purple-light); font-size: 1.1em; margin-bottom: 15px; }
+    .dynamic-card { background-color: var(--jjk-bg-darker); border: 1px solid var(--jjk-border); border-radius: 5px; padding: 15px; margin-bottom: 10px; position: relative; }
+    .dynamic-card .remove-button { position: absolute; top: 10px; right: 10px; }
+    .sub-card-list { margin-top: 15px; padding-left: 15px; border-left: 2px solid var(--jjk-purple); }
+    .dynamic-sub-card { background-color: var(--jjk-bg); padding: 10px; border-radius: 5px; margin-bottom: 10px; position: relative; }
 
-    .dynamic-card {
-      background-color: var(--jjk-bg-darker);
-      border: 1px solid var(--jjk-border);
-      border-radius: 5px;
-      padding: 15px;
-      margin-bottom: 10px;
-      position: relative;
-    }
-    .dynamic-card .remove-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-
-    /* Card de Sub-item (Feitiços) */
-    .sub-card-list {
-      margin-top: 15px;
-      padding-left: 15px;
-      border-left: 2px solid var(--jjk-purple);
-    }
-    .dynamic-sub-card {
-      background-color: var(--jjk-bg);
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      position: relative;
-    }
-
-    /* --- Seção de Saída --- */
-    .output-section {
-      background-color: var(--jjk-bg-light);
-      border: 1px solid var(--jjk-border);
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    .output-section legend {
+    /* --- Seção de Saída e Editor --- */
+    .output-section legend, #editor-legend {
       font-size: 1.4em;
       font-weight: 700;
       color: var(--jjk-purple);
       padding: 0;
       margin: 0 0 15px 0;
     }
-    #output-html {
+    #editor-legend { color: var(--jjk-warn); }
+    #input-html, #output-html {
       width: 100%;
-      height: 200px;
+      height: 150px;
       background-color: var(--jjk-bg-darker);
       border: 1px solid var(--jjk-border);
       color: var(--jjk-text-secondary);
@@ -287,21 +145,14 @@
       border-radius: 5px;
       margin-bottom: 15px;
     }
-    #copy-html-btn {
-      width: 100%;
-      font-size: 1.1em;
-      padding: 12px;
-    }
+    #output-html { height: 200px; }
+    #input-html:focus { border-color: var(--jjk-warn); box-shadow: 0 0 5px rgba(224, 143, 47, 0.5); }
+    #copy-html-btn { width: 100%; font-size: 1.1em; padding: 12px; }
 
     /* --- Responsividade --- */
     @media (max-width: 768px) {
-      .form-grid, .form-grid-3-col {
-        grid-template-columns: 1fr;
-      }
-      .aptidao-item {
-        /* Label | "Nv." | Input Nv | Input XP */
-        grid-template-columns: 1fr auto 70px 90px;
-      }
+      .form-grid, .form-grid-3-col { grid-template-columns: 1fr; }
+      .aptidao-item { grid-template-columns: 1fr auto 70px 90px; }
     }
   </style>
 </head>
@@ -309,9 +160,22 @@
 
   <div class="generator-container">
     <header>
-      <h1>Gerador de Ficha</h1>
+      <h1>Gerador & Editor de Ficha</h1>
       <p>Golden Age Jujutsu Kaisen RPG</p>
     </header>
+
+    <fieldset>
+      <legend id="editor-legend">✏️ Editor de Ficha</legend>
+      <p class="form-note">Cole o HTML da sua ficha aqui e clique em "Carregar" para editar.</p>
+      <div class="form-group">
+        <label for="input-html">HTML da Ficha Existente (em linha única)</label>
+        <textarea id="input-html" rows="5" placeholder="Cole o código <link ...> da sua ficha aqui..."></textarea>
+      </div>
+      <div class="button-group">
+        <button type="button" id="load-html-btn">Carregar Ficha para Edição</button>
+        <button type="button" id="clear-form-btn">Limpar Formulário</button>
+      </div>
+    </fieldset>
 
     <form id="sheet-generator-form">
 
@@ -695,22 +559,56 @@
       const form = document.getElementById('sheet-generator-form');
       const outputArea = document.getElementById('output-html');
       const copyBtn = document.getElementById('copy-html-btn');
+      const inputHtmlArea = document.getElementById('input-html');
+      const loadHtmlBtn = document.getElementById('load-html-btn');
+      const clearFormBtn = document.getElementById('clear-form-btn');
+      
       const addTechniqueGroupBtn = document.getElementById('add-technique-group');
       const addEquipmentBtn = document.getElementById('add-equipment');
       const addTraitPosBtn = document.getElementById('add-trait-pos');
       const addTraitNegBtn = document.getElementById('add-trait-neg');
       const addRelationBtn = document.getElementById('add-relation');
+      
       const techniqueGroupsList = document.getElementById('technique-groups-list');
       const equipmentList = document.getElementById('equipment-list');
       const traitsList = document.getElementById('traits-list');
       const relationsList = document.getElementById('relations-list');
 
-      // --- [CORRIGIDO] IDs de todas as Aptidões ---
-      const aptidaoIDs = [
-        'apt-combate-desarmado', 'apt-espadas-longas', 'apt-machados-longos', 'apt-martelos-longos', 'apt-clavas', 'apt-escalada', 'apt-acrobacia',
-        'apt-espadas-curtas', 'apt-adagas', 'apt-laminas-duplas', 'apt-machados-curtos', 'apt-martelos-curtos', 'apt-lancas', 'apt-foices', 'apt-bastoes', 'apt-correntes', 'apt-arremesso', 'apt-armas-fogo', 'apt-furtividade', 'apt-natacao', 'apt-corrida',
-        'apt-feiticos', 'apt-barreiras', 'apt-pactos', 'apt-percepcao-magica', 'apt-primeiros-socorros', 'apt-tecnica-reversa', 'apt-percepcao-visual', 'apt-sobrevivencia'
-      ];
+      // --- MAPA DE APTIDÕES (Para o Parser) ---
+      // Mapeia o Nome da Aptidão (no HTML) para o ID do campo do formulário
+      const aptidaoNameMap = {
+        'Combate Desarmado': 'apt-combate-desarmado',
+        'Espadas Longas': 'apt-espadas-longas',
+        'Machados Longos': 'apt-machados-longos',
+        'Martelos Longos': 'apt-martelos-longos',
+        'Clavas': 'apt-clavas',
+        'Escalada': 'apt-escalada',
+        'Acrobacia': 'apt-acrobacia',
+        'Espadas Curtas': 'apt-espadas-curtas',
+        'Adagas': 'apt-adagas',
+        'Lâminas Duplas': 'apt-laminas-duplas',
+        'Machados Curtos': 'apt-machados-curtos',
+        'Martelos Curtos': 'apt-martelos-curtos',
+        'Lanças': 'apt-lancas',
+        'Foices': 'apt-foices',
+        'Bastões': 'apt-bastoes',
+        'Correntes': 'apt-correntes',
+        'Arremesso de Armas': 'apt-arremesso',
+        'Armas de Fogo': 'apt-armas-fogo',
+        'Furtividade': 'apt-furtividade',
+        'Natação': 'apt-natacao',
+        'Corrida': 'apt-corrida',
+        'Feitiços': 'apt-feiticos',
+        'Barreiras': 'apt-barreiras',
+        'Pactos': 'apt-pactos',
+        'Percepção Mágica': 'apt-percepcao-magica',
+        'Primeiros Socorros': 'apt-primeiros-socorros',
+        'Técnica Reversa': 'apt-tecnica-reversa',
+        'Percepção Visual': 'apt-percepcao-visual',
+        'Sobrevivência': 'apt-sobrevivencia'
+      };
+      
+      const aptidaoIDs = Object.values(aptidaoNameMap);
       const simpleValueIDs = [
         'char-name', 'char-nickname', 'char-header-img', 'char-profile-pic', 'char-age', 'char-species', 'char-grade', 'char-alignment', 'char-hp', 'char-ea',
         'attr-for', 'attr-des', 'attr-sor', 'attr-vig', 'attr-ene', 'attr-fon',
@@ -720,12 +618,35 @@
         'part-name', 'part-link', 'part-desc', 'part-notes',
         'bio-text'
       ];
-      // Combina os IDs simples com os de aptidão (lvl e xp)
       const allValueIDs = simpleValueIDs.concat(aptidaoIDs.flatMap(id => [`${id}-lvl`, `${id}-xp`]));
 
 
-      // --- FUNÇÕES DE ADICIONAR CARDS ---
-      function addTechniqueGroup() {
+      // --- FUNÇÕES HELPER ---
+      function getVal(id) { return document.getElementById(id).value; }
+      function setVal(id, value) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.value = value;
+        }
+      }
+      // Converte ...<br>... para ...\n...
+      function brToNewline(str) {
+        return str.replace(/<br\s*\/?>/gi, '\n');
+      }
+      // Converte ...\n... para ...<br>...
+      function newlineTobr(str) {
+        return str.replace(/\n/g, '<br>');
+      }
+      // Limpa todos os cards dinâmicos
+      function clearDynamicLists() {
+        techniqueGroupsList.innerHTML = '';
+        equipmentList.innerHTML = '';
+        traitsList.innerHTML = '';
+        relationsList.innerHTML = '';
+      }
+
+      // --- FUNÇÕES DE ADICIONAR CARDS (Formulário) ---
+      function addTechniqueGroup(data = {}) {
         const cardId = Date.now();
         const card = document.createElement('div');
         card.className = 'dynamic-card';
@@ -734,16 +655,16 @@
           <div class="form-grid">
             <div class="form-group full-width">
               <label>Nome do Grupo (Ex: Técnica Amaldiçoada)</label>
-              <input type="text" class="tech-group-name" placeholder="Ex: Técnica da Boneca de Palha">
+              <input type="text" class="tech-group-name" placeholder="Ex: Técnica da Boneca de Palha" value="${data.name || ''}">
             </div>
             <div class="form-group full-width">
               <label>Link do Tópico</label>
-              <input type="url" class="tech-group-link" placeholder="https://.../link-do-topico">
+              <input type="url" class="tech-group-link" placeholder="https://.../link-do-topico" value="${data.link || ''}">
             </div>
           </div>
           <div class="form-group">
             <label>Descrição do Grupo</label>
-            <textarea class="tech-group-desc" rows="2" placeholder="Descrição geral da sua Técnica Amaldiçoada..."></textarea>
+            <textarea class="tech-group-desc" rows="2" placeholder="Descrição geral da sua Técnica Amaldiçoada...">${data.desc || ''}</textarea>
           </div>
           <div class="sub-card-list">
             <h4>Feitiços Vinculados</h4>
@@ -752,9 +673,14 @@
           </div>
         `;
         techniqueGroupsList.appendChild(card);
+        
+        // Se houver dados de feitiços, adiciona-os
+        if (data.spells && data.spells.length > 0) {
+          data.spells.forEach(spellData => addSpell(`spell-list-${cardId}`, spellData));
+        }
       }
 
-      function addSpell(targetListId) {
+      function addSpell(targetListId, data = {}) {
         const spellList = document.getElementById(targetListId);
         if (!spellList) return;
         const subCard = document.createElement('div');
@@ -763,38 +689,38 @@
           <button type="button" class="remove-button">Remover</button>
           <div class="form-group">
             <label>Nome do Feitiço</label>
-            <input type="text" class="spell-name" placeholder="Ex: Ressonância">
+            <input type="text" class="spell-name" placeholder="Ex: Ressonância" value="${data.name || ''}">
           </div>
           <div class="form-group">
             <label>Descrição do Feitiço</label>
-            <textarea class="spell-desc" rows="2" placeholder="Descrição, custo de EA, dano..."></textarea>
+            <textarea class="spell-desc" rows="2" placeholder="Descrição, custo de EA, dano...">${data.desc || ''}</textarea>
           </div>
         `;
         spellList.appendChild(subCard);
       }
 
-      function addEquipment() {
+      function addEquipment(data = {}) {
         const card = document.createElement('div');
         card.className = 'dynamic-card';
         card.innerHTML = `
           <button type="button" class="remove-button">Remover</button>
           <div class="form-group">
             <label>Nome do Equipamento</label>
-            <input type="text" class="equip-name" placeholder="Ex: Faca Amaldiçoada">
+            <input type="text" class="equip-name" placeholder="Ex: Faca Amaldiçoada" value="${data.name || ''}">
           </div>
           <div class="form-group">
             <label>Tipo</label>
-            <input type="text" class="equip-type" placeholder="Ex: Arma Amaldiçoada Grau 3">
+            <input type="text" class="equip-type" placeholder="Ex: Arma Amaldiçoada Grau 3" value="${data.type || ''}">
           </div>
           <div class="form-group">
             <label>Descrição</label>
-            <textarea class="equip-desc" rows="2" placeholder="Descrição do item, seus efeitos..."></textarea>
+            <textarea class="equip-desc" rows="2" placeholder="Descrição do item, seus efeitos...">${data.desc || ''}</textarea>
           </div>
         `;
         equipmentList.appendChild(card);
       }
 
-      function addTrait(type) {
+      function addTrait(type, data = {}) {
         const card = document.createElement('div');
         const isPositive = type === 'positive';
         card.className = `dynamic-card trait-card ${isPositive ? 'trait-positive' : 'trait-negative'}`;
@@ -803,17 +729,17 @@
           <button type="button" class="remove-button">Remover</button>
           <div class="form-group">
             <label>Nome da Característica (${isPositive ? 'Positiva' : 'Negativa'})</label>
-            <input type="text" class="trait-name" placeholder="Ex: Energia Amaldiçoada Vasta">
+            <input type="text" class="trait-name" placeholder="Ex: Energia Amaldiçoada Vasta" value="${data.name || ''}">
           </div>
           <div class="form-group">
             <label>Descrição</label>
-            <textarea class="trait-desc" rows="2" placeholder="Descrição da característica..."></textarea>
+            <textarea class="trait-desc" rows="2" placeholder="Descrição da característica...">${data.desc || ''}</textarea>
           </div>
         `;
         traitsList.appendChild(card);
       }
 
-      function addRelation() {
+      function addRelation(data = {}) {
         const card = document.createElement('div');
         card.className = 'dynamic-card';
         card.innerHTML = `
@@ -821,35 +747,37 @@
           <div class="form-grid">
             <div class="form-group">
               <label>Nome da Pessoa</label>
-              <input type="text" class="relation-name" placeholder="Ex: Suguru Geto">
+              <input type="text" class="relation-name" placeholder="Ex: Suguru Geto" value="${data.name || ''}">
             </div>
             <div class="form-group">
               <label>Status</label>
               <select class="relation-status">
-                <option value="vivo" selected>Vivo</option>
-                <option value="morto">Morto</option>
-                <option value="incerto">Incerto</option>
+                <option value="vivo" ${data.status === 'vivo' ? 'selected' : ''}>Vivo</option>
+                <option value="morto" ${data.status === 'morto' ? 'selected' : ''}>Morto</option>
+                <option value="incerto" ${!data.status || data.status === 'incerto' ? 'selected' : ''}>Incerto</option>
               </select>
             </div>
           </div>
           <div class="form-group">
             <label>Relação</label>
-            <input type="text" class="relation-type" placeholder="Ex: Melhor Amigo, Rival">
+            <input type="text" class="relation-type" placeholder="Ex: Melhor Amigo, Rival" value="${data.type || ''}">
           </div>
           <div class="form-group">
             <label>Descrição</label>
-            <textarea class="relation-desc" rows="2" placeholder="Breve descrição do relacionamento..."></textarea>
+            <textarea class="relation-desc" rows="2" placeholder="Breve descrição do relacionamento...">${data.desc || ''}</textarea>
           </div>
         `;
+        // Corrige o select
+        if(data.status) card.querySelector('.relation-status').value = data.status;
         relationsList.appendChild(card);
       }
 
       // --- EVENT LISTENERS (Botões de Adicionar) ---
-      addTechniqueGroupBtn.addEventListener('click', addTechniqueGroup);
-      addEquipmentBtn.addEventListener('click', addEquipment);
+      addTechniqueGroupBtn.addEventListener('click', () => addTechniqueGroup());
+      addEquipmentBtn.addEventListener('click', () => addEquipment());
       addTraitPosBtn.addEventListener('click', () => addTrait('positive'));
       addTraitNegBtn.addEventListener('click', () => addTrait('negative'));
-      addRelationBtn.addEventListener('click', addRelation);
+      addRelationBtn.addEventListener('click', () => addRelation());
 
       form.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-button')) {
@@ -864,16 +792,9 @@
       });
 
       // --- FUNÇÃO DE GERAR O HTML ---
-      
-      function getVal(id) {
-        return document.getElementById(id).value;
-      }
-      
-      // [CORRIGIDO] Helper para gerar um item de aptidão
       function createSkillHTML(name, levelId, xpId) {
-        const level = getVal(levelId); // Pega só o número (ex: "00")
+        const level = getVal(levelId);
         const xp = getVal(xpId);
-        // Monta o "Nv. 00" no código final
         return `<div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">${name}</span><span class="jjk-dossier-skill-level">Nv. ${level}</span><span class="jjk-dossier-skill-xp">${xp}</span><div class="jjk-dossier-skill-bar"><div class="jjk-dossier-skill-bar-fill"></div></div></div>`;
       }
       
@@ -884,18 +805,18 @@
         });
         
         ['profile-phys-desc', 'profile-psy-desc', 'domain-desc', 'part-desc', 'part-notes', 'bio-text'].forEach(id => {
-          if (values[id]) values[id] = values[id].replace(/\n/g, '<br>');
+          if (values[id]) values[id] = newlineTobr(values[id]);
         });
 
         let techniqueGroupsHtml = '';
         techniqueGroupsList.querySelectorAll('.dynamic-card').forEach(groupCard => {
           const groupName = groupCard.querySelector('.tech-group-name').value;
           const groupLink = groupCard.querySelector('.tech-group-link').value || '#';
-          const groupDesc = groupCard.querySelector('.tech-group-desc').value.replace(/\n/g, '<br>');
+          const groupDesc = newlineTobr(groupCard.querySelector('.tech-group-desc').value);
           let spellsHtml = '';
           groupCard.querySelectorAll('.dynamic-sub-card').forEach(spellCard => {
             const spellName = spellCard.querySelector('.spell-name').value;
-            const spellDesc = spellCard.querySelector('.spell-desc').value.replace(/\n/g, '<br>');
+            const spellDesc = newlineTobr(spellCard.querySelector('.spell-desc').value);
             spellsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${spellName}</div><div class="jjk-dossier-card-desc">${spellDesc}</div></div>`;
           });
           techniqueGroupsHtml += `<div class="jjk-technique-group"><h4 class="jjk-technique-title"><a href="${groupLink}">${groupName}</a></h4><div class="jjk-technique-desc jjk-scrollable-content">${groupDesc}</div><div class="jjk-dossier-card-list">${spellsHtml}</div></div>`;
@@ -905,7 +826,7 @@
         equipmentList.querySelectorAll('.dynamic-card').forEach(card => {
           const equipName = card.querySelector('.equip-name').value;
           const equipType = card.querySelector('.equip-type').value;
-          const equipDesc = card.querySelector('.equip-desc').value.replace(/\n/g, '<br>');
+          const equipDesc = newlineTobr(card.querySelector('.equip-desc').value);
           equipmentHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${equipName}</div><div class="jjk-dossier-card-subtitle">Tipo: ${equipType}</div><div class="jjk-dossier-card-desc">${equipDesc}</div></div>`;
         });
 
@@ -913,7 +834,7 @@
         traitsList.querySelectorAll('.dynamic-card').forEach(card => {
           const type = card.dataset.type;
           const traitName = card.querySelector('.trait-name').value;
-          const traitDesc = card.querySelector('.trait-desc').value.replace(/\n/g, '<br>');
+          const traitDesc = newlineTobr(card.querySelector('.trait-desc').value);
           const typeClass = type === 'positive' ? 'jjk-card-positive' : 'jjk-card-negative';
           traitsHtml += `<div class="jjk-dossier-card-item ${typeClass}"><div class="jjk-dossier-card-title">${traitName}</div><div class="jjk-dossier-card-desc">${traitDesc}</div></div>`;
         });
@@ -923,14 +844,14 @@
           const relName = card.querySelector('.relation-name').value;
           const relStatus = card.querySelector('.relation-status').value;
           const relType = card.querySelector('.relation-type').value;
-          const relDesc = card.querySelector('.relation-desc').value.replace(/\n/g, '<br>');
+          const relDesc = newlineTobr(card.querySelector('.relation-desc').value);
           let statusTag = '';
           if (relStatus === 'vivo') statusTag = '<span class="jjk-status-tag jjk-status-vivo">(Vivo)</span>';
           if (relStatus === 'morto') statusTag = '<span class="jjk-status-tag jjk-status-morto">(Morto)</span>';
           relationsHtml += `<div class="jjk-dossier-card-item"><div class="jjk-dossier-card-title">${relName} ${statusTag}</div><div class="jjk-dossier-card-subtitle">Relação: ${relType}</div><div class="jjk-dossier-card-desc">${relDesc}</div></div>`;
         });
 
-        // --- [CORRIGIDO] Bloco de Aptidões Dinâmico ---
+        // --- Bloco de Aptidões Dinâmico ---
         const skillsHtml = `
           <div class="jjk-dossier-skills-category">
             <h4 class="jjk-category-title">Força (FOR)</h4>
@@ -1120,26 +1041,250 @@
         outputArea.value = singleLineHTML;
       }
 
-      // --- LOCALSTORAGE (Salvar Progresso) ---
+      // --- [NOVO] PARSER DE HTML ---
+      function parseAndLoadHTML() {
+        const htmlString = inputHtmlArea.value;
+        if (!htmlString) {
+          alert('Por favor, cole o HTML da sua ficha no campo de edição.');
+          return;
+        }
+        
+        try {
+          // Limpa o formulário antes de carregar
+          clearFormAndStorage();
+
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlString, 'text/html');
+          const ficha = doc.querySelector('.jjk-dossier-container');
+
+          if (!ficha) {
+            alert('HTML da ficha inválido ou não encontrado. Verifique se você copiou o código completo.');
+            return;
+          }
+
+          // 1. Preencher Campos Simples
+          setVal('char-name', ficha.querySelector('.jjk-dossier-name')?.textContent || '');
+          setVal('char-nickname', ficha.querySelector('.jjk-dossier-apelido')?.textContent || '');
+          const headerStyle = ficha.querySelector('.jjk-dossier-header')?.style.backgroundImage || '';
+          setVal('char-header-img', headerStyle.replace('url("', '').replace('")', ''));
+          setVal('char-profile-pic', ficha.querySelector('.jjk-dossier-profile-pic')?.src || '');
+          
+          setVal('char-age', ficha.querySelector('.jjk-info-item:nth-of-type(1) .jjk-info-value')?.textContent || '');
+          setVal('char-species', ficha.querySelector('.jjk-info-item:nth-of-type(2) .jjk-info-value')?.textContent || '');
+          setVal('char-alignment', ficha.querySelector('.jjk-info-item:nth-of-type(3) .jjk-info-value')?.textContent || '');
+          setVal('char-grade', (ficha.querySelector('.jjk-dossier-grau')?.textContent || 'Grau 4').replace('Grau ', ''));
+
+          setVal('char-hp', ficha.querySelector('.jjk-dossier-status-item:nth-child(1) .jjk-dossier-status-value')?.textContent || '400/400');
+          setVal('char-ea', ficha.querySelector('.jjk-dossier-status-item:nth-child(2) .jjk-dossier-status-value')?.textContent || '400/400');
+
+          setVal('attr-for', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(1) .jjk-dossier-attr-value')?.textContent || '00/20');
+          setVal('attr-des', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(2) .jjk-dossier-attr-value')?.textContent || '00/20');
+          setVal('attr-sor', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(3) .jjk-dossier-attr-value')?.textContent || '00/20');
+          setVal('attr-vig', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(4) .jjk-dossier-attr-value')?.textContent || '00/20');
+          setVal('attr-ene', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(5) .jjk-dossier-attr-value')?.textContent || '00/20');
+          setVal('attr-fon', ficha.querySelector('.jjk-dossier-attr-item:nth-of-type(6) .jjk-dossier-attr-value')?.textContent || '00/20');
+
+          setVal('profile-phys-desc', brToNewline(ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-description')?.innerHTML || ''));
+          setVal('phys-cabelo', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(1)')?.textContent.replace('Cabelo: ', '') || '');
+          setVal('phys-olhos', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(2)')?.textContent.replace('Olhos: ', '') || '');
+          setVal('phys-pele', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(3)')?.textContent.replace('Pele: ', '') || '');
+          setVal('phys-altura', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(4)')?.textContent.replace('Altura: ', '') || '');
+          setVal('phys-peso', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(5)')?.textContent.replace('Peso: ', '') || '');
+          setVal('phys-extras', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-list .jjk-profile-item:nth-of-type(6)')?.textContent.replace('Extras: ', '') || '');
+          
+          setVal('profile-psy-desc', brToNewline(ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-description')?.innerHTML || ''));
+          setVal('psy-gostos', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-item:nth-of-type(1)')?.textContent.replace('Gostos: ', '') || '');
+          setVal('psy-desgostos', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-item:nth-of-type(2)')?.textContent.replace('Desgostos: ', '') || '');
+          setVal('psy-medos', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-item:nth-of-type(3)')?.textContent.replace('Medos: ', '') || '');
+          setVal('psy-traumas', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-item:nth-of-type(4)')?.textContent.replace('Traumas: ', '') || '');
+          setVal('psy-objetivos', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-item:nth-of-type(5)')?.textContent.replace('Objetivos: ', '') || '');
+          setVal('psy-sonhos', ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-dossier-block:nth-of-type(2) .jjk-profile-item:nth-of-type(6)')?.textContent.replace('Sonhos: ', '') || '');
+          
+          setVal('bio-text', brToNewline(ficha.querySelector('.jjk-tab-content:nth-of-type(5) .jjk-dossier-textarea')?.innerHTML || ''));
+
+          // 2. Preencher Aptidões
+          ficha.querySelectorAll('.jjk-dossier-skill-item').forEach(item => {
+            const name = item.querySelector('.jjk-dossier-skill-name')?.textContent || '';
+            const level = (item.querySelector('.jjk-dossier-skill-level')?.textContent || 'Nv. 00').replace('Nv. ', '');
+            const xp = item.querySelector('.jjk-dossier-skill-xp')?.textContent || '000/200';
+            const formId = aptidaoNameMap[name];
+            if (formId) {
+              setVal(`${formId}-lvl`, level);
+              setVal(`${formId}-xp`, xp);
+            }
+          });
+
+          // 3. Preencher Dinâmicos (Técnicas)
+          const techBlock = ficha.querySelector('.jjk-tab-content:nth-of-type(2) .jjk-dossier-block:nth-of-type(2)');
+          techBlock?.querySelectorAll('.jjk-technique-group').forEach(group => {
+            const data = { spells: [] };
+            data.name = group.querySelector('.jjk-technique-title a')?.textContent || '';
+            data.link = group.querySelector('.jjk-technique-title a')?.href || '';
+            data.desc = brToNewline(group.querySelector('.jjk-technique-desc')?.innerHTML || '');
+            
+            group.querySelectorAll('.jjk-dossier-card-item').forEach(spellCard => {
+              data.spells.push({
+                name: spellCard.querySelector('.jjk-dossier-card-title')?.textContent || '',
+                desc: brToNewline(spellCard.querySelector('.jjk-dossier-card-desc')?.innerHTML || '')
+              });
+            });
+            addTechniqueGroup(data);
+          });
+          
+          // 4. Preencher Expansão de Domínio
+          const domainBlock = ficha.querySelector('.jjk-domain-expansion .jjk-technique-group');
+          setVal('domain-name', domainBlock?.querySelector('.jjk-technique-title a')?.textContent || '');
+          setVal('domain-link', domainBlock?.querySelector('.jjk-technique-title a')?.href || '');
+          setVal('domain-desc', brToNewline(domainBlock?.querySelector('.jjk-technique-desc')?.innerHTML || 'Ainda não possui uma'));
+
+          // 5. Preencher Equipamento
+          const equipBlock = ficha.querySelector('.jjk-tab-content:nth-of-type(2) .jjk-dossier-block:nth-of-type(4)');
+          equipBlock?.querySelectorAll('.jjk-dossier-card-item').forEach(card => {
+            const data = {
+              name: card.querySelector('.jjk-dossier-card-title')?.textContent || '',
+              type: (card.querySelector('.jjk-dossier-card-subtitle')?.textContent || '').replace('Tipo: ', ''),
+              desc: brToNewline(card.querySelector('.jjk-dossier-card-desc')?.innerHTML || '')
+            };
+            addEquipment(data);
+          });
+          
+          // 6. Preencher Particularidade
+          const partCard = ficha.querySelector('.jjk-particularidade-card');
+          setVal('part-name', partCard?.querySelector('.jjk-particularidade-name a')?.textContent || '');
+          setVal('part-link', partCard?.querySelector('.jjk-particularidade-name a')?.href || '');
+          setVal('part-desc', brToNewline(partCard?.querySelector('.jjk-particularidade-desc')?.innerHTML || ''));
+          setVal('part-notes', brToNewline(partCard?.querySelector('.jjk-particularidade-notes')?.innerHTML || ''));
+
+          // 7. Preencher Características
+          const traitsBlock = ficha.querySelector('.jjk-tab-content:nth-of-type(3) .jjk-dossier-block:nth-of-type(2)');
+          traitsBlock?.querySelectorAll('.jjk-dossier-card-item').forEach(card => {
+            const type = card.classList.contains('jjk-card-positive') ? 'positive' : 'negative';
+            const data = {
+              name: card.querySelector('.jjk-dossier-card-title')?.textContent || '',
+              desc: brToNewline(card.querySelector('.jjk-dossier-card-desc')?.innerHTML || '')
+            };
+            addTrait(type, data);
+          });
+          
+          // 8. Preencher Relações
+          const relationsBlock = ficha.querySelector('.jjk-tab-content:nth-of-type(4)');
+          relationsBlock?.querySelectorAll('.jjk-dossier-card-item').forEach(card => {
+            const statusTag = card.querySelector('.jjk-status-tag');
+            let status = 'incerto';
+            if (statusTag) {
+              if (statusTag.classList.contains('jjk-status-vivo')) status = 'vivo';
+              if (statusTag.classList.contains('jjk-status-morto')) status = 'morto';
+            }
+            const data = {
+              name: card.querySelector('.jjk-dossier-card-title')?.firstChild.textContent.trim() || '',
+              status: status,
+              type: (card.querySelector('.jjk-dossier-card-subtitle')?.textContent || '').replace('Relação: ', ''),
+              desc: brToNewline(card.querySelector('.jjk-dossier-card-desc')?.innerHTML || '')
+            };
+            addRelation(data);
+          });
+          
+          // Dispara a geração de HTML para preencher o campo de saída
+          generateAndDisplayHTML();
+          // Salva os dados carregados no localStorage
+          saveDataToLocalStorage();
+          alert('Ficha carregada com sucesso! Você já pode editar.');
+
+        } catch (e) {
+          console.error('Erro ao processar o HTML:', e);
+          alert('Ocorreu um erro ao ler o HTML. Verifique se o código está correto e completo.');
+        }
+      }
+
+      // --- LOCALSTORAGE (Salvar/Carregar Progresso) ---
       function saveDataToLocalStorage() {
         const data = { simpleValues: {} };
+        // Salva simples e aptidões
         allValueIDs.forEach(id => {
           data.simpleValues[id] = getVal(id);
         });
+        
+        // Salva dinâmicos
+        data.techGroups = [];
+        techniqueGroupsList.querySelectorAll('.dynamic-card').forEach(groupCard => {
+          const spells = [];
+          groupCard.querySelectorAll('.dynamic-sub-card').forEach(spellCard => {
+            spells.push({
+              name: spellCard.querySelector('.spell-name').value,
+              desc: spellCard.querySelector('.spell-desc').value
+            });
+          });
+          data.techGroups.push({
+            name: groupCard.querySelector('.tech-group-name').value,
+            link: groupCard.querySelector('.tech-group-link').value,
+            desc: groupCard.querySelector('.tech-group-desc').value,
+            spells: spells
+          });
+        });
+        
+        data.equipment = [];
+        equipmentList.querySelectorAll('.dynamic-card').forEach(card => {
+          data.equipment.push({
+            name: card.querySelector('.equip-name').value,
+            type: card.querySelector('.equip-type').value,
+            desc: card.querySelector('.equip-desc').value
+          });
+        });
+        
+        data.traits = [];
+        traitsList.querySelectorAll('.dynamic-card').forEach(card => {
+          data.traits.push({
+            type: card.dataset.type,
+            name: card.querySelector('.trait-name').value,
+            desc: card.querySelector('.trait-desc').value
+          });
+        });
+        
+        data.relations = [];
+        relationsList.querySelectorAll('.dynamic-card').forEach(card => {
+          data.relations.push({
+            name: card.querySelector('.relation-name').value,
+            status: card.querySelector('.relation-status').value,
+            type: card.querySelector('.relation-type').value,
+            desc: card.querySelector('.relation-desc').value
+          });
+        });
+
         localStorage.setItem('jjkSheetData', JSON.stringify(data));
       }
       
       function loadDataFromLocalStorage() {
         const data = JSON.parse(localStorage.getItem('jjkSheetData'));
-        if (!data || !data.simpleValues) return;
+        if (!data) return;
         
-        allValueIDs.forEach(id => {
-            const el = document.getElementById(id);
-            if (el && data.simpleValues[id] !== undefined) { // Checa por undefined
-              el.value = data.simpleValues[id];
+        // Limpa campos dinâmicos antes de carregar
+        clearDynamicLists();
+        
+        // Carrega valores simples e aptidões
+        if (data.simpleValues) {
+          allValueIDs.forEach(id => {
+            if (data.simpleValues[id] !== undefined) {
+              setVal(id, data.simpleValues[id]);
             }
-        });
-        // A lógica de recriar os cards dinâmicos ainda está omitida.
+          });
+        }
+        
+        // Recria cards dinâmicos
+        data.techGroups?.forEach(groupData => addTechniqueGroup(groupData));
+        data.equipment?.forEach(equipData => addEquipment(equipData));
+        data.traits?.forEach(traitData => addTrait(traitData.type, traitData));
+        data.relations?.forEach(relationData => addRelation(relationData));
+        
+        // Gera o HTML na saída
+        generateAndDisplayHTML();
+      }
+      
+      function clearFormAndStorage() {
+        form.reset(); // Reseta os campos do formulário para o padrão
+        clearDynamicLists(); // Limpa os cards
+        localStorage.removeItem('jjkSheetData'); // Limpa o save
+        generateAndDisplayHTML(); // Atualiza a saída
+        setTimeout(calculateAndSendHeight, 100);
       }
 
       // --- SCRIPT DE IFRAME (Fornecido por você) ---
@@ -1147,39 +1292,63 @@
       let lastHeightSent = 0;
 
       function calculateAndSendHeight() {
-        const height = document.documentElement.scrollHeight;
-        if (height !== lastHeightSent) {
-          lastHeightSent = height;
-          window.parent.postMessage({ frameHeight: height }, targetOrigin);
-        }
+        // Adiciona um pequeno delay para garantir que o DOM se ajustou
+        setTimeout(() => {
+          const height = document.documentElement.scrollHeight;
+          if (height !== lastHeightSent) {
+            lastHeightSent = height;
+            window.parent.postMessage({ frameHeight: height }, targetOrigin);
+          }
+        }, 50); 
       }
       
-      // --- EVENT LISTENERS FINAIS (Seus) ---
+      // --- EVENT LISTENERS FINAIS ---
       loadDataFromLocalStorage();
 
       form.addEventListener('input', function(event) {
         generateAndDisplayHTML();
         saveDataToLocalStorage();
-        setTimeout(calculateAndSendHeight, 50);
+        calculateAndSendHeight(); // Recalcula a altura a cada input
       });
 
+      // Botões de Ação
       copyBtn.addEventListener('click', function() {
-        outputArea.select();
-        try {
-          document.execCommand('copy');
-          copyBtn.textContent = 'Copiado!';
-        } catch (err) {
-          copyBtn.textContent = 'Erro ao copiar!';
+        if (navigator.clipboard && window.isSecureContext) {
+          // Método Moderno (HTTPS)
+          navigator.clipboard.writeText(outputArea.value)
+            .then(() => {
+              copyBtn.textContent = 'Copiado!';
+              setTimeout(() => { copyBtn.textContent = 'Copiar Código'; }, 2000);
+            })
+            .catch(err => {
+              copyBtn.textContent = 'Erro ao copiar!';
+              setTimeout(() => { copyBtn.textContent = 'Copiar Código'; }, 2000);
+            });
+        } else {
+          // Método Antigo (Fallback)
+          outputArea.select();
+          try {
+            document.execCommand('copy');
+            copyBtn.textContent = 'Copiado!';
+          } catch (err) {
+            copyBtn.textContent = 'Erro ao copiar!';
+          }
+          setTimeout(() => { copyBtn.textContent = 'Copiar Código'; }, 2000);
         }
-        setTimeout(() => {
-          copyBtn.textContent = 'Copiar Código';
-        }, 2000);
       });
       
+      loadHtmlBtn.addEventListener('click', parseAndLoadHTML);
+      clearFormBtn.addEventListener('click', () => {
+        if(confirm('Tem certeza que deseja limpar todo o formulário? O progresso salvo será perdido.')) {
+          clearFormAndStorage();
+        }
+      });
+      
+      // Listeners de altura do Iframe
       setTimeout(calculateAndSendHeight, 150);
-      window.addEventListener('resize', () => setTimeout(calculateAndSendHeight, 100));
-
-      // Gera o HTML uma vez ao carregar
+      window.addEventListener('resize', calculateAndSendHeight);
+      
+      // Gera o HTML uma vez ao carregar (com os dados do localStorage)
       generateAndDisplayHTML();
     });
   </script>
