@@ -1,632 +1,238 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-T-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador de Ficha v2 - JJK RPG</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Roboto+Mono:wght@400;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg: #0c0c1a;
-      --panel: #13141c;
-      --muted: #bfc6e6;
-      --accent1: #9b00ff;
-      --highlight: #c48fff;
-      --text: #e7e9ff;
-      --ui: 'Inter', system-ui, sans-serif;
-      --title: 'Yuji Syuku', serif;
-      --mono: 'Roboto Mono', monospace;
-      --failure: #c53030;
-      --glass: rgba(255, 255, 255, 0.03);
-      --glass-2: rgba(255, 255, 255, 0.02);
-      --success: #00e091;
-    }
-    body {
-      font-family: var(--ui);
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding: 20px;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    #form-container {
-      background: var(--panel);
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 20px;
-    }
-    #output-container {
-      margin-top: 20px;
-    }
-    fieldset {
-      border: 1px solid var(--glass);
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    legend {
-      font-family: var(--title);
-      font-size: 1.5em;
-      color: var(--highlight);
-      padding: 0 10px;
-      margin-left: 10px;
-    }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
-    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
-    .input-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
-    label { font-weight: 500; font-size: 13px; color: var(--muted); text-transform: uppercase; font-family: var(--mono); }
-    input[type="text"], input[type="url"], input[type="number"], textarea, select {
-      background: var(--bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      padding: 10px;
-      color: var(--text);
-      font-family: var(--ui);
-      font-size: 14px;
-    }
-    input[type="number"], select { font-family: var(--mono); }
-    textarea { min-height: 80px; resize: vertical; }
-    .note { font-size: 12px; color: var(--muted); opacity: 0.8; margin-top: -5px; margin-bottom: 10px; }
-    h4 {
-      font-family: var(--title);
-      color: var(--highlight);
-      border-bottom: 1px solid var(--glass-2);
-      padding-bottom: 5px;
-      margin-top: 15px;
-      margin-bottom: 10px;
-      font-size: 1.1em;
-    }
-    .dynamic-item-set {
-      border: 1px solid var(--glass-2);
-      border-radius: 6px;
-      padding: 10px;
-      margin-bottom: 10px;
-      background: var(--bg);
-    }
-    #output-code {
-      width: 100%;
-      height: 150px;
-      background: var(--bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 15px;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 12px;
-      resize: vertical;
-      margin-bottom: 10px;
-    }
-    #copy-btn {
-      width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--success);
-      color: var(--panel); font-size: 1em; font-family: var(--ui); font-weight: 700;
-      cursor: pointer; transition: background 0.2s;
-    }
-    #copy-btn:hover { background: #00ffaa; }
-    
-    textarea::-webkit-scrollbar { width: 8px; }
-    textarea::-webkit-scrollbar-track { background: var(--panel); }
-    textarea::-webkit-scrollbar-thumb { background-color: var(--accent1); border-radius: 8px; }
-    
-    @media (max-width: 600px) {
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-    }
-  </style>
+  <title>Gerador de Ficha - Golden Age RPG</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="container">
-    
-    <div id="form-container">
+  <div class="generator-container">
+    <header>
+      <h1>Gerador de Ficha</h1>
+      <p>Golden Age Jujutsu Kaisen RPG</p>
+    </header>
+
+    <form id="sheet-generator-form">
+
       <fieldset>
-        <legend>Cabeçalho</legend>
-        <div class="input-group">
-          <label for="f-char-name">Nome do Personagem</label>
-          <input type="text" id="f-char-name" placeholder="Ex: Yuji Itadori">
-        </div>
-        <div class="input-group">
-          <label for="f-char-title">Título/Alcunha</label>
-          <input type="text" id="f-char-title" placeholder="Ex: O Receptáculo de Ryomen Sukuna">
-        </div>
-        <div class="input-group">
-          <label for="f-profile-img">URL da Imagem de Perfil</label>
-          <input type="url" id="f-profile-img" placeholder="https://... .jpg">
-        </div>
-        <div class="grid-4">
-          <div class="input-group">
-            <label for="f-idade">Idade</label>
-            <input type="text" id="f-idade" placeholder="Ex: 15">
+        <legend>Informações Principais</legend>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="char-name">Nome do Personagem</label>
+            <input type="text" id="char-name" placeholder="Ex: Satoru Gojo">
           </div>
-          <div class="input-group">
-            <label for="f-grau">Grau</label>
-            <input type="text" id="f-grau" placeholder="Ex: Estudante">
+          <div class="form-group">
+            <label for="char-nickname">Apelido</label>
+            <input type="text" id="char-nickname" placeholder="Ex: O Mais Forte">
           </div>
-          <div class="input-group">
-            <label for="f-afiliacao">Afiliação</label>
-            <input type="text" id="f-afiliacao" placeholder="Ex: Escola de Tóquio">
+          <div class="form-group">
+            <label for="char-age">Idade</label>
+            <input type="text" id="char-age" placeholder="Ex: 28 Anos">
           </div>
-          <div class="input-group">
-            <label for="f-alinhamento">Alinhamento</label>
-            <select id="f-alinhamento">
+          <div class="form-group full-width">
+            <label for="char-header-img">URL da Imagem de Capa (Header)</label>
+            <input type="url" id="char-header-img" placeholder="https://i.imgur.com/example.jpeg">
+          </div>
+          <div class="form-group full-width">
+            <label for="char-profile-pic">URL da Imagem de Perfil (Quadrada)</label>
+            <input type="url" id="char-profile-pic" placeholder="https://i.imgur.com/example-profile.png">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Detalhes e Status</legend>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="char-species">Espécie</label>
+            <input type="text" id="char-species" value="Humano (Feiticeiro)">
+          </div>
+          <div class="form-group">
+            <label for="char-grade">Grau</label>
+            <select id="char-grade">
+              <option value="4" selected>Grau 4</option>
+              <option value="3">Grau 3</option>
+              <option value="2">Grau 2</option>
+              <option value="1">Grau 1</option>
+              <option value="Semi-Especial">Semi-Grau Especial</option>
+              <option value="Especial">Grau Especial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="char-alignment">Alinhamento</label>
+            <select id="char-alignment">
               <option value="Leal e Bom">Leal e Bom</option>
               <option value="Neutro e Bom">Neutro e Bom</option>
               <option value="Caótico e Bom">Caótico e Bom</option>
               <option value="Leal e Neutro">Leal e Neutro</option>
-              <option value="Neutro Verdadeiro" selected>Neutro Verdadeiro</option>
+              <option value="Neutro" selected>Neutro</option>
               <option value="Caótico e Neutro">Caótico e Neutro</option>
               <option value="Leal e Mau">Leal e Mau</option>
               <option value="Neutro e Mau">Neutro e Mau</option>
               <option value="Caótico e Mau">Caótico e Mau</option>
             </select>
           </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Atributos (1-20)</legend>
-        <div class="grid-2">
-          <div class="input-group"><label for="f-forca">Força (FOR)</label><input type="number" id="f-forca" value="1" min="1" max="20"></div>
-          <div class="input-group"><label for="f-destreza">Destreza (DES)</label><input type="number" id="f-destreza" value="1" min="1" max="20"></div>
-          <div class="input-group"><label for="f-inteligencia">Inteligência (INT)</label><input type="number" id="f-inteligencia" value="1" min="1" max="20"></div>
-          <div class="input-group"><label for="f-sorte">Sorte (SOR)</label><input type="number" id="f-sorte" value="1" min="1" max="20"></div>
-        </div>
-        <hr style="border-color: var(--glass); margin: 15px 0;">
-        <div class="grid-3">
-          <div class="input-group"><label for="f-vigor">Vigor (VIG)</label><input type="number" id="f-vigor" value="1" min="1" max="20"></div>
-          <div class="input-group"><label for="f-energia">Energia (ENE)</label><input type="number" id="f-energia" value="1" min="1" max="20"></div>
-          <div class="input-group"><label for="f-fonte">Fonte (FON)</label><input type="number" id="f-fonte" value="1" min="1" max="20"></div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Aptidões</legend>
-        <p class="note">Digite o nível (ex: 5). Deixe 0 para aptidões não treinadas.</p>
-        <h3>Força (FOR)</h3>
-        <div class="grid-2">
-          <div class="input-group"><label>Combate Desarmado</label><input type="number" id="f-skill-combate-desarmado" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Espadas Longas</label><input type="number" id="f-skill-espadas-longas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Machados Longos</label><input type="number" id="f-skill-machados-longos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Martelos Longos</label><input type="number" id="f-skill-martelos-longos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Clavas</label><input type="number" id="f-skill-clavas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Escalada</label><input type="number" id="f-skill-escalada" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Acrobacia</label><input type="number" id="f-skill-acrobacia" value="0" min="0" max="50"></div>
-        </div>
-        <hr style="border-color: var(--glass); margin: 15px 0;">
-        <h3>Destreza (DES)</h3>
-        <div class="grid-2">
-          <div class="input-group"><label>Espadas Curtas</label><input type="number" id="f-skill-espadas-curtas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Adagas</label><input type="number" id="f-skill-adagas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Lâminas Duplas</label><input type="number" id="f-skill-laminas-duplas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Machados Curtos</label><input type="number" id="f-skill-machados-curtos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Martelos Curtos</label><input type="number" id="f-skill-martelos-curtos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Lanças</label><input type="number" id="f-skill-lancas" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Foices</label><input type="number" id="f-skill-foices" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Bastões</label><input type="number" id="f-skill-bastoes" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Correntes e Kusarigama</label><input type="number" id="f-skill-correntes" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Arremesso de Armas</label><input type="number" id="f-skill-arremesso" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Armas de Fogo</label><input type="number" id="f-skill-armas-de-fogo" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Furtividade</label><input type="number" id="f-skill-furtividade" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Natação</label><input type="number" id="f-skill-natacao" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Corrida</label><input type="number" id="f-skill-corrida" value="0" min="0" max="50"></div>
-        </div>
-        <hr style="border-color: var(--glass); margin: 15px 0;">
-        <h3>Inteligência (INT)</h3>
-        <div class="grid-2">
-          <div class="input-group"><label>Feitiços</label><input type="number" id="f-skill-feiticos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Barreiras</label><input type="number" id="f-skill-barreiras" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Pactos</label><input type="number" id="f-skill-pactos" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Percepção Mágica</label><input type="number" id="f-skill-percepcao-magica" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Primeiros Socorros</label><input type="number" id="f-skill-primeiros-socorros" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Técnica Reversa</label><input type="number" id="f-skill-tecnica-reversa" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Percepção Visual</label><input type="number" id="f-skill-percepcao-visual" value="0" min="0" max="50"></div>
-          <div class="input-group"><label>Sobrevivência</label><input type="number" id="f-skill-sobrevivencia" value="0" min="0" max="50"></div>
+          <div class="form-group">
+            <label for="char-hp" title="O jogador deve calcular o valor máximo com base no Vigor">Vigor (HP)</label>
+            <input type="text" id="char-hp" value="400/400">
+          </div>
+          <div class="form-group">
+            <label for="char-ea" title="O jogador deve calcular o valor máximo com base na Energia">Energia (EA)</label>
+            <input type="text" id="char-ea" value="400/400">
+          </div>
         </div>
       </fieldset>
       
       <fieldset>
-        <legend>Combate</legend>
-        <h4>Técnicas</h4>
-        <p class="note">Preencha quantos slots precisar. Os vazios serão ignorados.</p>
-        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 1: Nome</label><input type="text" id="f-tecnica-nome-1" placeholder="Ex: Punho Divergente"></div><div class="input-group"><label>Técnica 1: URL</label><input type="url" id="f-tecnica-url-1" placeholder="https://... (opcional)"></div></div></div>
-        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 2: Nome</label><input type="text" id="f-tecnica-nome-2" placeholder="Ex: Clarão Negro"></div><div class="input-group"><label>Técnica 2: URL</label><input type="url" id="f-tecnica-url-2" placeholder="https://... (opcional)"></div></div></div>
-        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 3: Nome</label><input type="text" id="f-tecnica-nome-3"></div><div class="input-group"><label>Técnica 3: URL</label><input type="url" id="f-tecnica-url-3"></div></div></div>
-        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 4: Nome</label><input type="text" id="f-tecnica-nome-4"></div><div class="input-group"><label>Técnica 4: URL</label><input type="url" id="f-tecnica-url-4"></div></div></div>
-        <div class="dynamic-item-set"><div class="grid-2"><div class="input-group"><label>Técnica 5: Nome</label><input type="text" id="f-tecnica-nome-5"></div><div class="input-group"><label>Técnica 5: URL</label><input type="url" id="f-tecnica-url-5"></div></div></div>
+        <legend>Atributos (Valor/Máx)</legend>
+        <div class="form-grid" id="attributes-grid">
+          <div class="form-group">
+            <label for="attr-for">Força</label>
+            <input type="text" id="attr-for" value="05/20">
+          </div>
+          <div class="form-group">
+            <label for="attr-des">Destreza</label>
+            <input type="text" id="attr-des" value="05/20">
+          </div>
+          <div class="form-group">
+            <label for="attr-sor">Sorte</label>
+            <input type="text" id="attr-sor" value="05/20">
+          </div>
+          <div class="form-group">
+            <label for="attr-vig">Vigor</label>
+            <input type="text" id="attr-vig" value="05/20">
+          </div>
+          <div class="form-group">
+            <label for="attr-ene">Energia</label>
+            <input type="text" id="attr-ene" value="05/20">
+          </div>
+          <div class="form-group">
+            <label for="attr-fon">Fonte</label>
+            <input type="text" id="attr-fon" value="05/20">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aba: Perfil</legend>
+        <div class="form-group">
+          <label for="profile-phys-desc">Descrição Física (Geral)</label>
+          <textarea id="profile-phys-desc" rows="3" placeholder="Descrição geral da aparência, postura e físico..."></textarea>
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label for="phys-cabelo">Cabelo</label><input type="text" id="phys-cabelo"></div>
+          <div class="form-group"><label for="phys-olhos">Olhos</label><input type="text" id="phys-olhos"></div>
+          <div class="form-group"><label for="phys-pele">Pele</label><input type="text" id="phys-pele"></div>
+          <div class="form-group"><label for="phys-altura">Altura</label><input type="text" id="phys-altura"></div>
+          <div class="form-group"><label for="phys-peso">Peso</label><input type="text" id="phys-peso"></div>
+          <div class="form-group"><label for="phys-extras">Extras</label><input type="text" id="phys-extras"></div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <label for="profile-psy-desc">Descrição Psicológica (Geral)</label>
+          <textarea id="profile-psy-desc" rows="3" placeholder="Descrição geral da personalidade, maneirismos..."></textarea>
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label for="psy-gostos">Gostos</label><input type="text" id="psy-gostos"></div>
+          <div class="form-group"><label for="psy-desgostos">Desgostos</label><input type="text" id="psy-desgostos"></div>
+          <div class="form-group"><label for="psy-medos">Medos</label><input type="text" id="psy-medos"></div>
+          <div class="form-group"><label for="psy-traumas">Traumas</label><input type="text" id="psy-traumas"></div>
+          <div class="form-group"><label for="psy-objetivos">Objetivos</label><input type="text" id="psy-objetivos"></div>
+          <div class="form-group"><label for="psy-sonhos">Sonhos</label><input type="text" id="psy-sonhos"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aba: Combate</legend>
+        <p class="form-note">As Aptidões são fixas e iniciam em 000/200 no código.</p>
         
-        <h4 style="margin-top: 20px;">Equipamentos</h4>
-        <p class="note">Um por linha. Deixe vazio para pular.</p>
-        <textarea id="f-equipamentos" placeholder="Ex: Uniforme da Escola Jujutsu"></textarea>
+        <div class="dynamic-section">
+          <h4>Técnicas (CTs, Barreiras, etc.)</h4>
+          <div id="technique-groups-list">
+            </div>
+          <button type="button" id="add-technique-group" class="add-button">Adicionar Grupo de Técnica</button>
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Expansão de Domínio</h4>
+          <div class="form-group">
+            <label for="domain-name">Nome da Expansão de Domínio</label>
+            <input type="text" id="domain-name" placeholder="Ex: Vazio Ilimitado">
+            <label for="domain-link">Link do Tópico</label>
+            <input type="url" id="domain-link" placeholder="https://.../link-do-topico">
+          </div>
+          <div class="form-group">
+            <label for="domain-desc">Descrição do Domínio</label>
+            <textarea id="domain-desc" rows="3" placeholder="(O personagem pode não ter uma ainda) Descrição do domínio, seu sinal de mão, regras, e efeito garantido."></textarea>
+          </div>
+        </div>
+        
+        <div class="dynamic-section">
+          <h4>Equipamento</h4>
+          <div id="equipment-list">
+            </div>
+          <button type="button" id="add-equipment" class="add-button">Adicionar Equipamento</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aba: Detalhes</legend>
+        <div class="dynamic-section">
+          <h4>Particularidade</h4>
+          <div class="form-group">
+            <label for="part-name">Nome da Particularidade</label>
+            <input type="text" id="part-name" placeholder="Ex: Receptáculo Amaldiçoado">
+          </div>
+          <div class="form-group">
+            <label for="part-link">Link do Tópico</label>
+            <input type="url" id="part-link" placeholder="https://.../link-do-topico">
+          </div>
+          <div class="form-group">
+            <label for="part-desc">Descrição Geral</label>
+            <textarea id="part-desc" rows="3" placeholder="Definição ou descrição geral da sua particularidade."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="part-notes">Sistemas / Notas Adicionais</label>
+            <textarea id="part-notes" rows="3" placeholder="Use para rastreadores (Ex: Nível de Influência: 0/100) ou outras notas."></textarea>
+          </div>
+        </div>
+
+        <div class="dynamic-section">
+          <h4>Características</h4>
+          <div id="traits-list">
+            </div>
+          <div class="button-group">
+            <button type="button" id="add-trait-pos" class="add-button positive">Adicionar Positiva</button>
+            <button type="button" id="add-trait-neg" class="add-button negative">Adicionar Negativa</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Aba: Relações</legend>
+        <div id="relations-list">
+          </div>
+        <button type="button" id="add-relation" class="add-button">Adicionar Relacionamento</button>
       </fieldset>
       
       <fieldset>
-        <legend>Características</legend>
-        <div class="grid-2">
-          <div class="input-group">
-            <label for="f-carac-p">Positivas (Uma por linha)</label>
-            <textarea id="f-carac-p" placeholder="Ex: Força Elevada (2 pts)"></textarea>
-          </div>
-          <div class="input-group">
-            <label for="f-carac-n">Negativas (Uma por linha)</label>
-            <textarea id="f-carac-n" placeholder="Ex: Impulsividade (5 pts)"></textarea>
-          </div>
+        <legend>Aba: Biografia</legend>
+        <div class="form-group">
+          <label for="bio-text">História do Personagem</label>
+          <textarea id="bio-text" rows="8" placeholder="Escreva aqui a história completa do personagem..."></textarea>
         </div>
       </fieldset>
-
-      <fieldset>
-        <legend>Perfil</legend>
-        <div class="input-group">
-          <label for="f-particularidade-nome">Particularidade (Apenas UMA)</label>
-          <input type="text" id="f-particularidade-nome" placeholder="Ex: Receptáculo Amaldiçoado">
-        </div>
-        <div class="input-group">
-          <label for="f-particularidade-url">URL da Particularidade</label>
-          <input type="url" id="f-particularidade-url" placeholder="https://... (opcional)">
-        </div>
-        <div class="input-group">
-          <label for="f-particularidade-desc">Descrição IC da Particularidade</label>
-          <input type="text" id="f-particularidade-desc" placeholder="Ex: Hospedeiro de Ryomen Sukuna">
-        </div>
-        
-        <hr style="border-color: var(--glass); margin: 15px 0;">
-        <div class="input-group">
-          <label for="f-aparencia">Aparência Geral</label>
-          <textarea id="f-aparencia" placeholder="Descreva a aparência física do seu personagem..."></textarea>
-        </div>
-        <div class="grid-3">
-          <div class="input-group"> <label>Altura</label> <input type="text" id="f-altura" placeholder="Ex: 173 cm"> </div>
-          <div class="input-group"> <label>Peso</label> <input type="text" id="f-peso" placeholder="Ex: 80 kg"> </div>
-          <div class="input-group"> <label>Olhos</label> <input type="text" id="f-olhos" placeholder="Ex: Castanho Claro"> </div>
-          <div class="input-group"> <label>Cabelo</label> <input type="text" id="f-cabelo" placeholder="Ex: Rosa (Tingido)"> </div>
-          <div class="input-group"> <label>Pele</label> <input type="text" id="f-pele" placeholder="Ex: Clara"> </div>
-        </div>
-        
-        <hr style="border-color: var(--glass); margin: 15px 0;">
-        <div class="grid-2">
-          <div class="input-group"> <label for="f-gostos">Gostos (Um por linha)</label> <textarea id="f-gostos" placeholder="Ex: Filmes de ação"></textarea> </div>
-          <div class="input-group"> <label for="f-desgostos">Desgostos (Um por linha)</label> <textarea id="f-desgostos" placeholder="Ex: Ficar sozinho"></textarea> </div>
-          <div class="input-group"> <label for="f-medos">Medos (Um por linha)</label> <textarea id="f-medos" placeholder="Ex: Não ser capaz de salvar a todos"></textarea> </div>
-          <div class="input-group"> <label for="f-objetivos">Objetivos (Um por linha)</label> <textarea id="f-objetivos" placeholder="Ex: Consumir todos os dedos de Sukuna"></textarea> </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Relações</legend>
-        <p class="note">Preencha quantos slots precisar. Os vazios serão ignorados.</p>
-        <div class="dynamic-item-set relacao-item">
-          <div class="grid-2">
-            <div class="input-group"><label>Relação 1: Nome</label><input type="text" id="f-rel-nome-1" placeholder="Ex: Megumi Fushiguro"></div>
-            <div class="input-group"><label>Relação 1: Status</label><input type="text" id="f-rel-status-1" placeholder="Ex: Aliado, Rival"></div>
-          </div>
-          <div class="input-group"><label>Relação 1: Descrição</label><textarea id="f-rel-desc-1" rows="2" placeholder="Primeiro feiticeiro que conheceu..."></textarea></div>
-        </div>
-        <div class="dynamic-item-set relacao-item">
-          <div class="grid-2">
-            <div class="input-group"><label>Relação 2: Nome</label><input type="text" id="f-rel-nome-2"></div>
-            <div class="input-group"><label>Relação 2: Status</label><input type="text" id="f-rel-status-2"></div>
-          </div>
-          <div class="input-group"><label>Relação 2: Descrição</label><textarea id="f-rel-desc-2" rows="2"></textarea></div>
-        </div>
-        <div class="dynamic-item-set relacao-item">
-          <div class="grid-2">
-            <div class="input-group"><label>Relação 3: Nome</label><input type="text" id="f-rel-nome-3"></div>
-            <div class="input-group"><label>Relação 3: Status</label><input type="text" id="f-rel-status-3"></div>
-          </div>
-          <div class="input-group"><label>Relação 3: Descrição</label><textarea id="f-rel-desc-3" rows="2"></textarea></div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Inventário e Biografia</legend>
-        <h4>Inventário</h4>
-        <p class="note">Formato: [Nome] | [Descrição Tooltip]. Slots vazios serão ignorados.</p>
-        <div class="grid-2">
-          <div class="input-group"><label>Item 1</label><input type="text" id="f-inv-1" placeholder="Ex: Celular | Um smartphone comum..."></div>
-          <div class="input-group"><label>Item 2</label><input type="text" id="f-inv-2" placeholder="Ex: Faca Amaldiçoada | ..."></div>
-          <div class="input-group"><label>Item 3</label><input type="text" id="f-inv-3"></div>
-          <div class="input-group"><label>Item 4</label><input type="text" id="f-inv-4"></div>
-          <div class="input-group"><label>Item 5</label><input type="text" id="f-inv-5"></div>
-          <div class="input-group"><label>Item 6</label><input type="text" id="f-inv-6"></div>
-        </div>
-        <hr style="border-color: var(--glass); margin: 15px 0;">
-        <div class="input-group">
-          <label for="f-biografia">Biografia</label>
-          <textarea id="f-biografia" placeholder="A história do seu personagem..."></textarea>
-        </div>
-      </fieldset>
+    </form>
+    
+    <div class="output-section">
+      <legend>Código Gerado (em linha única)</legend>
+      <textarea id="output-html" readonly placeholder="O código HTML da sua ficha aparecerá aqui..."></textarea>
+      <button type="button" id="copy-html-btn">Copiar Código</button>
     </div>
 
-    <div id="output-container">
-      <textarea id="output-code" readonly>O HTML minificado da sua ficha aparecerá aqui...</textarea>
-      <button id="copy-btn">Copiar Código</button>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      
-      const form = document.getElementById('form-container');
-      const copyBtn = document.getElementById('copy-btn');
-      const outputArea = document.getElementById('output-code');
-      const allInputs = form.querySelectorAll('input, textarea, select');
-      const storageKey = 'jjkFichaGeneratorData_v16_DossierV2'; // Nova chave
-      
-      // Gera um ID único para esta instância da ficha
-      const uniqueId = 'uid-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-      
-      const aptidoesMap = {
-        forca: [
-          { id: 'f-skill-combate-desarmado', label: 'Combate Desarmado' },
-          { id: 'f-skill-espadas-longas', label: 'Espadas Longas' },
-          { id: 'f-skill-machados-longos', label: 'Machados Longos' },
-          { id: 'f-skill-martelos-longos', label: 'Martelos Longos' },
-          { id: 'f-skill-clavas', label: 'Clavas' },
-          { id: 'f-skill-escalada', label: 'Escalada' },
-          { id: 'f-skill-acrobacia', label: 'Acrobacia' }
-        ],
-        destreza: [
-          { id: 'f-skill-espadas-curtas', label: 'Espadas Curtas' },
-          { id: 'f-skill-adagas', label: 'Adagas' },
-          { id: 'f-skill-laminas-duplas', label: 'Lâminas Duplas' },
-          { id: 'f-skill-machados-curtos', label: 'Machados Curtos' },
-          { id: 'f-skill-martelos-curtos', label: 'Martelos Curtos' },
-          { id: 'f-skill-lancas', label: 'Lanças' },
-          { id: 'f-skill-foices', label: 'Foices' },
-          { id: 'f-skill-bastoes', label: 'Bastões' },
-          { id: 'f-skill-correntes', label: 'Correntes e Kusarigama' },
-          { id: 'f-skill-arremesso', label: 'Arremesso de Armas' },
-          { id: 'f-skill-armas-de-fogo', label: 'Armas de Fogo' },
-          { id: 'f-skill-furtividade', label: 'Furtividade' },
-          { id: 'f-skill-natacao', label: 'Natação' },
-          { id: 'f-skill-corrida', label: 'Corrida' }
-        ],
-        inteligencia: [
-          { id: 'f-skill-feiticos', label: 'Feitiços' },
-          { id: 'f-skill-barreiras', label: 'Barreiras' },
-          { id: 'f-skill-pactos', label: 'Pactos' },
-          { id: 'f-skill-percepcao-magica', label: 'Percepção Mágica' },
-          { id: 'f-skill-primeiros-socorros', label: 'Primeiros Socorros' },
-          { id: 'f-skill-tecnica-reversa', label: 'Técnica Reversa' },
-          { id: 'f-skill-percepcao-visual', label: 'Percepção Visual' },
-          { id: 'f-skill-sobrevivencia', label: 'Sobrevivência' }
-        ]
-      };
-      
-      const MAX_SLOTS = {
-        tecnicas: 5,
-        relacoes: 3,
-        inventario: 6
-      };
-
-      function getVal(id) { return document.getElementById(id).value.trim(); }
-      function getNum(id) { return parseInt(document.getElementById(id).value, 10) || 0; }
-      function escapeHTML(str) { if (!str) return ''; return str.replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-      function escapeAttr(str) { if (!str) return ''; return str.replace(/"/g, "&quot;"); }
-
-      function parseListSimple(textareaId) {
-        const text = getVal(textareaId);
-        if (!text) return '<li>...</li>';
-        return text.split('\n')
-                   .filter(line => line.trim() !== '')
-                   .map(line => '<li>' + escapeHTML(line.trim()) + '</li>')
-                   .join('');
-      }
-      
-      function parseListLinks(baseId, maxSlots) {
-        let html = '';
-        for (let i = 1; i <= maxSlots; i++) {
-          const nome = getVal(baseId + '-nome-' + i);
-          const url = getVal(baseId + '-url-' + i);
-          if (nome) {
-            if (url) {
-              html += '<li>[url=' + escapeAttr(url) + ']' + escapeHTML(nome) + '[/url]</li>';
-            } else {
-              html += '<li>' + escapeHTML(nome) + '</li>';
-            }
-          }
-        }
-        return html || '<li>...</li>';
-      }
-      
-      function parseParticularidade() {
-        const nome = getVal('f-particularidade-nome');
-        if (!nome) return '<li>Nenhuma</li>';
-        const url = getVal('f-particularidade-url');
-        const desc = escapeHTML(getVal('f-particularidade-desc'));
-        let linkContent = escapeHTML(nome);
-        if (url) {
-          linkContent = '[url=' + escapeAttr(url) + ']' + escapeHTML(nome) + '[/url]';
-        }
-        return '<li>[b]' + linkContent + ':[/b] ' + desc + '</li>';
-      }
-      
-      function parseRelacoes(baseId, maxSlots) {
-        let html = '';
-        for (let i = 1; i <= maxSlots; i++) {
-          const nome = getVal(baseId + '-nome-' + i);
-          const status = getVal(baseId + '-status-' + i);
-          const desc = getVal(baseId + '-desc-' + i);
-          if (nome) {
-            html += '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">' + escapeHTML(nome) + '</div><div class="jjk-dossier-relation-status">' + escapeHTML(status) + '</div></div><div class="jjk-dossier-relation-body">' + escapeHTML(desc) + '</div></div>';
-          }
-        }
-        return html || '<div class="jjk-dossier-relation-card"><div class="jjk-dossier-relation-header"><div class="jjk-dossier-relation-name">...</div></div></div>';
-      }
-      
-      function parseInventario(baseId, maxSlots) {
-        let html = '';
-        for (let i = 1; i <= maxSlots; i++) {
-          const val = getVal(baseId + '-' + i);
-          if (val) {
-            const parts = val.split('|');
-            const nome = escapeHTML((parts[0] || 'Item').trim());
-            const desc = escapeHTML((parts[1] || '...').trim());
-            html += '<div class="jjk-dossier-inventory-item"><span>' + nome + '</span><div class="jjk-dossier-tooltip-text">' + desc + '</div></div>';
-          }
-        }
-        return html || '<div class="jjk-dossier-inventory-item"><span>...</span></div>';
-      }
-      
-      function gerarAptidoesHTML(tipo) {
-        return aptidoesMap[tipo].map(apt => {
-          const nivel = getNum(apt.id);
-          return '<div class="jjk-dossier-skill-item"><span class="jjk-dossier-skill-name">' + apt.label + '</span><span class="jjk-dossier-skill-level">' + nivel + '</span></div>';
-        }).join('');
-      }
-
-      function generateAndDisplayHTML() {
-        try {
-          const charName = escapeHTML(getVal('f-char-name'));
-          const charTitle = escapeHTML(getVal('f-char-title'));
-          const profileImg = escapeAttr(getVal('f-profile-img'));
-          const idade = escapeHTML(getVal('f-idade'));
-          const grau = escapeHTML(getVal('f-grau'));
-          const afiliacao = escapeHTML(getVal('f-afiliacao'));
-          const alinhamento = escapeHTML(getVal('f-alinhamento'));
-          
-          const forca = getNum('f-forca');
-          const destreza = getNum('f-destreza');
-          const inteligencia = getNum('f-inteligencia');
-          const sorte = getNum('f-sorte');
-          const vigor = getNum('f-vigor');
-          const energia = getNum('f-energia');
-          const fonte = getNum('f-fonte');
-          
-          const hpTotal = vigor * 400;
-          const eaTotal = energia * 400;
-          const hpPercent = (hpTotal > 0 ? 100 : 0); // Assumindo 100% no gerador
-          const eaPercent = (eaTotal > 0 ? 100 : 0); // Assumindo 100% no gerador
-          
-          const aptForcaHtml = gerarAptidoesHTML('forca');
-          const aptDestrezaHtml = gerarAptidoesHTML('destreza');
-          const aptInteligenciaHtml = gerarAptidoesHTML('inteligencia');
-          
-          const tecnicasHtml = parseListLinks('f-tecnica', MAX_SLOTS.tecnicas);
-          const equipamentosHtml = parseListSimple('f-equipamentos');
-          const caracPHtml = parseListSimple('f-carac-p');
-          const caracNHtml = parseListSimple('f-carac-n');
-          const particularidadeHtml = parseParticularidade();
-          
-          const aparencia = escapeHTML(getVal('f-aparencia'));
-          const altura = escapeHTML(getVal('f-altura'));
-          const peso = escapeHTML(getVal('f-peso'));
-          const olhos = escapeHTML(getVal('f-olhos'));
-          const cabelo = escapeHTML(getVal('f-cabelo'));
-          const pele = escapeHTML(getVal('f-pele'));
-
-          const gostosHtml = parseListSimple('f-gostos');
-          const desgostosHtml = parseListSimple('f-desgostos');
-          const medosHtml = parseListSimple('f-medos');
-          const objetivosHtml = parseListSimple('f-objetivos');
-          
-          const relacoesHtml = parseRelacoes('f-rel', MAX_SLOTS.relacoes);
-          const inventarioHtml = parseInventario('f-inv', MAX_SLOTS.inventario);
-          const biografia = escapeHTML(getVal('f-biografia'));
-
-          // Geração do HTML (v2)
-          var finalHTML = '<link href="https://gaaaaaaaaabs.github.io/goldenagerepositor.io/ficha-v2.css?v=1.1" rel="stylesheet" type="text/css"><div class="jjk-dossier-v2"><aside class="jjk-dossier-sidebar"><div class="jjk-dossier-profile-pic"><img src="' + profileImg + '" alt="' + charName + '"><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div><div class="jjk-dossier-particle"></div></div><h1 class="jjk-dossier-name">' + charName + '</h1><p class="jjk-dossier-title">' + charTitle + '</p><div class="jjk-dossier-status-bars"><div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-label">HP</span><span class="jjk-dossier-status-value">' + hpTotal + ' / ' + hpTotal + '</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-hp-fill" style="width: ' + hpPercent + '%;"></div></div></div><div class="jjk-dossier-status-item"><div class="jjk-dossier-status-header"><span class="jjk-dossier-status-label">EA</span><span class="jjk-dossier-status-value">' + eaTotal + ' / ' + eaTotal + '</span></div><div class="jjk-dossier-status-bar"><div class="jjk-dossier-status-bar-fill jjk-dossier-ea-fill" style="width: ' + eaPercent + '%;"></div></div></div></div><div class="jjk-dossier-quick-stats"><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Idade</span><span class="jjk-dossier-value">' + idade + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Grau</span><span class="jjk-dossier-value">' + grau + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Afiliação</span><span class="jjk-dossier-value">' + afiliacao + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Alinhamento</span><span class="jjk-dossier-value">' + alinhamento + '</span></div></div></aside><main class="jjk-dossier-main">';
-          
-          // Abas
-          finalHTML += '<input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-1-' + uniqueId + '" checked><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-2-' + uniqueId + '"><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-3-' + uniqueId + '"><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-4-' + uniqueId + '"><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-5-' + uniqueId + '"><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-6-' + uniqueId + '"><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-7-' + uniqueId + '"><input type="radio" name="dossier-tab-' + uniqueId + '" id="dossier-tab-8-' + uniqueId + '">';
-          
-          // Navegação
-          finalHTML += '<nav class="jjk-dossier-tabs-nav"><label for="dossier-tab-1-' + uniqueId + '" class="jjk-dossier-tab-button">Perfil</label><label for="dossier-tab-2-' + uniqueId + '" class="jjk-dossier-tab-button">Atributos</label><label for="dossier-tab-3-' + uniqueId + '" class="jjk-dossier-tab-button">Aptidões</label><label for="dossier-tab-8-' + uniqueId + '" class="jjk-dossier-tab-button">Características</label><label for="dossier-tab-4-' + uniqueId + '" class="jjk-dossier-tab-button">Combate</label><label for="dossier-tab-5-' + uniqueId + '" class="jjk-dossier-tab-button">Relações</label><label for="dossier-tab-6-' + uniqueId + '" class="jjk-dossier-tab-button">Inventário</label><label for="dossier-tab-7-' + uniqueId + '" class="jjk-dossier-tab-button">Biografia</label></nav>';
-
-          // Aba 1: Perfil
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-1-' + uniqueId + '"><h3>Aparência Física</h3><div class="jjk-dossier-quick-stats" style="grid-template-columns: 1fr 1fr 1fr; margin-top: 0; margin-bottom: 15px;"><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Altura</span><span class="jjk-dossier-value">' + altura + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Peso</span><span class="jjk-dossier-value">' + peso + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Olhos</span><span class="jjk-dossier-value">' + olhos + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Cabelo</span><span class="jjk-dossier-value">' + cabelo + '</span></div><div class="jjk-dossier-stat-box"><span class="jjk-dossier-label">Pele</span><span class="jjk-dossier-value">' + pele + '</span></div></div><p class="jjk-dossier-bio-text" style="max-height: 150px;">' + aparencia + '</p><h3>Perfil Psicológico</h3><div class="jjk-dossier-psyche-grid"><div class="jjk-dossier-psyche-card"><h4>Gostos</h4><ul>' + gostosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4>Desgostos</h4><ul>' + desgostosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4>Medos</h4><ul>' + medosHtml + '</ul></div><div class="jjk-dossier-psyche-card"><h4>Objetivos</h4><ul>' + objetivosHtml + '</ul></div></div></div>';
-
-          // Aba 2: Atributos
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-2-' + uniqueId + '"><h3>Atributos Principais</h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">' + forca + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (forca/20*100) + '%;"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">' + destreza + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (destreza/20*100) + '%;"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Inteligência</span><span class="jjk-dossier-attr-value">' + inteligencia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (inteligencia/20*100) + '%;"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">' + sorte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (sorte/20*100) + '%;"></div></div></div></div><h3 style="margin-top:25px;">Atributos Especiais</h3><div class="jjk-dossier-attr-grid"><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor (HP)</span><span class="jjk-dossier-attr-value">' + vigor + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (vigor/20*100) + '%;"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia (EA)</span><span class="jjk-dossier-attr-value">' + energia + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (energia/20*100) + '%;"></div></div></div><div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Fonte (Regen. EA)</span><span class="jjk-dossier-attr-value">' + fonte + ' / 20</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill" style="width:' + (fonte/20*100) + '%;"></div></div></div></div></div>';
-          
-          // Aba 3: Aptidões
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-3-' + uniqueId + '"><h3>Aptidões</h3><div class="jjk-dossier-accordion"><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-for-' + uniqueId + '"><label for="skill-for-' + uniqueId + '" class="jjk-dossier-accordion-title">Força (FOR)</label><div class="jjk-dossier-skill-list">' + aptForcaHtml + '</div></div><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-des-' + uniqueId + '"><label for="skill-des-' + uniqueId + '" class="jjk-dossier-accordion-title">Destreza (DES)</label><div class="jjk-dossier-skill-list">' + aptDestrezaHtml + '</div></div><div class="jjk-dossier-accordion-item"><input type="checkbox" id="skill-int-' + uniqueId + '"><label for="skill-int-' + uniqueId + '" class="jjk-dossier-accordion-title">Inteligência (INT)</label><div class="jjk-dossier-skill-list">' + aptInteligenciaHtml + '</div></div></div></div>';
-
-          // Aba 4: Combate
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-4-' + uniqueId + '"><h3>Técnicas</h3><div class="jjk-dossier-combat-box"><ul>' + tecnicasHtml + '</ul></div><h3 style="margin-top: 25px;">Equipamentos</h3><div class="jjk-dossier-combat-box"><ul>' + equipamentosHtml + '</ul></div><h3 style="margin-top: 25px;">Particularidade</h3><div class="jjk-dossier-combat-box"><ul>' + particularidadeHtml + '</ul></div></div>';
-          
-          // Aba 5: Relações
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-5-' + uniqueId + '"><h3>Relações</h3><div class="jjk-dossier-relations-grid">' + relacoesHtml + '</div></div>';
-          
-          // Aba 6: Inventário
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-6-' + uniqueId + '"><h3>Inventário</h3><div class="jjk-dossier-inventory-grid">' + inventarioHtml + '</div></div>';
-
-          // Aba 7: Biografia
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-7-' + uniqueId + '"><h3>Biografia</h3><p class="jjk-dossier-bio-text">' + biografia + '</p></div>';
-          
-          // Aba 8: Características
-          finalHTML += '<div class="jjk-dossier-tab-content" id="dossier-content-8-' + uniqueId + '"><div class="jjk-dossier-combat-grid"><div><h3>Características Positivas</h3><div class="jjk-dossier-combat-box"><ul>' + caracPHtml + '</ul></div></div><div><h3>Características Negativas</h3><div class="jjk-dossier-combat-box"><ul>' + caracNHtml + '</ul></div></div></div></div>';
-
-          finalHTML += '</main></div>'; // Fecha o .jjk-dossier-main e .jjk-dossier-v2
-          outputArea.value = finalHTML;
-        
-        } catch (e) {
-          console.error("Erro ao gerar HTML:", e);
-          outputArea.value = "Erro! Verifique os valores do formulário. Detalhes no console (F12).";
-        }
-      }
-      
-      function saveDataToLocalStorage() {
-        const data = {};
-        allInputs.forEach(input => {
-          if(input.id) {
-            data[input.id] = input.value;
-          }
-        });
-        localStorage.setItem(storageKey, JSON.stringify(data));
-      }
-
-      function loadDataFromLocalStorage() {
-        const data = JSON.parse(localStorage.getItem(storageKey));
-        if (data) {
-          allInputs.forEach(input => {
-            if (input.id && data[input.id] !== undefined) {
-              input.value = data[input.id];
-            }
-          });
-        }
-        generateAndDisplayHTML();
-      }
-
-      // --- SCRIPT DE ALTURA DO IFRAME (v3 - Anti-Loop) ---
-      const targetOrigin = 'https://goldenagejjkrpg.forumeiros.com';
-      
-      let lastHeightSent = 0; // Armazena a última altura
-
-      function calculateAndSendHeight() {
-        const height = document.documentElement.scrollHeight;
-        // Só envia se a altura for diferente
-        if (height !== lastHeightSent) {
-          lastHeightSent = height;
-          window.parent.postMessage({ frameHeight: height }, targetOrigin);
-        }
-      }
-      
-      // --- EVENT LISTENERS ---
-      loadDataFromLocalStorage();
-
-      form.addEventListener('input', function(event) {
-        generateAndDisplayHTML();
-        saveDataToLocalStorage();
-        setTimeout(calculateAndSendHeight, 50); // Delay para recalcular
-      });
-
-      copyBtn.addEventListener('click', function() {
-        outputArea.select();
-        document.execCommand('copy');
-        copyBtn.textContent = 'Copiado!';
-        setTimeout(() => {
-          copyBtn.textContent = 'Copiar Código';
-        }, 2000);
-      });
-      
-      // Envia a altura inicial e monitora a janela
-      setTimeout(calculateAndSendHeight, 150);
-      window.addEventListener('resize', () => setTimeout(calculateAndSendHeight, 100));
-
-    });
-  </script>
+  </div> <script src="script.js"></script>
 </body>
 </html>
