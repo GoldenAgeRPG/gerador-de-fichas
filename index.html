@@ -260,6 +260,10 @@
             <input type="text" id="attr-des" value="00/20">
           </div>
           <div class="form-group">
+            <label for="attr-int">Inteligência</label>
+            <input type="text" id="attr-int" value="00/20">
+          </div>
+          <div class="form-group">
             <label for="attr-sor">Sorte</label>
             <input type="text" id="attr-sor" value="00/20">
           </div>
@@ -574,7 +578,6 @@
       const traitsList = document.getElementById('traits-list');
       const relationsList = document.getElementById('relations-list');
 
-      // --- [CORRIGIDO] MAPA DE APTIDÕES ---
       const aptidaoNameMap = {
         'Combate Desarmado': 'apt-combate-desarmado',
         'Espadas Longas': 'apt-espadas-longas',
@@ -610,7 +613,7 @@
       const aptidaoIDs = Object.values(aptidaoNameMap);
       const simpleValueIDs = [
         'char-name', 'char-nickname', 'char-header-img', 'char-profile-pic', 'char-age', 'char-species', 'char-grade', 'char-alignment', 'char-hp', 'char-ea',
-        'attr-for', 'attr-des', 'attr-sor', 'attr-vig', 'attr-ene', 'attr-fon',
+        'attr-for', 'attr-des', 'attr-int', 'attr-sor', 'attr-vig', 'attr-ene', 'attr-fon',
         'profile-phys-desc', 'phys-cabelo', 'phys-olhos', 'phys-pele', 'phys-altura', 'phys-peso', 'phys-extras',
         'profile-psy-desc', 'psy-gostos', 'psy-desgostos', 'psy-medos', 'psy-traumas', 'psy-objetivos', 'psy-sonhos',
         'domain-name', 'domain-link', 'domain-desc',
@@ -918,6 +921,7 @@
         <div class="jjk-dossier-attr-list">
           <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Força</span><span class="jjk-dossier-attr-value">${values['attr-for']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
           <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Destreza</span><span class="jjk-dossier-attr-value">${values['attr-des']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
+          <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Inteligência</span><span class="jjk-dossier-attr-value">${values['attr-int']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
           <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Sorte</span><span class="jjk-dossier-attr-value">${values['attr-sor']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
           <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Vigor</span><span class="jjk-dossier-attr-value">${values['attr-vig']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
           <div class="jjk-dossier-attr-item"><div class="jjk-dossier-attr-header"><span class="jjk-dossier-attr-name">Energia</span><span class="jjk-dossier-attr-value">${values['attr-ene']}</span></div><div class="jjk-dossier-attr-bar"><div class="jjk-dossier-attr-bar-fill"></div></div></div>
@@ -1066,7 +1070,11 @@
           ficha.querySelectorAll('.jjk-dossier-attr-item').forEach(item => {
             const name = item.querySelector('.jjk-dossier-attr-name')?.textContent.toLowerCase();
             const value = item.querySelector('.jjk-dossier-attr-value')?.textContent || '00/20';
-            if (name) setVal(`attr-${name.substring(0, 3)}`, value);
+            if (name) {
+                let id = `attr-${name.substring(0, 3)}`;
+                if(name.startsWith('inteligência') || name.startsWith('inteligencia')) id = 'attr-int';
+                setVal(id, value);
+            }
           });
 
           setVal('profile-phys-desc', brToNewline(ficha.querySelector('.jjk-tab-content:nth-of-type(1) .jjk-profile-description')?.innerHTML || ''));
